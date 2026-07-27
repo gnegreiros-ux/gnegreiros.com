@@ -1,0 +1,146 @@
+---
+import { locales } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { getLocalizedPath, type Slug } from '../i18n/routes';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+	title: string;
+	description: string;
+	/** Language of the rendered content (drives `<html lang>` and nav strings). */
+	lang: Locale;
+	slug: Slug;
+	/** Locale segment of the current URL, if it differs from `lang` (EN-fallback pages served under /fr or /pt-br). */
+	routeLocale?: Locale;
+}
+
+const { title, description, lang, slug, routeLocale = lang } = Astro.props;
+const t = useTranslations(lang);
+
+const navLinks: { slug: Slug; label: string }[] = [
+	{ slug: 'approche', label: t('nav.approach') },
+	{ slug: 'agentica', label: t('nav.agentica') },
+	{ slug: 'dtgen', label: t('nav.dtgen') },
+	{ slug: 'parcours', label: t('nav.parcours') },
+	{ slug: 'a-propos', label: t('nav.about') },
+	{ slug: 'contact', label: t('nav.contact') },
+];
+
+const canonicalUrl = new URL(getLocalizedPath(routeLocale, slug), Astro.site);
+
+const personJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: 'Guilherme Negreiros',
+	jobTitle: 'UX Systems Designer',
+	url: 'https://gnegreiros.com',
+	sameAs: ['https://www.linkedin.com/in/gnegreiros', 'https://github.com/gnegreiros-ux'],
+};
+---
+
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		{locales.map((locale) => (
+			<link
+				rel="alternate"
+				hreflang={locale}
+				href={new URL(getLocalizedPath(locale, slug), Astro.site)}
+			/>
+		))}
+		<link rel="alternate" hreflang="x-default" href={new URL(getLocalizedPath('en', slug), Astro.site)} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} is:inline />
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<header>
+			<nav aria-label="Primary">
+				<a href={getLocalizedPath(routeLocale, 'home')}>Guilherme Negreiros</a>
+				<ul>
+					{navLinks.map((link) => (
+						<li>
+							<a href={getLocalizedPath(routeLocale, link.slug)}>{link.label}</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</header>
+		<main id="main">
+			<slot />
+		</main>
+		<footer>
+			<p>&copy; {new Date().getFullYear()} Guilherme Negreiros. {t('footer.rights')}</p>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:root {
+		color-scheme: light dark;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		margin: 0;
+		font-family: system-ui, sans-serif;
+		line-height: 1.5;
+	}
+
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		z-index: 100;
+		padding: 0.5rem 1rem;
+		background: Canvas;
+		color: CanvasText;
+	}
+
+	.skip-link:focus {
+		left: 0.5rem;
+		top: 0.5rem;
+	}
+
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 1rem;
+		padding: 1rem;
+	}
+
+	nav ul {
+		display: flex;
+		gap: 1rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		flex-wrap: wrap;
+	}
+
+	main {
+		max-width: 60rem;
+		margin: 0 auto;
+		padding: 1rem;
+	}
+
+	footer {
+		padding: 1rem;
+		text-align: center;
+		font-size: 0.875rem;
+	}
+</style>

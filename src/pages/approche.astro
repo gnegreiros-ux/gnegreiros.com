@@ -1,0 +1,14 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('pages', 'en/approche');
+if (!entry) throw new Error('Missing content entry: en/approche');
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="approche">
+	<h1>{entry.data.heroTitle}</h1>
+	{entry.data.heroSubtitle && <p>{entry.data.heroSubtitle}</p>}
+	<Content />
+</BaseLayout>
