@@ -1,6 +1,6 @@
 # Portfolio gnegreiros.com — Contenu & Storytelling (Phase 1)
 
-**Statut :** Contenu validé (toutes pages + corrections), prêt pour métadonnées SEO puis Phase 2 (Design)
+**Statut :** Contenu validé (toutes pages + corrections). SEO et Phase 2 (Design) sont également verrouillés depuis — voir `portfolio-gnegreiros-seo-metadata.md` et `portfolio-gnegreiros-phase2-design.md`
 **Langue de rédaction :** Anglais (langue par défaut du site)
 **Langues du site :** EN (défaut) · FR · PT-BR
 **Titre de page (browser tab) :** `Guilherme Negreiros — UX Systems Designer`
@@ -220,6 +220,6 @@ gnegreiros.com
 - [x] CV/Resume retiré temporairement du Contact (livrable séparé, après le site)
 - [ ] Traduction FR et PT-BR (une fois le contenu anglais définitivement verrouillé)
 - [ ] **Métadonnées SEO** (title tags + meta descriptions par page) — à concevoir juste après validation finale du contenu, avant la Phase 2
-- [ ] **Phase 2 — Design** : direction visuelle, wireframes, hiérarchie de l'information
+- [x] **Phase 2 — Design** : direction visuelle, wireframes, hiérarchie de l'information (voir `portfolio-gnegreiros-phase2-design.md`)
 - [ ] **Phase 3 — Technologie** : le site sera construit comme pilote d'une équipe produit consommant Agentica (Web Components, tokens, architecture i18n dès le départ pour EN/FR/PT-BR ; affichage dynamique des chiffres Agentica à évaluer une fois la source corrigée)
 - [ ] Rappel hors périmètre : corriger l'écart de chiffres sur le site Agentica lui-même (projet Promotion Agentica)

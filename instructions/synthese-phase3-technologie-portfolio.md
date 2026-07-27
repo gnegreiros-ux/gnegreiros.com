@@ -1,8 +1,8 @@
 # Portfolio gnegreiros.com — Phase 3 : Technologie — Synthèse des décisions
 
 **Statut :** Décisions techniques verrouillées, y compris l'architecture i18n.
-**Document compagnon de :** `portfolio-gnegreiros-contenu-phase1.md`, `portfolio-gnegreiros-seo-metadata.md`
-**Contexte :** Phase 1 (contenu, 7 pages EN) et Phase 2 (design) sont verrouillées. Ce document couvre les décisions de la Phase 3.
+**Document compagnon de :** `portfolio-gnegreiros-contenu-phase1.md`, `portfolio-gnegreiros-seo-metadata.md`, `portfolio-gnegreiros-phase2-design.md`
+**Contexte :** Phase 1 (contenu, 7 pages EN) et Phase 2 (design — voir `portfolio-gnegreiros-phase2-design.md`) sont verrouillées. Ce document couvre les décisions de la Phase 3.
 
 ---
 

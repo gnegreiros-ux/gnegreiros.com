@@ -1,16 +1,19 @@
 # Start Here — gnegreiros.com
 
-Ce fichier est le point d'entrée pour le développement du site **gnegreiros.com**. Lis les trois documents ci-dessous, dans cet ordre, avant d'écrire la moindre ligne de code. Ils contiennent des décisions déjà verrouillées par Guilherme — ne les remets pas en question, implémente-les.
+Ce fichier est le point d'entrée pour le développement du site **gnegreiros.com**. Lis les quatre documents ci-dessous, dans cet ordre, avant d'écrire la moindre ligne de code. Ils contiennent des décisions déjà verrouillées par Guilherme — ne les remets pas en question, implémente-les.
 
-## 1. `Portfolio Gnegreiros Phase 1.md` — Contenu & storytelling
+## 1. `portfolio-gnegreiros-contenu-phase1.md` — Contenu & storytelling
 Contenu final validé pour les 7 pages du site (Home, Approche, Agentica, DTGen, Parcours, À propos, Contact), en anglais (langue par défaut). Définit l'arborescence, le positionnement ("systems builder", pas "screen designer"), et tout le texte à intégrer tel quel dans les Content Collections.
 
 ⚠️ Contient une note interne (chiffres Agentica) à ne pas publier telle quelle — voir section correspondante dans le document.
 
-## 2. `SEO Metadata Portfolio.md` — Métadonnées SEO
+## 2. `portfolio-gnegreiros-seo-metadata.md` — Métadonnées SEO
 Title tags et meta descriptions validés pour chacune des 7 pages, prêts à être injectés dans le `<head>` de chaque route Astro. Contient aussi les règles de rédaction à respecter si de nouvelles pages sont ajoutées plus tard (pas de répétition de mots-clés, pas de "Design Systems Expert", etc.).
 
-## 3. `Priorisation Phase 3 Technologie.md` — Décisions techniques
+## 3. `portfolio-gnegreiros-phase2-design.md` — Design (direction visuelle, hiérarchie, wireframes)
+Système visuel verrouillé : fond clair chaud-neutre, accent unique `#4C49E2` (indigo, réservé aux liens/CTA/annotations, jamais en fond large), titres serif / corps sans-serif, motif de grille discret en monospace. Définit aussi la hiérarchie de l'information page par page (ex. hero Agentica sans chiffres en avant, Contact réduit à 2 niveaux) et liste les wireframes moyenne fidélité déjà produits (Home, Agentica, À propos, Parcours, Approche, DTGen — Contact n'en a pas, jugé inutile).
+
+## 4. `synthese-phase3-technologie-portfolio.md` — Décisions techniques
 Le document de référence pour l'implémentation :
 - **Stack :** Astro (SSG), zéro JS par défaut, Content Collections pour le contenu multilingue
 - **Le site n'est PAS un pilote Agentica** — projet indépendant, repo Git séparé, propre stack (pivot déjà tranché, ne pas revenir dessus)
@@ -24,12 +27,13 @@ Le document de référence pour l'implémentation :
 ## Ordre de travail suggéré pour Claude Code
 
 1. Scaffolding du projet Astro (config i18n, structure de dossiers, Content Collections)
-2. Intégration du contenu Phase 1 (pages EN uniquement au lancement)
-3. Intégration des métadonnées SEO par page
-4. Script de build pour lire les chiffres Agentica via l'API GitHub
-5. Mise en place W3C / WCAG / Core Web Vitals (validation automatisée)
-6. GA4 + bannière de consentement
-7. Pipeline GitHub Actions (build + déploiement OVH)
+2. Implémentation du système visuel Phase 2 (tokens de couleur/typo, layout de base, composants partagés — voir `portfolio-gnegreiros-phase2-design.md`)
+3. Intégration du contenu Phase 1 dans la structure de pages selon la hiérarchie de l'information verrouillée (pages EN uniquement au lancement)
+4. Intégration des métadonnées SEO par page
+5. Script de build pour lire les chiffres Agentica via l'API GitHub
+6. Mise en place W3C / WCAG / Core Web Vitals (validation automatisée)
+7. GA4 + bannière de consentement
+8. Pipeline GitHub Actions (build + déploiement OVH)
 
 ## Points encore ouverts (à confirmer avec Guilherme avant de bloquer dessus)
 
