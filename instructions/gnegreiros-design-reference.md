@@ -26,6 +26,7 @@ Those three files are now obsolete for visual design purposes — do not read th
 ---
 
 **Changelog:**
+- v0.4 — added dot-mark decorative motif (§4.9): CSS-only token-grid dot accent, 2–3 instances per page in empty corners, `--color-text-secondary` at low opacity; established during the Home page build and confirmed with Guilherme, applies to all future pages
 - v0.3 — added iconography rule (Lucide Icons, §4.7), imagery/company-marks policy (§4.8), increased section/card spacing (§4.4); reaffirmed "no Home hero image" and "no Agentica hero metrics" after a ChatGPT-generated visual draft surfaced both — both rules stay locked (see §4.6 and §5); declared this file as the sole visual design reference, superseding the three prior design documents
 
 ---
@@ -181,6 +182,26 @@ Internal links keep the existing text arrow (`→`) convention — Lucide icons 
 - **No stock photography.** Generic architectural/interior stock photos (staircases, arches, columns) read as templated and contradict the "no photo as a substitute for thinking" principle — even outside the Home hero, on pages like Parcours or About. If a page benefits from a visual break, prefer an abstract token/diagram treatment (in the style of the Agentica micro-diagram) over a photograph, or leave the space as a rhythm break with no image at all.
 - **No real company logos.** The Parcours page must not reproduce the actual logos/wordmarks of RAMQ, Akinox, Intact, Ovation, or Canadel — these are trademarked marks and not Guilherme's to reuse visually, and doing so also risks reading as an implied endorsement. Represent each company as a plain-text wordmark set in `--font-mono`, uppercase, `--color-text-secondary` — consistent with how the rest of the system already treats structural labels. No logo marks, no brand colors borrowed from these companies.
 - Photography, if used anywhere on the site (e.g. About page drums/church reference), should be original or clearly abstracted — never third-party stock imagery presented as if it depicts Guilherme's actual life or work.
+
+### 4.9 Decorative motif — dot-mark (token grid accent)
+
+A small CSS-only radial-gradient dot grid, echoing the "token grid" concept from §4.1, used as a quiet corner accent — never a dominant pattern. Established during the Home page build (v0.4); apply to every subsequent page.
+
+- **Implementation:** pure CSS, no image assets, no JS —
+  ```css
+  .dot-mark {
+    position: absolute;
+    pointer-events: none;
+    background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+    background-size: 14px 14px;
+    opacity: 0.2;
+  }
+  ```
+- **Color:** always `--color-text-secondary` at low opacity (0.15–0.2) — never `--color-accent`. Indigo stays reserved for the 3 structural moments in §4.5; the dot-mark must not become a 4th unauthorized indigo use.
+- **Placement:** 2–3 instances per page, in otherwise-empty corners (e.g. top-right of the hero, top-right of a content section, bottom-right near a closing CTA). Never overlapping text, never centered, never load-bearing for layout.
+- **Sizing:** one larger instance (~220×160px) for the page's hero/lead section, smaller companion instances (~140×100px) elsewhere — creates rhythm rather than mechanical repetition of an identical block.
+- **Responsive:** hidden below `1024px` (`display: none`) — decorative only, not essential content.
+- **Reference implementation:** `src/pages/index.astro` (`.dot-mark` base class + page-specific position modifiers, e.g. `.hero__mark`, `.teasers__mark`, `.final-cta__mark`).
 
 ---
 

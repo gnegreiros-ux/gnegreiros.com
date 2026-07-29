@@ -1,0 +1,51 @@
+/* Design tokens — source of truth: instructions/gnegreiros-design-reference.md §4 */
+
+:root {
+	color-scheme: light;
+
+	/* 4.2 Color */
+	--color-bg: #faf8f4;
+	--color-text-primary: #231f1a;
+	--color-text-secondary: #6b645c;
+	--color-line: #e4dfd8;
+	--color-accent: #4c49e2;
+
+	/* 4.3 Typography */
+	--font-serif: 'Fraunces Variable', Georgia, serif;
+	--font-sans: 'Inter Variable', system-ui, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+	--text-hero: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+	--text-h1: clamp(2rem, 3vw + 1rem, 3rem);
+	--text-h2: 2rem;
+	--text-h3: 1.5rem;
+	--text-lead: 1.3125rem;
+	--text-body: 1.125rem;
+	--text-small: 0.9375rem;
+	--text-mono: 0.8125rem;
+
+	/* 4.4 Spacing & layout */
+	--space-unit: 8px;
+	--grid-columns: 12;
+	--grid-columns-mobile: 4;
+	--content-max: 80rem;
+	--measure: 720px;
+	--radius: 2px;
+	--shadow: none;
+
+	--space-section: 10rem;
+	--space-section-mobile: 6rem;
+	--space-card-gap: 4rem;
+	--space-card-gap-mobile: 2rem;
+	--space-card-padding: 2.5rem;
+
+	/* 7. Hero composition */
+	--nav-height: 5rem;
+}
+
+@media (max-width: 768px) {
+	:root {
+		--space-section: var(--space-section-mobile);
+		--space-card-gap: var(--space-card-gap-mobile);
+	}
+}

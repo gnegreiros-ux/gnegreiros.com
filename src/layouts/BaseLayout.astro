@@ -1,4 +1,11 @@
 ---
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/inter';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import { Menu } from '@lucide/astro';
+import '../styles/tokens.css';
+
 import { locales } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
 import { getLocalizedPath, type Slug } from '../i18n/routes';
@@ -23,7 +30,6 @@ const navLinks: { slug: Slug; label: string }[] = [
 	{ slug: 'dtgen', label: t('nav.dtgen') },
 	{ slug: 'parcours', label: t('nav.parcours') },
 	{ slug: 'a-propos', label: t('nav.about') },
-	{ slug: 'contact', label: t('nav.contact') },
 ];
 
 const canonicalUrl = new URL(getLocalizedPath(routeLocale, slug), Astro.site);
@@ -63,40 +69,58 @@ const personJsonLd = {
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
-		<header>
-			<nav aria-label="Primary">
-				<a href={getLocalizedPath(routeLocale, 'home')}>Guilherme Negreiros</a>
-				<ul>
+		<header class="site-header">
+			<nav class="site-nav" aria-label="Primary">
+				<a class="site-nav__logo" href={getLocalizedPath(routeLocale, 'home')}>Guilherme Negreiros</a>
+				<input type="checkbox" id="nav-toggle" class="site-nav__toggle-input" />
+				<label for="nav-toggle" class="site-nav__menu-toggle" aria-label="Open menu">
+					<Menu size={22} stroke-width={1.5} aria-hidden="true" />
+				</label>
+				<ul class="site-nav__links">
 					{navLinks.map((link) => (
 						<li>
 							<a href={getLocalizedPath(routeLocale, link.slug)}>{link.label}</a>
 						</li>
 					))}
+					<li>
+						<a class="site-nav__contact" href={getLocalizedPath(routeLocale, 'contact')}>
+							{t('nav.contact')}
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</header>
 		<main id="main">
 			<slot />
 		</main>
-		<footer>
+		<footer class="site-footer">
 			<p>&copy; {new Date().getFullYear()} Guilherme Negreiros. {t('footer.rights')}</p>
 		</footer>
 	</body>
 </html>
 
-<style>
-	:root {
-		color-scheme: light dark;
+<style is:global>
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
 	}
 
-	* {
-		box-sizing: border-box;
+	html {
+		background: var(--color-bg);
 	}
 
 	body {
 		margin: 0;
-		font-family: system-ui, sans-serif;
-		line-height: 1.5;
+		background: var(--color-bg);
+		color: var(--color-text-primary);
+		font-family: var(--font-sans);
+		font-size: var(--text-body);
+		line-height: 1.6;
+	}
+
+	a {
+		color: inherit;
 	}
 
 	.skip-link {
@@ -105,8 +129,8 @@ const personJsonLd = {
 		top: 0;
 		z-index: 100;
 		padding: 0.5rem 1rem;
-		background: Canvas;
-		color: CanvasText;
+		background: var(--color-bg);
+		color: var(--color-text-primary);
 	}
 
 	.skip-link:focus {
@@ -114,33 +138,118 @@ const personJsonLd = {
 		top: 0.5rem;
 	}
 
-	nav {
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		height: var(--nav-height);
+		background: var(--color-bg);
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	.site-nav {
+		position: relative;
+		max-width: var(--content-max);
+		height: 100%;
+		margin: 0 auto;
+		padding: 0 1.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 1rem;
-		padding: 1rem;
+		gap: 1.5rem;
 	}
 
-	nav ul {
-		display: flex;
-		gap: 1rem;
+	.site-nav__logo {
+		font-family: var(--font-mono);
+		font-size: var(--text-small);
+		letter-spacing: 0.02em;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.site-nav__toggle-input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.site-nav__menu-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		color: var(--color-text-primary);
+	}
+
+	.site-nav__links {
+		align-items: center;
+		gap: 1.75rem;
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		flex-wrap: wrap;
+		font-size: var(--text-small);
+	}
+
+	@media (min-width: 769px) {
+		.site-nav__links {
+			display: flex;
+		}
+	}
+
+	.site-nav__links a {
+		text-decoration: none;
+		color: var(--color-text-secondary);
+		transition: color 0.2s ease;
+	}
+
+	.site-nav__links a:hover,
+	.site-nav__links a:focus-visible {
+		color: var(--color-text-primary);
+	}
+
+	.site-nav__contact {
+		color: var(--color-accent) !important;
 	}
 
 	main {
-		max-width: 60rem;
-		margin: 0 auto;
-		padding: 1rem;
+		display: block;
 	}
 
-	footer {
-		padding: 1rem;
+	.site-footer {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 2rem 1.5rem;
 		text-align: center;
-		font-size: 0.875rem;
+		font-size: var(--text-small);
+		color: var(--color-text-secondary);
+	}
+
+	@media (max-width: 768px) {
+		.site-nav__menu-toggle {
+			display: flex;
+		}
+
+		.site-nav__links {
+			display: none;
+			position: absolute;
+			top: calc(100% + 1px);
+			right: 0;
+			left: 0;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0;
+			background: var(--color-bg);
+			border-bottom: 1px solid var(--color-line);
+			font-size: var(--text-mono);
+		}
+
+		.site-nav__toggle-input:checked ~ .site-nav__links {
+			display: flex;
+		}
+
+		.site-nav__links a {
+			display: block;
+			padding: 0.75rem 1.5rem;
+		}
 	}
 </style>
