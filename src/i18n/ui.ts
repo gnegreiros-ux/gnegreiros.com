@@ -22,6 +22,10 @@ export const ui = {
 		'nav.about': 'About',
 		'nav.contact': 'Contact',
 		'footer.rights': 'All rights reserved.',
+		'consent.message':
+			'This site uses Google Analytics to understand how it’s used. No tracking cookies until you accept.',
+		'consent.accept': 'Accept',
+		'consent.refuse': 'Refuse',
 	},
 	fr: {},
 	'pt-br': {},
