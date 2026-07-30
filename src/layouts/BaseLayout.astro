@@ -77,8 +77,9 @@ const personJsonLd = {
 			<nav class="site-nav" aria-label="Primary">
 				<a class="site-nav__logo" href={getLocalizedPath(routeLocale, 'home')}>Guilherme Negreiros</a>
 				<input type="checkbox" id="nav-toggle" class="site-nav__toggle-input" />
-				<label for="nav-toggle" class="site-nav__menu-toggle" aria-label="Open menu">
+				<label for="nav-toggle" class="site-nav__menu-toggle">
 					<Menu size={22} stroke-width={1.5} aria-hidden="true" />
+					<span class="visually-hidden">Open menu</span>
 				</label>
 				<ul class="site-nav__links">
 					{navLinks.map((link) => (
@@ -128,6 +129,18 @@ const personJsonLd = {
 		color: inherit;
 	}
 
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	.skip-link {
 		position: absolute;
 		left: -9999px;
@@ -173,9 +186,7 @@ const personJsonLd = {
 	}
 
 	.site-nav__toggle-input {
-		position: absolute;
-		opacity: 0;
-		pointer-events: none;
+		display: none;
 	}
 
 	.site-nav__menu-toggle {
@@ -230,6 +241,13 @@ const personJsonLd = {
 	}
 
 	@media (max-width: 768px) {
+		.site-nav__toggle-input {
+			position: absolute;
+			display: block;
+			opacity: 0;
+			pointer-events: none;
+		}
+
 		.site-nav__menu-toggle {
 			display: flex;
 		}

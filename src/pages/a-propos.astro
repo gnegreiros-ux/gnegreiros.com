@@ -22,7 +22,15 @@ const links = [
 				<h1 class="page-hero__title">{entry.data.heroTitle}</h1>
 				{entry.data.heroSubtitle && <p class="page-hero__subtitle">{entry.data.heroSubtitle}</p>}
 			</div>
-			<img class="page-hero__photo" src="/photos/guilherme.png" alt="Guilherme Negreiros" />
+			<img
+				class="page-hero__photo"
+				src="/photos/guilherme.webp"
+				alt="Guilherme Negreiros"
+				width="440"
+				height="560"
+				loading="eager"
+				fetchpriority="high"
+			/>
 		</div>
 	</section>
 
@@ -73,8 +81,11 @@ const links = [
 			</p>
 			<img
 				class="outside-section__photo"
-				src="/photos/drums.jpg"
+				src="/photos/drums.webp"
 				alt="Guilherme playing drums at his church"
+				width="640"
+				height="480"
+				loading="lazy"
 			/>
 		</div>
 	</section>

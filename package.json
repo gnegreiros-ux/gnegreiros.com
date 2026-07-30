@@ -12,7 +12,11 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "stats:agentica": "node scripts/update-agentica-stats.mjs"
+    "stats:agentica": "node scripts/update-agentica-stats.mjs",
+    "qa:html": "node scripts/qa/validate-html.mjs",
+    "qa:a11y": "node scripts/qa/a11y.mjs",
+    "qa:lighthouse": "node scripts/qa/lighthouse.mjs",
+    "qa": "npm run build && npm run qa:html && npm run qa:a11y && npm run qa:lighthouse"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -24,6 +28,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "axe-core": "^4.12.1",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^12.8.2",
+    "puppeteer-core": "^25.4.0",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.3"
   }
 }
