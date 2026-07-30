@@ -2,9 +2,12 @@
 import { getEntry } from 'astro:content';
 import { ChevronDown } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAgenticaStats } from '../lib/agentica';
 
 const entry = await getEntry('pages', 'en/home');
 if (!entry) throw new Error('Missing content entry: en/home');
+
+const stats = await getAgenticaStats();
 
 const teasers = [
 	{
@@ -20,7 +23,7 @@ const teasers = [
 		variant: 'default' as const,
 		eyebrow: 'Agentica',
 		title: 'Agentica — proof at scale',
-		body: '800+ tokens. 70+ versioned decisions. 14 components shipped, more in progress. A personal system built to test a governance model most enterprise design systems are missing.',
+		body: `${stats.tokenCount}+ tokens. ${stats.adrCount}+ versioned decisions. ${stats.componentCount} components shipped, more in progress. A personal system built to test a governance model most enterprise design systems are missing.`,
 		linkLabel: 'Explore Agentica',
 	},
 	{

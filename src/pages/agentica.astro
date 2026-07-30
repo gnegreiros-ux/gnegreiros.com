@@ -3,9 +3,12 @@ import { getEntry } from 'astro:content';
 import { Laptop } from '@lucide/astro';
 import BrandIcon from '../components/icons/BrandIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAgenticaStats } from '../lib/agentica';
 
 const entry = await getEntry('pages', 'en/agentica');
 if (!entry) throw new Error('Missing content entry: en/agentica');
+
+const stats = await getAgenticaStats();
 
 const flowSteps = ['Decide', 'Govern', 'Systematize', 'Execute'];
 
@@ -17,15 +20,15 @@ const architectureTags = [
 ];
 
 const results = [
-	'800+ design tokens across light and dark modes',
-	'14 components shipped, with more in active development',
-	'70+ ADRs capturing the reasoning behind every major decision',
-	'10 automated quality gates (accessibility WCAG 2.1, visual regression, documentation, token consistency)',
+	`${stats.tokenCount}+ design tokens across light and dark modes`,
+	`${stats.componentCount} components shipped, with more in active development`,
+	`${stats.adrCount}+ ADRs capturing the reasoning behind every major decision`,
+	'Automated quality gates for accessibility (WCAG 2.1), visual regression, documentation, and token consistency',
 ];
 
 const resultLinks = [
 	{ label: 'Live site', href: 'https://designsystem.gnegreiros.com', icon: 'laptop' as const },
-	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux/agentic-design-system', icon: 'github' as const },
+	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux/agentica-design-system', icon: 'github' as const },
 	{ label: 'Storybook', href: 'https://main--6a1c1e665ec5fe8fc0540983.chromatic.com/', icon: 'storybook' as const },
 ];
 ---
