@@ -16,7 +16,6 @@ const links = [
 
 <BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="a-propos">
 	<section class="page-hero">
-		<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
 		<div class="page-hero__grid">
 			<div class="page-hero__text">
 				<h1 class="page-hero__title">{entry.data.heroTitle}</h1>
@@ -26,12 +25,13 @@ const links = [
 				class="page-hero__photo"
 				src="/photos/guilherme.webp"
 				alt="Guilherme Negreiros"
-				width="440"
-				height="560"
+				width="750"
+				height="1125"
 				loading="eager"
 				fetchpriority="high"
 			/>
 		</div>
+		<div class="page-hero__divider" aria-hidden="true"></div>
 	</section>
 
 	<section class="section prose-section">
@@ -83,8 +83,8 @@ const links = [
 				class="outside-section__photo"
 				src="/photos/drums.webp"
 				alt="Guilherme playing drums at his church"
-				width="640"
-				height="480"
+				width="700"
+				height="700"
 				loading="lazy"
 			/>
 		</div>
@@ -119,23 +119,20 @@ const links = [
 
 	.page-hero {
 		position: relative;
-		max-width: var(--content-max);
-		margin: 0 auto;
-		padding: 7.5rem 1.5rem 0;
-	}
-
-	.page-hero__mark {
-		top: 1.5rem;
-		right: 1.5rem;
-		width: 180px;
-		height: 130px;
+		padding-top: 7.5rem;
 	}
 
 	.page-hero__grid {
 		display: grid;
-		grid-template-columns: 1fr auto;
-		align-items: start;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
 		gap: 3rem;
+		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
+		padding-bottom: 2.5rem;
+	}
+
+	.page-hero__text {
+		padding-bottom: 1rem;
 	}
 
 	.page-hero__title {
@@ -156,25 +153,30 @@ const links = [
 	}
 
 	.page-hero__photo {
-		width: 220px;
-		height: 280px;
-		object-fit: cover;
-		object-position: top center;
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius);
+		justify-self: end;
+		width: auto;
+		height: 560px;
+		max-width: 100%;
 		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
 		opacity: 0.92;
+	}
+
+	.page-hero__divider {
+		width: 100%;
+		height: 1px;
+		background: var(--color-line);
 	}
 
 	@media (max-width: 640px) {
 		.page-hero__grid {
 			grid-template-columns: 1fr;
+			padding-right: 1.5rem;
 		}
 
 		.page-hero__photo {
 			order: -1;
-			width: 160px;
-			height: 200px;
+			justify-self: center;
+			height: 320px;
 		}
 	}
 
@@ -286,23 +288,24 @@ const links = [
 	}
 
 	.outside-section {
-		padding-bottom: 0;
+		max-width: none;
+		margin: 0;
+		padding: var(--space-section) 0 0;
 	}
 
 	.outside-section__grid {
 		display: grid;
-		grid-template-columns: 1fr auto;
-		align-items: start;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
 		gap: 2rem;
+		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
 	}
 
 	.outside-section__photo {
-		width: 280px;
-		height: 230px;
-		object-fit: cover;
-		object-position: center 30%;
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius);
+		justify-self: end;
+		width: auto;
+		height: 320px;
+		max-width: 100%;
 		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
 		opacity: 0.92;
 	}
@@ -310,13 +313,13 @@ const links = [
 	@media (max-width: 640px) {
 		.outside-section__grid {
 			grid-template-columns: 1fr;
+			padding-right: 1.5rem;
 		}
 
 		.outside-section__photo {
 			order: -1;
-			width: 100%;
-			max-width: 320px;
-			height: 220px;
+			justify-self: center;
+			height: 260px;
 		}
 	}
 
