@@ -128,7 +128,6 @@ const links = [
 		align-items: end;
 		gap: 3rem;
 		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
-		padding-bottom: 2.5rem;
 	}
 
 	.page-hero__text {
@@ -290,7 +289,10 @@ const links = [
 	.outside-section {
 		max-width: none;
 		margin: 0;
-		padding: var(--space-section) 0 0;
+		padding-top: var(--space-section);
+		padding-right: 0;
+		padding-bottom: 0;
+		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
 	}
 
 	.outside-section__grid {
@@ -298,7 +300,6 @@ const links = [
 		grid-template-columns: minmax(0, 1fr) auto;
 		align-items: end;
 		gap: 2rem;
-		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
 	}
 
 	.outside-section__photo {
@@ -311,9 +312,12 @@ const links = [
 	}
 
 	@media (max-width: 640px) {
+		.outside-section {
+			padding-right: 1.5rem;
+		}
+
 		.outside-section__grid {
 			grid-template-columns: 1fr;
-			padding-right: 1.5rem;
 		}
 
 		.outside-section__photo {
