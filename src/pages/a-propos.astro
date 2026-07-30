@@ -1,14 +1,356 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import BrandIcon from '../components/icons/BrandIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const entry = await getEntry('pages', 'en/a-propos');
 if (!entry) throw new Error('Missing content entry: en/a-propos');
-const { Content } = await render(entry);
+
+const trajectory = ['Graphic design', 'Web & UI', 'UX Design', 'Design Systems'];
+
+const links = [
+	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const },
+	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const },
+];
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="a-propos">
-	<h1>{entry.data.heroTitle}</h1>
-	{entry.data.heroSubtitle && <p>{entry.data.heroSubtitle}</p>}
-	<Content />
+	<section class="page-hero">
+		<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
+		<div class="page-hero__grid">
+			<div class="page-hero__text">
+				<h1 class="page-hero__title">{entry.data.heroTitle}</h1>
+				{entry.data.heroSubtitle && <p class="page-hero__subtitle">{entry.data.heroSubtitle}</p>}
+			</div>
+			<img class="page-hero__photo" src="/photos/guilherme.png" alt="Guilherme Negreiros" />
+		</div>
+	</section>
+
+	<section class="section prose-section">
+		<h2 class="section__title">The trajectory</h2>
+		<p class="section__body">
+			I started in 1997 designing print ads and logos in Brazil. By 2001, I was building websites
+			by hand — HTML, CSS, one client at a time. Over two decades, that same instinct — build
+			something that works, then figure out how to make it hold — carried me from graphic design,
+			to web design, to UI, to UX, to what I do now: designing the systems and governance that keep
+			design decisions consistent at scale.
+		</p>
+		<p class="section__body">It wasn't a pivot. Every step used what the last one taught me.</p>
+		<div class="flow">
+			<ol class="flow__list">
+				{trajectory.map((stage) => (
+					<li class="flow__step">
+						<span class="flow__dot"></span>
+						<span class="flow__label">{stage}</span>
+					</li>
+				))}
+			</ol>
+		</div>
+	</section>
+
+	<section class="section builder-section">
+		<div class="dot-mark builder-section__mark" aria-hidden="true"></div>
+		<h2 class="section__title">What "systems builder" actually means</h2>
+		<div class="callout">
+			<p class="callout__body">
+				I don't think of myself as someone who designs screens — I design the infrastructure that
+				makes screens consistent, explainable, and durable over time: tokens, component
+				architecture, decision governance, and the workflows that connect design to development.
+				That's what colleagues have consistently pointed to when describing how I work — not as a
+				designer producing artifacts, but as someone building the systems that let a team produce
+				consistently, without reinventing the same decisions over and over.
+			</p>
+		</div>
+	</section>
+
+	<section class="section prose-section outside-section">
+		<h2 class="section__title">Outside the systems</h2>
+		<div class="outside-section__grid">
+			<p class="section__body section__body--small">
+				Trois-Rivières, Québec. Portuguese, French, and English. When I'm not working on design
+				systems, I play drums at my church — a different kind of discipline: showing up, staying
+				in time with other people, and trusting a structure you didn't build alone.
+			</p>
+			<img
+				class="outside-section__photo"
+				src="/photos/drums.jpg"
+				alt="Guilherme playing drums at his church"
+			/>
+		</div>
+	</section>
+
+	<section class="section links-section">
+		<div class="links">
+			{links.map((link) => (
+				<a class="links__link" href={link.href} target="_blank" rel="noopener">
+					<BrandIcon name={link.icon} size={20} />
+					{link.label}
+				</a>
+			))}
+		</div>
+	</section>
 </BaseLayout>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 7.5rem 1.5rem 0;
+	}
+
+	.page-hero__mark {
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 180px;
+		height: 130px;
+	}
+
+	.page-hero__grid {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: start;
+		gap: 3rem;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.page-hero__photo {
+		width: 220px;
+		height: 280px;
+		object-fit: cover;
+		object-position: top center;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
+		opacity: 0.92;
+	}
+
+	@media (max-width: 640px) {
+		.page-hero__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.page-hero__photo {
+			order: -1;
+			width: 160px;
+			height: 200px;
+		}
+	}
+
+	.section {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem 0;
+	}
+
+	.prose-section,
+	.builder-section {
+		position: relative;
+	}
+
+	.section__title {
+		margin: 0 0 1.5rem;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-h2);
+		line-height: 1.2;
+		color: var(--color-text-primary);
+	}
+
+	.section__body {
+		margin: 0 0 1.25rem;
+		max-width: var(--measure);
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.section__body:last-of-type {
+		margin-bottom: 0;
+	}
+
+	.section__body--small {
+		font-size: var(--text-small);
+	}
+
+	.flow {
+		margin: 3rem 0 0;
+		max-width: var(--content-max);
+	}
+
+	.flow__list {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.flow__list::before {
+		content: '';
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		right: 5px;
+		height: 1px;
+		background: var(--color-line);
+	}
+
+	.flow__step {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.flow__dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--color-text-primary);
+	}
+
+	.flow__label {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		text-align: center;
+	}
+
+	.builder-section__mark {
+		top: 0;
+		right: 1.5rem;
+		width: 160px;
+		height: 110px;
+	}
+
+	.callout {
+		max-width: var(--measure);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		padding: var(--space-card-padding);
+	}
+
+	.callout__body {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-primary);
+	}
+
+	.outside-section {
+		padding-bottom: 0;
+	}
+
+	.outside-section__grid {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: start;
+		gap: 2rem;
+	}
+
+	.outside-section__photo {
+		width: 280px;
+		height: 230px;
+		object-fit: cover;
+		object-position: center 30%;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
+		opacity: 0.92;
+	}
+
+	@media (max-width: 640px) {
+		.outside-section__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.outside-section__photo {
+			order: -1;
+			width: 100%;
+			max-width: 320px;
+			height: 220px;
+		}
+	}
+
+	.links-section {
+		padding-bottom: var(--space-section);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+	}
+
+	.links__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: var(--text-body);
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 768px) {
+		.flow__list {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.5rem;
+		}
+
+		.flow__list::before {
+			top: 0;
+			bottom: 0;
+			left: 5px;
+			right: auto;
+			width: 1px;
+			height: auto;
+		}
+
+		.flow__step {
+			flex-direction: row;
+		}
+
+		.flow__label {
+			text-align: left;
+		}
+	}
+</style>

@@ -1,14 +1,349 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import { Laptop } from '@lucide/astro';
+import BrandIcon from '../components/icons/BrandIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const entry = await getEntry('pages', 'en/agentica');
 if (!entry) throw new Error('Missing content entry: en/agentica');
-const { Content } = await render(entry);
+
+const flowSteps = ['Decide', 'Govern', 'Systematize', 'Execute'];
+
+const architectureTags = [
+	{ label: 'Web Components' },
+	{ label: 'Design Tokens' },
+	{ label: 'W3C Standards', icon: 'w3c' as const },
+	{ label: 'Versioned ADRs' },
+];
+
+const results = [
+	'800+ design tokens across light and dark modes',
+	'14 components shipped, with more in active development',
+	'70+ ADRs capturing the reasoning behind every major decision',
+	'10 automated quality gates (accessibility WCAG 2.1, visual regression, documentation, token consistency)',
+];
+
+const resultLinks = [
+	{ label: 'Live site', href: 'https://designsystem.gnegreiros.com', icon: 'laptop' as const },
+	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux/agentic-design-system', icon: 'github' as const },
+	{ label: 'Storybook', href: 'https://main--6a1c1e665ec5fe8fc0540983.chromatic.com/', icon: 'storybook' as const },
+];
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="agentica">
-	<h1>{entry.data.heroTitle}</h1>
-	{entry.data.heroSubtitle && <p>{entry.data.heroSubtitle}</p>}
-	<Content />
+	<section class="page-hero">
+		<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
+		<h1 class="page-hero__title">{entry.data.heroTitle}</h1>
+		{entry.data.heroSubtitle && <p class="page-hero__subtitle">{entry.data.heroSubtitle}</p>}
+	</section>
+
+	<section class="section prose-section">
+		<h2 class="section__title">Context / problem</h2>
+		<p class="section__body">
+			Most design systems document what was built. Few preserve why. Teams lose decisions in Figma
+			comments, Slack threads, and tribal knowledge — so the same debates repeat, documentation
+			drifts out of date, and the system becomes dependent on the one person who remembers the
+			reasoning. I built Agentica to test whether that problem is solvable — not for a client, but
+			as proof of a governance model I believe enterprise design systems are missing.
+		</p>
+	</section>
+
+	<section class="section governance-section">
+		<div class="dot-mark governance-section__mark" aria-hidden="true"></div>
+		<h2 class="section__title">Decisions &amp; governance</h2>
+		<p class="section__body">
+			Every meaningful choice in Agentica is logged as a versioned Architecture Decision Record —
+			context, alternatives considered, trade-offs, and the reasoning behind the final call. This
+			isn't documentation after the fact; it's the mechanism that lets the system evolve without
+			erasing its own history.
+		</p>
+		<p class="section__body">
+			Agentica is also built with AI agents as a defined actor in the system — with an explicit
+			boundary. Agents can detect inconsistencies, propose components, and draft documentation.
+			They cannot approve, deploy, or bypass governance. The human keeps the final word, by design,
+			not by convention.
+		</p>
+		<div class="flow">
+			<ol class="flow__list">
+				{flowSteps.map((step) => (
+					<li class="flow__step">
+						<span class="flow__dot"></span>
+						<span class="flow__label">{step}</span>
+					</li>
+				))}
+			</ol>
+		</div>
+	</section>
+
+	<section class="section prose-section">
+		<h2 class="section__title">Architecture</h2>
+		<p class="section__body">
+			One source of truth feeds four levels: foundations (tokens), semantic contracts, components,
+			and applications. Components are built as native Web Components — framework-independent,
+			compiled to CSS, JS, Tailwind, Angular, iOS, and Android targets. If the AI tooling around it
+			disappeared tomorrow, the system would keep running: documented, scripted, and tested to
+			prove it.
+		</p>
+		<ul class="tags">
+			{architectureTags.map((tag) => (
+				<li class="tag">
+					{tag.icon && <BrandIcon name={tag.icon} size={14} />}
+					{tag.label}
+				</li>
+			))}
+		</ul>
+	</section>
+
+	<section class="section results-section">
+		<div class="dot-mark results-section__mark" aria-hidden="true"></div>
+		<h2 class="section__title">Result / proof</h2>
+		<ul class="results">
+			{results.map((line) => (
+				<li>{line}</li>
+			))}
+		</ul>
+		<div class="results__links">
+			{resultLinks.map((link) => (
+				<a class="results__link" href={link.href} target="_blank" rel="noopener">
+					{link.icon === 'laptop' ? (
+						<Laptop size={16} stroke-width={1.5} aria-hidden="true" />
+					) : (
+						<BrandIcon name={link.icon} size={16} />
+					)}
+					{link.label}
+				</a>
+			))}
+		</div>
+	</section>
 </BaseLayout>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 7.5rem 1.5rem 0;
+	}
+
+	.page-hero__mark {
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 180px;
+		height: 130px;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		max-width: 16ch;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.section {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem 0;
+	}
+
+	.section:last-child {
+		padding-bottom: var(--space-section);
+	}
+
+	.prose-section,
+	.governance-section,
+	.results-section {
+		position: relative;
+	}
+
+	.section__title {
+		margin: 0 0 1.5rem;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-h2);
+		line-height: 1.2;
+		color: var(--color-text-primary);
+	}
+
+	.section__body {
+		margin: 0 0 1.25rem;
+		max-width: var(--measure);
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.section__body:last-of-type {
+		margin-bottom: 0;
+	}
+
+	.governance-section__mark {
+		top: 0;
+		right: 1.5rem;
+		width: 160px;
+		height: 110px;
+	}
+
+	.flow {
+		margin: 3rem 0 0;
+		max-width: var(--content-max);
+	}
+
+	.flow__list {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.flow__list::before {
+		content: '';
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		right: 5px;
+		height: 1px;
+		background: var(--color-line);
+	}
+
+	.flow__step {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.flow__dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--color-text-primary);
+	}
+
+	.flow__label {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		list-style: none;
+		margin: 2rem 0 0;
+		padding: 0;
+	}
+
+	.tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		padding: 0.4rem 0.85rem;
+	}
+
+	.results-section__mark {
+		top: 0;
+		right: 1.5rem;
+		width: 160px;
+		height: 110px;
+	}
+
+	.results {
+		max-width: var(--measure);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.results li {
+		position: relative;
+		padding-left: 1.25rem;
+		margin-bottom: 0.75rem;
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.results li::before {
+		content: '—';
+		position: absolute;
+		left: 0;
+		color: var(--color-text-secondary);
+	}
+
+	.results__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+		margin-top: 2rem;
+	}
+
+	.results__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: var(--text-small);
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 768px) {
+		.flow__list {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.5rem;
+		}
+
+		.flow__list::before {
+			top: 0;
+			bottom: 0;
+			left: 5px;
+			right: auto;
+			width: 1px;
+			height: auto;
+		}
+
+		.flow__step {
+			flex-direction: row;
+		}
+	}
+</style>

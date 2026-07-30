@@ -18,7 +18,7 @@ export const ui = {
 		'nav.approach': 'Approach',
 		'nav.agentica': 'Agentica',
 		'nav.dtgen': 'DTGen',
-		'nav.parcours': 'Parcours',
+		'nav.parcours': 'Journey',
 		'nav.about': 'About',
 		'nav.contact': 'Contact',
 		'footer.rights': 'All rights reserved.',

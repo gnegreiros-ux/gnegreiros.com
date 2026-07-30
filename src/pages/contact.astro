@@ -1,14 +1,131 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import { Mail } from '@lucide/astro';
+import BrandIcon from '../components/icons/BrandIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const entry = await getEntry('pages', 'en/contact');
 if (!entry) throw new Error('Missing content entry: en/contact');
-const { Content } = await render(entry);
+
+const contactLinks = [
+	{ label: 'guilherme@gnegreiros.com', href: 'mailto:guilherme@gnegreiros.com', icon: 'mail' as const, external: false },
+	{ label: 'linkedin.com/in/gnegreiros', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const, external: true },
+	{ label: 'github.com/gnegreiros-ux', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const, external: true },
+];
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="contact">
-	<h1>{entry.data.heroTitle}</h1>
-	{entry.data.heroSubtitle && <p>{entry.data.heroSubtitle}</p>}
-	<Content />
+	<section class="page-hero">
+		<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
+		<h1 class="page-hero__title">{entry.data.heroTitle}</h1>
+		{entry.data.heroSubtitle && <p class="page-hero__subtitle">{entry.data.heroSubtitle}</p>}
+	</section>
+
+	<section class="section contact-section">
+		<div class="dot-mark contact-section__mark" aria-hidden="true"></div>
+		<ul class="contact-list">
+			{contactLinks.map((link) => (
+				<li class="contact-item">
+					{link.icon === 'mail' ? (
+						<Mail size={20} stroke-width={1.5} aria-hidden="true" />
+					) : (
+						<BrandIcon name={link.icon} size={20} />
+					)}
+					<a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}>
+						{link.label}
+					</a>
+				</li>
+			))}
+		</ul>
+	</section>
 </BaseLayout>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 7.5rem 1.5rem 0;
+	}
+
+	.page-hero__mark {
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 180px;
+		height: 130px;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.contact-section {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem var(--space-section);
+	}
+
+	.contact-section__mark {
+		bottom: 1rem;
+		right: 1.5rem;
+		width: 140px;
+		height: 100px;
+	}
+
+	.contact-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.contact-item {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		color: var(--color-text-secondary);
+	}
+
+	.contact-item a {
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		text-decoration: none;
+		color: var(--color-text-primary);
+		transition: color 0.2s ease;
+	}
+
+	.contact-item a:hover,
+	.contact-item a:focus-visible {
+		color: var(--color-accent);
+	}
+</style>

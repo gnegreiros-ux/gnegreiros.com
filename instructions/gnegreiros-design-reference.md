@@ -26,6 +26,7 @@ Those three files are now obsolete for visual design purposes — do not read th
 ---
 
 **Changelog:**
+- v0.5 — reversed the "no real company logos" rule (§4.8): Guilherme supplied actual logo assets for RAMQ/Akinox/Intact/Ovation/Canadel and confirmed he wants them used on Parcours, accepting the trademark/endorsement trade-off knowingly; also corrected §4.7 (`Linkedin`/`Github` Lucide icons don't exist — brand icons were removed from the `@lucide/astro` package — use inlined Font Awesome brand SVGs instead, see `src/components/icons/BrandIcon.astro`)
 - v0.4 — added dot-mark decorative motif (§4.9): CSS-only token-grid dot accent, 2–3 instances per page in empty corners, `--color-text-secondary` at low opacity; established during the Home page build and confirmed with Guilherme, applies to all future pages
 - v0.3 — added iconography rule (Lucide Icons, §4.7), imagery/company-marks policy (§4.8), increased section/card spacing (§4.4); reaffirmed "no Home hero image" and "no Agentica hero metrics" after a ChatGPT-generated visual draft surfaced both — both rules stay locked (see §4.6 and §5); declared this file as the sole visual design reference, superseding the three prior design documents
 
@@ -171,16 +172,17 @@ No other structural use of indigo without an explicit deliberate decision (ADR-s
 **Icon set: [Lucide Icons](https://lucide.dev)** — outline style, `stroke-width: 1.5`, sized `18–20px` for inline use (contact details, nav utilities) and `20–24px` for standalone use (theme toggle, scroll hint). Never filled/solid icon styles, never multi-color icon sets, never emoji as icon substitutes.
 
 Icons are used sparingly and functionally, never decoratively:
-- Contact page: `Mail`, `MapPin`, `Linkedin`, `Github` next to each contact line
-- Nav utility: `Sun`/`Moon` if a theme toggle exists, `ArrowUpRight` for external links (GitHub, Storybook, live site) instead of plain text arrows when the link leaves the site
+- Contact page: `Mail` (Lucide) next to the email line. **Correction (found during Contact build):** `Linkedin` and `Github` don't exist in the installed `@lucide/astro` package — Lucide removed brand/logo icons upstream. GitHub and LinkedIn now use `src/components/icons/BrandIcon.astro` (inlined Font Awesome brand glyphs, `fill="currentColor"`) instead — glyph-only versions, no square background container (LinkedIn keeps its brand-mandated rounded-square frame; GitHub and Figma use the frameless glyph). `MapPin` isn't used anywhere currently — no page has a standalone address line.
+- Nav utility: `Sun`/`Moon` if a theme toggle exists, `ArrowUpRight` for external links (Storybook, live site) instead of plain text arrows when the link leaves the site; use `BrandIcon` instead of `ArrowUpRight` specifically for GitHub/LinkedIn links, since a recognizable brand mark is more useful than a generic arrow
 - Scroll hint: `ChevronDown` or `ArrowDown`, animated per the existing bob keyframe
+- Agentica architecture tags: the "W3C Standards" tag pairs its label with the `w3c` `BrandIcon` glyph
 
 Internal links keep the existing text arrow (`→`) convention — Lucide icons are reserved for external links, contact channels, and utility controls, not for every link on the site. Overusing icons where text arrows already work would add visual noise the system doesn't need.
 
 ### 4.8 Imagery & company marks
 
 - **No stock photography.** Generic architectural/interior stock photos (staircases, arches, columns) read as templated and contradict the "no photo as a substitute for thinking" principle — even outside the Home hero, on pages like Parcours or About. If a page benefits from a visual break, prefer an abstract token/diagram treatment (in the style of the Agentica micro-diagram) over a photograph, or leave the space as a rhythm break with no image at all.
-- **No real company logos.** The Parcours page must not reproduce the actual logos/wordmarks of RAMQ, Akinox, Intact, Ovation, or Canadel — these are trademarked marks and not Guilherme's to reuse visually, and doing so also risks reading as an implied endorsement. Represent each company as a plain-text wordmark set in `--font-mono`, uppercase, `--color-text-secondary` — consistent with how the rest of the system already treats structural labels. No logo marks, no brand colors borrowed from these companies.
+- **Real company logos — overridden (v0.5).** Originally this section forbade reproducing the actual logos/wordmarks of RAMQ, Akinox, Intact, Ovation, and Canadel on the Parcours page (trademark risk, implied-endorsement risk), in favor of plain-text mono wordmarks. Guilherme reviewed that trade-off and asked to use the real logos anyway, accepting the risk knowingly — assets supplied directly (`public/logos/*.png`). The Parcours page now renders the actual company logos, each sized to a consistent bounding box, in their original brand colors. This is a deliberate, confirmed exception — brand colors from these 5 logos are not subject to the indigo-only accent rule in §4.5 (they're third-party marks, not structural accents).
 - Photography, if used anywhere on the site (e.g. About page drums/church reference), should be original or clearly abstracted — never third-party stock imagery presented as if it depicts Guilherme's actual life or work.
 
 ### 4.9 Decorative motif — dot-mark (token grid accent)
