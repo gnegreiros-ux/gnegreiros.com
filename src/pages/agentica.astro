@@ -3,12 +3,10 @@ import { getEntry } from 'astro:content';
 import { Laptop } from '@lucide/astro';
 import BrandIcon from '../components/icons/BrandIcon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAgenticaStats } from '../lib/agentica';
+import stats from '../data/agentica-stats.json';
 
 const entry = await getEntry('pages', 'en/agentica');
 if (!entry) throw new Error('Missing content entry: en/agentica');
-
-const stats = await getAgenticaStats();
 
 const flowSteps = ['Decide', 'Govern', 'Systematize', 'Execute'];
 

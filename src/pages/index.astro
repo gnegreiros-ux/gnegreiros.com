@@ -2,12 +2,10 @@
 import { getEntry } from 'astro:content';
 import { ChevronDown } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAgenticaStats } from '../lib/agentica';
+import stats from '../data/agentica-stats.json';
 
 const entry = await getEntry('pages', 'en/home');
 if (!entry) throw new Error('Missing content entry: en/home');
-
-const stats = await getAgenticaStats();
 
 const teasers = [
 	{

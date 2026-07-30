@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "stats:agentica": "node scripts/update-agentica-stats.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
