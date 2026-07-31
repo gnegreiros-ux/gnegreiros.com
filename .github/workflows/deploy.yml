@@ -41,4 +41,4 @@ jobs:
           password: ${{ secrets.OVH_SFTP_PASSWORD }}
           sftp_only: true
           local_path: './dist/*'
-          remote_path: '/${{ secrets.OVH_SFTP_REMOTE_DIR }}'
+          remote_path: '${{ secrets.OVH_SFTP_REMOTE_DIR }}'
