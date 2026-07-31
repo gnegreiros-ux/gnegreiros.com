@@ -1,0 +1,40 @@
+name: Deploy to OVH
+
+# Builds the Astro site and pushes dist/ to the OVH mutualisé host over
+# SFTP — see instructions/CLAUDE EXECUTION PLAN — gnegreiros.md §11.
+# OVH mutualisé SFTP is a jailed account (no shell/rsync), hence
+# sftp_only: true below.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1' # 06:00 UTC every Monday
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Deploy over SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.OVH_SFTP_USER }}
+          server: ${{ secrets.OVH_SFTP_HOST }}
+          port: ${{ secrets.OVH_SFTP_PORT }}
+          password: ${{ secrets.OVH_SFTP_PASSWORD }}
+          sftp_only: true
+          local_path: './dist/*'
+          remote_path: '/${{ secrets.OVH_SFTP_REMOTE_DIR }}'
