@@ -25,7 +25,11 @@ jobs:
         with:
           node-version: '22'
 
-      - run: npm ci
+      # npm ci: the committed lockfile's optional wasm32-wasi fallback
+      # entries (rolldown/lightningcss deps) resolve differently on macOS
+      # vs. this Linux runner, so npm ci flags them as "missing" even
+      # though npm install here resolves cleanly.
+      - run: npm install
       - run: npm run build
 
       - name: Deploy over SFTP
