@@ -1,0 +1,204 @@
+---
+import { Laptop } from '@lucide/astro';
+import type { DtgenCopy } from '../content/copy/dtgen';
+
+interface Props {
+	heroTitle: string;
+	heroSubtitle?: string;
+	copy: DtgenCopy;
+}
+
+const { heroTitle, heroSubtitle, copy } = Astro.props;
+---
+
+<section class="page-hero">
+	<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
+	<h1 class="page-hero__title">{heroTitle}</h1>
+	{heroSubtitle && <p class="page-hero__subtitle">{heroSubtitle}</p>}
+</section>
+
+<section class="section prose-section">
+	<h2 class="section__title">{copy.contextTitle}</h2>
+	<p class="section__body">{copy.contextBody}</p>
+</section>
+
+<section class="section prose-section">
+	<h2 class="section__title">{copy.whatTitle}</h2>
+	<p class="section__body">{copy.whatBody}</p>
+	<ul class="tags">
+		{copy.sourceTags.map((tag) => (
+			<li class="tag">{tag}</li>
+		))}
+		{copy.colorSpaceTags.map((tag) => (
+			<li class="tag">{tag}</li>
+		))}
+	</ul>
+</section>
+
+<section class="section prose-section">
+	<h2 class="section__title">{copy.whyTitle}</h2>
+	<p class="section__body">{copy.whyBody}</p>
+</section>
+
+<section class="section status-section">
+	<div class="dot-mark status-section__mark" aria-hidden="true"></div>
+	<h2 class="section__title">{copy.statusTitle}</h2>
+	<ul class="results">
+		{copy.status.map((line) => (
+			<li>{line}</li>
+		))}
+	</ul>
+	<div class="results__links">
+		<a class="results__link" href="https://dtgen.netlify.app" target="_blank" rel="noopener">
+			<Laptop size={16} stroke-width={1.5} aria-hidden="true" />
+			{copy.liveBetaLabel}
+		</a>
+	</div>
+</section>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 7.5rem 1.5rem 0;
+	}
+
+	.page-hero__mark {
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 180px;
+		height: 130px;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		max-width: 16ch;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.section {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem 0;
+	}
+
+	.section:last-child {
+		padding-bottom: var(--space-section);
+	}
+
+	.prose-section,
+	.status-section {
+		position: relative;
+	}
+
+	.section__title {
+		margin: 0 0 1.5rem;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-h2);
+		line-height: 1.2;
+		color: var(--color-text-primary);
+	}
+
+	.section__body {
+		margin: 0;
+		max-width: var(--measure);
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		list-style: none;
+		margin: 2rem 0 0;
+		padding: 0;
+	}
+
+	.tag {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		padding: 0.4rem 0.85rem;
+	}
+
+	.status-section__mark {
+		top: 0;
+		right: 1.5rem;
+		width: 160px;
+		height: 110px;
+	}
+
+	.results {
+		max-width: var(--measure);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.results li {
+		position: relative;
+		padding-left: 1.25rem;
+		margin-bottom: 0.75rem;
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.results li::before {
+		content: '—';
+		position: absolute;
+		left: 0;
+		color: var(--color-text-secondary);
+	}
+
+	.results__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+		margin-top: 2rem;
+	}
+
+	.results__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: var(--text-small);
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+</style>

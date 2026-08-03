@@ -1,8 +1,22 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getContentId, SLUGS, type Slug } from '../../i18n/routes';
 import type { Locale } from '../../i18n/ui';
+import stats from '../../data/agentica-stats.json';
+
+import ApprocheSections from '../../components/ApprocheSections.astro';
+import AgenticaSections from '../../components/AgenticaSections.astro';
+import DtgenSections from '../../components/DtgenSections.astro';
+import ParcoursSections from '../../components/ParcoursSections.astro';
+import AProposSections from '../../components/AProposSections.astro';
+import ContactSections from '../../components/ContactSections.astro';
+
+import { getApprocheCopy } from '../../content/copy/approche';
+import { getAgenticaCopy } from '../../content/copy/agentica';
+import { getDtgenCopy } from '../../content/copy/dtgen';
+import { getParcoursCopy } from '../../content/copy/parcours';
+import { getAProposCopy } from '../../content/copy/a-propos';
 
 export function getStaticPaths() {
 	const locales: Locale[] = ['fr', 'pt-br'];
@@ -21,7 +35,7 @@ if (!entry) {
 }
 if (!entry) throw new Error(`Missing fallback content entry: en/${slug}`);
 
-const { Content } = await render(entry);
+const { heroTitle, heroSubtitle } = entry.data;
 ---
 
 <BaseLayout
@@ -31,7 +45,25 @@ const { Content } = await render(entry);
 	routeLocale={locale}
 	slug={slug}
 >
-	<h1>{entry.data.heroTitle}</h1>
-	{entry.data.heroSubtitle && <p>{entry.data.heroSubtitle}</p>}
-	<Content />
+	{slug === 'approche' && (
+		<ApprocheSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} copy={getApprocheCopy(contentLang).copy} />
+	)}
+	{slug === 'agentica' && (
+		<AgenticaSections
+			heroTitle={heroTitle}
+			heroSubtitle={heroSubtitle}
+			copy={getAgenticaCopy(contentLang).copy}
+			stats={stats}
+		/>
+	)}
+	{slug === 'dtgen' && (
+		<DtgenSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} copy={getDtgenCopy(contentLang).copy} />
+	)}
+	{slug === 'parcours' && (
+		<ParcoursSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} copy={getParcoursCopy(contentLang).copy} />
+	)}
+	{slug === 'a-propos' && (
+		<AProposSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} copy={getAProposCopy(contentLang).copy} />
+	)}
+	{slug === 'contact' && <ContactSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} />}
 </BaseLayout>

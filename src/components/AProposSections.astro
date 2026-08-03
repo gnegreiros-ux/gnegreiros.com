@@ -1,0 +1,356 @@
+---
+import BrandIcon from './icons/BrandIcon.astro';
+import type { AProposCopy } from '../content/copy/a-propos';
+
+interface Props {
+	heroTitle: string;
+	heroSubtitle?: string;
+	copy: AProposCopy;
+}
+
+const { heroTitle, heroSubtitle, copy } = Astro.props;
+
+const links = [
+	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const },
+	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const },
+];
+---
+
+<section class="page-hero">
+	<div class="page-hero__grid">
+		<div class="page-hero__text">
+			<h1 class="page-hero__title">{heroTitle}</h1>
+			{heroSubtitle && <p class="page-hero__subtitle">{heroSubtitle}</p>}
+		</div>
+		<img
+			class="page-hero__photo"
+			src="/photos/guilherme.webp"
+			alt="Guilherme Negreiros"
+			width="750"
+			height="1125"
+			loading="eager"
+			fetchpriority="high"
+		/>
+	</div>
+	<div class="page-hero__divider" aria-hidden="true"></div>
+</section>
+
+<section class="section prose-section">
+	<h2 class="section__title">{copy.trajectoryTitle}</h2>
+	<p class="section__body">{copy.trajectoryBody1}</p>
+	<p class="section__body">{copy.trajectoryBody2}</p>
+	<div class="flow">
+		<ol class="flow__list">
+			{copy.trajectorySteps.map((stage) => (
+				<li class="flow__step">
+					<span class="flow__dot"></span>
+					<span class="flow__label">{stage}</span>
+				</li>
+			))}
+		</ol>
+	</div>
+</section>
+
+<section class="section builder-section">
+	<div class="dot-mark builder-section__mark" aria-hidden="true"></div>
+	<h2 class="section__title">{copy.builderTitle}</h2>
+	<div class="callout">
+		<p class="callout__body">{copy.builderBody}</p>
+	</div>
+</section>
+
+<section class="section prose-section outside-section">
+	<div class="outside-section__grid">
+		<p class="section__body section__body--small">{copy.outsideBody}</p>
+		<img
+			class="outside-section__photo"
+			src="/photos/drums.webp"
+			alt="Guilherme playing drums at his church"
+			width="700"
+			height="700"
+			loading="lazy"
+		/>
+	</div>
+</section>
+
+<section class="section links-section">
+	<div class="links">
+		{links.map((link) => (
+			<a class="links__link" href={link.href} target="_blank" rel="noopener">
+				<BrandIcon name={link.icon} size={20} />
+				{link.label}
+			</a>
+		))}
+	</div>
+</section>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		padding-top: 7.5rem;
+	}
+
+	.page-hero__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
+		gap: 3rem;
+		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
+	}
+
+	.page-hero__text {
+		padding-bottom: 1rem;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.page-hero__photo {
+		justify-self: end;
+		width: auto;
+		height: 560px;
+		max-width: 100%;
+		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
+		opacity: 0.92;
+	}
+
+	.page-hero__divider {
+		width: 100%;
+		height: 1px;
+		background: var(--color-line);
+	}
+
+	@media (max-width: 640px) {
+		.page-hero__grid {
+			grid-template-columns: 1fr;
+			padding-right: 1.5rem;
+		}
+
+		.page-hero__photo {
+			order: -1;
+			justify-self: center;
+			height: 320px;
+		}
+	}
+
+	.section {
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem 0;
+	}
+
+	.prose-section,
+	.builder-section {
+		position: relative;
+	}
+
+	.section__title {
+		margin: 0 0 1.5rem;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-h2);
+		line-height: 1.2;
+		color: var(--color-text-primary);
+	}
+
+	.section__body {
+		margin: 0 0 1.25rem;
+		max-width: var(--measure);
+		font-size: var(--text-body);
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	.section__body:last-of-type {
+		margin-bottom: 0;
+	}
+
+	.section__body--small {
+		font-size: var(--text-small);
+	}
+
+	.flow {
+		margin: 3rem 0 0;
+		max-width: var(--content-max);
+	}
+
+	.flow__list {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.flow__list::before {
+		content: '';
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		right: 5px;
+		height: 1px;
+		background: var(--color-line);
+	}
+
+	.flow__step {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.flow__dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--color-text-primary);
+	}
+
+	.flow__label {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-text-secondary);
+		text-align: center;
+	}
+
+	.builder-section__mark {
+		top: 0;
+		right: 1.5rem;
+		width: 160px;
+		height: 110px;
+	}
+
+	.callout {
+		max-width: var(--measure);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		padding: var(--space-card-padding);
+	}
+
+	.callout__body {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-primary);
+	}
+
+	.outside-section {
+		max-width: none;
+		margin: 0;
+		padding-top: var(--space-section);
+		padding-right: 0;
+		padding-bottom: 0;
+		padding-left: max(1.5rem, calc((100% - var(--content-max)) / 2 + 1.5rem));
+	}
+
+	.outside-section__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
+		gap: 2rem;
+	}
+
+	.outside-section__photo {
+		justify-self: end;
+		width: auto;
+		height: 320px;
+		max-width: 100%;
+		filter: grayscale(0.8) sepia(0.15) contrast(1.05);
+		opacity: 0.92;
+	}
+
+	@media (max-width: 640px) {
+		.outside-section {
+			padding-right: 1.5rem;
+		}
+
+		.outside-section__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.outside-section__photo {
+			order: -1;
+			justify-self: center;
+			height: 260px;
+		}
+	}
+
+	.links-section {
+		padding-bottom: var(--space-section);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+	}
+
+	.links__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: var(--text-body);
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 768px) {
+		.flow__list {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.5rem;
+		}
+
+		.flow__list::before {
+			top: 0;
+			bottom: 0;
+			left: 5px;
+			right: auto;
+			width: 1px;
+			height: auto;
+		}
+
+		.flow__step {
+			flex-direction: row;
+		}
+
+		.flow__label {
+			text-align: left;
+		}
+	}
+</style>
