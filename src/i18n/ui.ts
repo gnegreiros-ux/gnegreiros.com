@@ -27,7 +27,19 @@ export const ui = {
 		'consent.accept': 'Accept',
 		'consent.refuse': 'Refuse',
 	},
-	fr: {},
+	fr: {
+		'nav.approach': 'Approche',
+		'nav.agentica': 'Agentica',
+		'nav.dtgen': 'DTGen',
+		'nav.parcours': 'Parcours',
+		'nav.about': 'À propos',
+		'nav.contact': 'Contact',
+		'footer.rights': 'Tous droits réservés.',
+		'consent.message':
+			'Ce site utilise Google Analytics pour comprendre son utilisation. Aucun cookie de suivi tant que vous n’avez pas accepté.',
+		'consent.accept': 'Accepter',
+		'consent.refuse': 'Refuser',
+	},
 	'pt-br': {},
 } as const satisfies Record<Locale, Partial<Record<string, string>>>;
 
