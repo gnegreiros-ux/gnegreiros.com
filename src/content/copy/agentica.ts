@@ -89,6 +89,37 @@ const agenticaCopy: Partial<Record<Locale, AgenticaCopy>> = {
 			...resultLinks,
 		],
 	},
+	'pt-br': {
+		contextTitle: 'Contexto / problema',
+		contextBody:
+			'A maioria dos design systems documenta o que foi construído. Poucos preservam o porquê. As equipes perdem decisões em comentários do Figma, threads do Slack e conhecimento tácito — então os mesmos debates se repetem, a documentação fica desatualizada, e o sistema se torna dependente da única pessoa que se lembra do raciocínio. Eu construí a Agentica para testar se esse problema é solucionável — não para um cliente, mas como prova de um modelo de governança que, na minha opinião, falta na maioria dos design systems corporativos.',
+		governanceTitle: 'Decisões e governança',
+		governanceBody1:
+			'Cada escolha significativa na Agentica é registrada como um Architecture Decision Record versionado — contexto, alternativas consideradas, trade-offs e o raciocínio por trás da decisão final. Isso não é documentação feita depois; é o mecanismo que permite ao sistema evoluir sem apagar sua própria história.',
+		governanceBody2:
+			'A Agentica também é construída com agentes de IA como um ator definido no sistema — com um limite explícito. Os agentes podem detectar inconsistências, propor componentes e redigir documentação. Eles não podem aprovar, implantar ou contornar a governança. O humano mantém a palavra final, por design, não por convenção.',
+		flowSteps: ['Decidir', 'Governar', 'Sistematizar', 'Executar'],
+		architectureTitle: 'Arquitetura',
+		architectureBody:
+			'Uma única fonte de verdade alimenta quatro níveis: fundações (tokens), contratos semânticos, componentes e aplicações. Os componentes são construídos como Web Components nativos — independentes de framework, compilados para CSS, JS, Tailwind, Angular, iOS e Android. Se o ferramental de IA ao redor desaparecesse amanhã, o sistema continuaria funcionando: documentado, com scripts e testado para provar isso.',
+		architectureTags: [
+			{ label: 'Web Components' },
+			{ label: 'Design Tokens' },
+			{ label: 'Padrões W3C', icon: 'w3c' },
+			{ label: 'ADRs versionados' },
+		],
+		resultsTitle: 'Resultado / prova',
+		results: (stats) => [
+			`${stats.tokenCount}+ tokens de design nos modos claro e escuro`,
+			`${stats.componentCount} componentes entregues, com mais em desenvolvimento ativo`,
+			`${stats.adrCount}+ ADRs capturando o raciocínio por trás de cada decisão importante`,
+			'Portões de qualidade automatizados para acessibilidade (WCAG 2.1), regressão visual, documentação e consistência de tokens',
+		],
+		resultLinks: [
+			{ label: 'Site ao vivo', href: 'https://designsystem.gnegreiros.com', icon: 'laptop' },
+			...resultLinks,
+		],
+	},
 };
 
 export function getAgenticaCopy(locale: Locale): { copy: AgenticaCopy; contentLang: Locale } {

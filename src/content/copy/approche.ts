@@ -75,6 +75,37 @@ const approcheCopy: Partial<Record<Locale, ApprocheCopy>> = {
 		aiBody:
 			"Les agents IA peuvent accélérer certaines parties de ce travail — détecter des incohérences, rédiger de la documentation, proposer des composants. Ce qu'ils ne peuvent pas faire, c'est décider. La gouvernance reste humaine, par design. Mon approche de l'IA dans les design systems n'est pas une question d'automatisation pour elle-même ; c'est de s'assurer que l'automatisation ne dépasse jamais la responsabilité.",
 	},
+	'pt-br': {
+		problemTitle: 'O problema que eu continuo resolvendo',
+		problemBody:
+			'Em plataformas de saúde pública, sistemas de seguros e ferramentas de manufatura, eu vi a mesma falha se repetir: as decisões de design são tomadas uma vez, depois esquecidas. Uma cor muda sem que ninguém se lembre por que a original foi escolhida. Um componente é reconstruído três vezes porque ninguém sabia que ele já existia. O sistema não falha porque as pessoas são negligentes — ele falha porque nada preserva o raciocínio por trás do que foi construído.',
+		principlesTitle: 'O que eu realmente otimizo',
+		principlesIntro:
+			'Meu trabalho está na interseção entre design, desenvolvimento e operações — o que costuma ser chamado de DesignOps. Três princípios o orientam:',
+		principles: [
+			{
+				number: '01',
+				title: 'Decisões precisam de memória.',
+				body: 'Um design system não é uma biblioteca de componentes; é um registro de compromissos (trade-offs). Se você não consegue explicar por que uma decisão foi tomada, não pode alterá-la com segurança depois.',
+			},
+			{
+				number: '02',
+				title: 'Fluxos de trabalho fazem parte do design.',
+				body: 'A passagem de bastão entre design e desenvolvimento é onde a maioria dos sistemas desmorona silenciosamente. Eu trato esse pipeline — não só a interface — como algo a ser projetado deliberadamente.',
+			},
+			{
+				number: '03',
+				title: 'Durabilidade vence novidade.',
+				body: 'Ferramentas e frameworks são substituídos a cada poucos anos. Um sistema construído para depender de uma única ferramenta é um sistema com data de validade. Eu construo para padrões que sobrevivem às ferramentas ao seu redor.',
+			},
+		],
+		practiceTitle: 'Como isso aparece na prática',
+		practiceBody:
+			'Na RAMQ, isso significa construir as fundações de UX de uma organização antes de construir telas. Na Akinox, significou projetar o pipeline entre design e desenvolvimento, não apenas a interface sobre ele. Na Agentica, meu sistema pessoal, significa que cada decisão significativa é registrada, versionada e rastreável — prova de que essa abordagem funciona além de um único projeto.',
+		aiTitle: 'Onde a IA entra',
+		aiBody:
+			'Agentes de IA podem acelerar partes desse trabalho — detectando inconsistências, redigindo documentação, propondo componentes. O que eles não podem fazer é decidir. A governança permanece humana, por design. Minha abordagem para IA em design systems não é sobre automação pela automação; é sobre garantir que a automação nunca ultrapasse a responsabilidade.',
+	},
 };
 
 export function getApprocheCopy(locale: Locale): { copy: ApprocheCopy; contentLang: Locale } {

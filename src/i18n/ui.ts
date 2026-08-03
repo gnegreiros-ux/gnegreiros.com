@@ -40,7 +40,19 @@ export const ui = {
 		'consent.accept': 'Accepter',
 		'consent.refuse': 'Refuser',
 	},
-	'pt-br': {},
+	'pt-br': {
+		'nav.approach': 'Abordagem',
+		'nav.agentica': 'Agentica',
+		'nav.dtgen': 'DTGen',
+		'nav.parcours': 'Trajetória',
+		'nav.about': 'Sobre',
+		'nav.contact': 'Contato',
+		'footer.rights': 'Todos os direitos reservados.',
+		'consent.message':
+			'Este site usa o Google Analytics para entender como é utilizado. Nenhum cookie de rastreamento até que você aceite.',
+		'consent.accept': 'Aceitar',
+		'consent.refuse': 'Recusar',
+	},
 } as const satisfies Record<Locale, Partial<Record<string, string>>>;
 
 export type UiKey = keyof (typeof ui)['en'];

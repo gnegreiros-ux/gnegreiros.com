@@ -53,6 +53,25 @@ const dtgenCopy: Partial<Record<Locale, DtgenCopy>> = {
 		],
 		liveBetaLabel: 'Bêta en ligne',
 	},
+	'pt-br': {
+		contextTitle: 'Contexto / problema',
+		contextBody:
+			'Todo novo design system começa da mesma forma — um designer definindo manualmente escalas de cores, unidades de espaçamento e proporções tipográficas, um valor de cada vez, sem um método consistente para derivá-los. Eu construí o DTGen para eliminar esse atrito: uma ferramenta que gera um conjunto de tokens completo e estruturado a partir de um pequeno número de entradas, em vez de horas de tentativa e erro manual.',
+		whatTitle: 'O que ele faz',
+		whatBody:
+			'O DTGen importa primitivas de fontes já estabelecidas — Tailwind, Ant Design, Open Color, ou um arquivo JSON personalizado — e gera paletas coerentes em HSL, LCH ou OKLCH a partir de um punhado de cores base. Ele também configura escalas tipográficas com proporções personalizadas, e salva configurações para reutilização entre projetos. O objetivo não é substituir o julgamento do designer; é eliminar a parte repetitiva do trabalho para que esse julgamento possa se concentrar no que realmente importa — consistência e intenção.',
+		sourceTags: ['Tailwind', 'Ant Design', 'Open Color', 'JSON personalizado'],
+		colorSpaceTags: ['HSL', 'LCH', 'OKLCH'],
+		whyTitle: 'Por que isso importa',
+		whyBody:
+			'O DTGen reflete o mesmo instinto por trás da Agentica, em uma escala menor: não resolver o mesmo problema fundamental duas vezes. É uma ferramenta prática construída a partir de uma frustração real e recorrente, não um exercício teórico.',
+		statusTitle: 'Status / prova',
+		status: [
+			'Suporta importações do Tailwind, Ant Design, Open Color e JSON personalizado',
+			'Geração de cores em HSL, LCH e OKLCH',
+		],
+		liveBetaLabel: 'Beta ao vivo',
+	},
 };
 
 export function getDtgenCopy(locale: Locale): { copy: DtgenCopy; contentLang: Locale } {

@@ -105,6 +105,51 @@ const parcoursCopy: Partial<Record<Locale, ParcoursCopy>> = {
 			},
 		],
 	},
+	'pt-br': {
+		currentLabel: 'Atual',
+		engagements: [
+			{
+				logo: '/logos/ramq.png',
+				alt: 'RAMQ',
+				current: true,
+				role: "Bureau d'expérience client (BXC)",
+				dates: 'Nov. 2024 – atualmente',
+				body: "Construindo as fundações de UX do Bureau d'expérience client (Bureau de Experiência do Cliente) da RAMQ — o trabalho de base que precisa existir antes que telas consistentes possam existir. Confidencial pela natureza do mandato; o trabalho em si é estrutural, não visual.",
+			},
+			{
+				logo: '/logos/akinox.png',
+				alt: 'Akinox',
+				current: false,
+				role: 'Design Systems e Saúde Pública',
+				dates: 'Jun. 2023 – 2024',
+				body: 'Projetei jornadas de cuidado multidisciplinares para plataformas de saúde pública, e lancei as fundações de um sistema design-to-code para reduzir a distância entre a intenção do design e o produto entregue. Foi aqui que o pensamento por trás da Agentica começou a tomar forma — dentro de uma organização real, sob restrições reais.',
+			},
+			{
+				logo: '/logos/intact.png',
+				alt: 'Intact Insurance',
+				current: false,
+				role: 'Designer UX',
+				dates: 'Abr. 2022 – abr. 2023',
+				body: 'Redesenhei um fluxo de submissão de seguros on-line para reduzir o abandono, trabalhando dentro de uma conformidade regulatória rígida (AMF) ao lado de equipes de analytics e pesquisa comportamental. Prova de que o pensamento sistêmico se sustenta mesmo em ambientes fortemente regulados.',
+			},
+			{
+				logo: '/logos/ovation.png',
+				alt: 'Réseau Ovation',
+				current: false,
+				role: 'Especialista em UX/UI',
+				dates: 'Set. 2021 – abr. 2022',
+				body: 'Apoiei a migração de uma plataforma legada em VB6 para a web, projetando o fluxo de trabalho entre design e desenvolvimento para proteger a consistência ao longo de uma transição técnica de alto risco — não apenas a interface de cada lado dela.',
+			},
+			{
+				logo: '/logos/canadel.png',
+				alt: 'Canadel',
+				current: false,
+				role: 'Designer Gráfico → Designer UI/UX',
+				dates: 'Abr. 2012 – set. 2021',
+				body: 'Comecei como designer gráfico em 2012 e evoluí organicamente para um papel de UI/UX em 2015, redesenhando a ferramenta de configuração de produtos da Canadel e construindo as primeiras fundações de analytics para guiar decisões de design com dados reais de uso. Nove anos — a versão longa de "o pensamento sistêmico não foi uma virada, foi uma progressão".',
+			},
+		],
+	},
 };
 
 export function getParcoursCopy(locale: Locale): { copy: ParcoursCopy; contentLang: Locale } {

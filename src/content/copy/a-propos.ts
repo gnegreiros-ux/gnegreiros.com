@@ -35,6 +35,18 @@ const aProposCopy: Partial<Record<Locale, AProposCopy>> = {
 		outsideBody:
 			"Trois-Rivières, Québec. Portugais, français et anglais. Quand je ne travaille pas sur des design systems, je joue de la batterie à mon église — une discipline différente : être présent, rester en rythme avec les autres, et faire confiance à une structure qu'on n'a pas bâtie seul.",
 	},
+	'pt-br': {
+		trajectoryTitle: 'A trajetória',
+		trajectoryBody1:
+			'Comecei em 1997 desenhando anúncios impressos e logotipos no Brasil. Em 2001, já construía sites à mão — HTML, CSS, um cliente de cada vez. Ao longo de duas décadas, esse mesmo instinto — construir algo que funcione, depois descobrir como fazê-lo durar — me levou do design gráfico, ao design web, à UI, à UX, até o que faço agora: projetar os sistemas e a governança que mantêm as decisões de design consistentes em grande escala.',
+		trajectoryBody2: 'Não foi uma virada de rumo. Cada etapa aproveitou o que a anterior me ensinou.',
+		trajectorySteps: ['Design gráfico', 'Web & UI', 'Design UX', 'Design Systems'],
+		builderTitle: 'O que "construtor de sistemas" realmente significa',
+		builderBody:
+			'Eu não me vejo como alguém que projeta telas — eu projeto a infraestrutura que torna as telas consistentes, explicáveis e duráveis ao longo do tempo: tokens, arquitetura de componentes, governança de decisões, e os fluxos de trabalho que conectam design e desenvolvimento. É isso que colegas apontam consistentemente ao descrever como eu trabalho — não como um designer que produz artefatos, mas como alguém que constrói os sistemas que permitem a uma equipe produzir de forma consistente, sem reinventar as mesmas decisões repetidamente.',
+		outsideBody:
+			'Trois-Rivières, Québec. Português, francês e inglês. Quando não estou trabalhando em design systems, toco bateria na minha igreja — um tipo diferente de disciplina: comparecer, manter o tempo junto com outras pessoas, e confiar em uma estrutura que você não construiu sozinho.',
+	},
 };
 
 export function getAProposCopy(locale: Locale): { copy: AProposCopy; contentLang: Locale } {

@@ -121,6 +121,50 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 			'Si vous évaluez comment rendre les décisions de design durables dans votre organisation, ce sera un plaisir d’en discuter.',
 		finalCtaLinkLabel: 'Parlons-en',
 	},
+	'pt-br': {
+		heroAnnotation: 'Designer de Sistemas UX / Systems Builder',
+		heroThesisLine1: 'Eu projeto os sistemas de decisão que sustentam as experiências digitais —',
+		heroThesisLine2Prefix: 'para os humanos que decidem, e agora para os ',
+		heroThesisAccent: 'agentes de IA que executam',
+		footerYears: '20+ anos',
+		footerLine: 'Design → Sistemas → Governança',
+		transitionText:
+			'Ao longo de mais de 20 anos, isso significa migrar das telas para a infraestrutura por trás delas — tokens, governança e os fluxos de trabalho que mantêm as decisões consistentes muito depois de as pessoas que as tomaram terem seguido em frente.',
+		teasers: (stats) => [
+			{
+				slug: 'approche',
+				variant: 'entry',
+				eyebrow: 'Abordagem',
+				title: 'Como eu penso os design systems',
+				body: 'Design systems não falham porque as pessoas são negligentes — eles falham porque nada preserva o raciocínio por trás do que foi construído.',
+				linkLabel: 'Ler a abordagem',
+			},
+			{
+				slug: 'agentica',
+				variant: 'default',
+				eyebrow: 'Agentica',
+				title: 'Agentica — prova em escala',
+				body: `${stats.tokenCount}+ tokens. ${stats.adrCount}+ decisões versionadas. ${stats.componentCount} componentes entregues, mais em desenvolvimento. Um sistema pessoal construído para testar um modelo de governança que falta na maioria dos design systems corporativos.`,
+				linkLabel: 'Explorar Agentica',
+			},
+			{
+				slug: 'dtgen',
+				variant: 'default',
+				eyebrow: 'DTGen',
+				title: 'DTGen — prova na prática',
+				body: 'Uma ferramenta construída a partir de uma frustração real e recorrente: gerar um conjunto coerente de tokens não deveria significar começar do zero todas as vezes.',
+				linkLabel: 'Ver DTGen',
+			},
+		],
+		contextEyebrow: 'Trajetória',
+		contextTitle: 'Testado dentro de organizações reais',
+		contextBody:
+			'Saúde pública, seguros, manufatura — esse pensamento foi moldado sob restrições regulatórias e técnicas reais, não apenas em projetos pessoais.',
+		contextLinkLabel: 'Ver o contexto',
+		finalCtaBody:
+			'Se você está avaliando como tornar as decisões de design duráveis na sua organização, terei prazer em conversar sobre como isso funciona na prática.',
+		finalCtaLinkLabel: 'Vamos conversar',
+	},
 };
 
 export function getHomeCopy(locale: Locale): { copy: HomeCopy; contentLang: Locale } {
