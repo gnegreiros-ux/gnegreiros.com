@@ -102,9 +102,9 @@ const approcheCopy: Partial<Record<Locale, ApprocheCopy>> = {
 		practiceTitle: 'Como isso aparece na prática',
 		practiceBody:
 			'Na RAMQ, isso significa construir as fundações de UX de uma organização antes de construir telas. Na Akinox, significou projetar o pipeline entre design e desenvolvimento, não apenas a interface sobre ele. Na Agentica, meu sistema pessoal, significa que cada decisão significativa é registrada, versionada e rastreável — prova de que essa abordagem funciona além de um único projeto.',
-		aiTitle: 'Onde a IA entra',
+		aiTitle: 'Onde a AI entra',
 		aiBody:
-			'Agentes de IA podem acelerar partes desse trabalho — detectando inconsistências, redigindo documentação, propondo componentes. O que eles não podem fazer é decidir. A governança permanece humana, por design. Minha abordagem para IA em design systems não é sobre automação pela automação; é sobre garantir que a automação nunca ultrapasse a responsabilidade.',
+			'Agentes de AI podem acelerar partes desse trabalho — detectando inconsistências, redigindo documentação, propondo componentes. O que eles não podem fazer é decidir. A governança permanece humana, por design. Minha abordagem para AI em design systems não é sobre automação pela automação; é sobre garantir que a automação nunca ultrapasse a responsabilidade.',
 	},
 };
 

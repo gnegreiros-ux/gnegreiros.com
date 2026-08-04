@@ -97,11 +97,11 @@ const agenticaCopy: Partial<Record<Locale, AgenticaCopy>> = {
 		governanceBody1:
 			'Cada escolha significativa na Agentica é registrada como um Architecture Decision Record versionado — contexto, alternativas consideradas, trade-offs e o raciocínio por trás da decisão final. Isso não é documentação feita depois; é o mecanismo que permite ao sistema evoluir sem apagar sua própria história.',
 		governanceBody2:
-			'A Agentica também é construída com agentes de IA como um ator definido no sistema — com um limite explícito. Os agentes podem detectar inconsistências, propor componentes e redigir documentação. Eles não podem aprovar, implantar ou contornar a governança. O humano mantém a palavra final, por design, não por convenção.',
+			'A Agentica também é construída com agentes de AI como um ator definido no sistema — com um limite explícito. Os agentes podem detectar inconsistências, propor componentes e redigir documentação. Eles não podem aprovar, implantar ou contornar a governança. O humano mantém a palavra final, por design, não por convenção.',
 		flowSteps: ['Decidir', 'Governar', 'Sistematizar', 'Executar'],
 		architectureTitle: 'Arquitetura',
 		architectureBody:
-			'Uma única fonte de verdade alimenta quatro níveis: fundações (tokens), contratos semânticos, componentes e aplicações. Os componentes são construídos como Web Components nativos — independentes de framework, compilados para CSS, JS, Tailwind, Angular, iOS e Android. Se o ferramental de IA ao redor desaparecesse amanhã, o sistema continuaria funcionando: documentado, com scripts e testado para provar isso.',
+			'Uma única fonte de verdade alimenta quatro níveis: fundações (tokens), contratos semânticos, componentes e aplicações. Os componentes são construídos como Web Components nativos — independentes de framework, compilados para CSS, JS, Tailwind, Angular, iOS e Android. Se o ferramental de AI ao redor desaparecesse amanhã, o sistema continuaria funcionando: documentado, com scripts e testado para provar isso.',
 		architectureTags: [
 			{ label: 'Web Components' },
 			{ label: 'Design Tokens' },
