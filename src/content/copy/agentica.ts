@@ -30,16 +30,16 @@ const agenticaCopy: Partial<Record<Locale, AgenticaCopy>> = {
 	en: {
 		contextTitle: 'Context / problem',
 		contextBody:
-			"Most design systems document what was built. Few preserve why. Teams lose decisions in Figma comments, Slack threads, and tribal knowledge — so the same debates repeat, documentation drifts out of date, and the system becomes dependent on the one person who remembers the reasoning. I built Agentica to test whether that problem is solvable — not for a client, but as proof of a governance model I believe enterprise design systems are missing.",
+			"Most design systems document what was built. Few preserve why. Teams lose decisions in Figma comments, Slack threads, and tribal knowledge, so the same debates repeat, documentation drifts out of date, and the system becomes dependent on the one person who remembers the reasoning. I built Agentica to test whether that problem is solvable, not for a client, but as proof of a governance model I believe enterprise design systems are missing.",
 		governanceTitle: 'Decisions & governance',
 		governanceBody1:
-			"Every meaningful choice in Agentica is logged as a versioned Architecture Decision Record — context, alternatives considered, trade-offs, and the reasoning behind the final call. This isn't documentation after the fact; it's the mechanism that lets the system evolve without erasing its own history.",
+			"Every meaningful choice in Agentica is logged as a versioned Architecture Decision Record, context, alternatives considered, trade-offs, and the reasoning behind the final call. This isn't documentation after the fact; it's the mechanism that lets the system evolve without erasing its own history.",
 		governanceBody2:
-			'Agentica is also built with AI agents as a defined actor in the system — with an explicit boundary. Agents can detect inconsistencies, propose components, and draft documentation. They cannot approve, deploy, or bypass governance. The human keeps the final word, by design, not by convention.',
+			'Agentica is also built with AI agents as a defined actor in the system, with an explicit boundary. Agents can detect inconsistencies, propose components, and draft documentation. They cannot approve, deploy, or bypass governance. The human keeps the final word, by design, not by convention.',
 		flowSteps: ['Decide', 'Govern', 'Systematize', 'Execute'],
 		architectureTitle: 'Architecture',
 		architectureBody:
-			'One source of truth feeds four levels: foundations (tokens), semantic contracts, components, and applications. Components are built as native Web Components — framework-independent, compiled to CSS, JS, Tailwind, Angular, iOS, and Android targets. If the AI tooling around it disappeared tomorrow, the system would keep running: documented, scripted, and tested to prove it.',
+			'One source of truth feeds four levels: foundations (tokens), semantic contracts, components, and applications. Components are built as native Web Components, framework-independent, compiled to CSS, JS, Tailwind, Angular, iOS, and Android targets. If the AI tooling around it disappeared tomorrow, the system would keep running: documented, scripted, and tested to prove it.',
 		architectureTags: [
 			{ label: 'Web Components' },
 			{ label: 'Design Tokens' },
@@ -61,16 +61,16 @@ const agenticaCopy: Partial<Record<Locale, AgenticaCopy>> = {
 	fr: {
 		contextTitle: 'Contexte / problème',
 		contextBody:
-			"La plupart des design systems documentent ce qui a été construit. Peu préservent le pourquoi. Les équipes perdent leurs décisions dans des commentaires Figma, des fils Slack et le savoir tacite — alors les mêmes débats se répètent, la documentation devient obsolète, et le système devient dépendant de la seule personne qui se souvient du raisonnement. J'ai construit Agentica pour tester si ce problème est solvable — pas pour un client, mais comme preuve d'un modèle de gouvernance qui manque, selon moi, à la plupart des design systems d'entreprise.",
+			"La plupart des design systems documentent ce qui a été construit. Peu préservent le pourquoi. Les équipes perdent leurs décisions dans des commentaires Figma, des fils Slack et le savoir tacite, alors les mêmes débats se répètent, la documentation devient obsolète, et le système devient dépendant de la seule personne qui se souvient du raisonnement. J'ai construit Agentica pour tester si ce problème est solvable, pas pour un client, mais comme preuve d'un modèle de gouvernance qui manque, selon moi, à la plupart des design systems d'entreprise.",
 		governanceTitle: 'Décisions et gouvernance',
 		governanceBody1:
-			"Chaque choix significatif dans Agentica est consigné comme un Architecture Decision Record versionné — contexte, alternatives considérées, compromis, et le raisonnement derrière la décision finale. Ce n'est pas de la documentation après coup ; c'est le mécanisme qui permet au système d'évoluer sans effacer sa propre histoire.",
+			"Chaque choix significatif dans Agentica est consigné comme un Architecture Decision Record versionné, contexte, alternatives considérées, compromis, et le raisonnement derrière la décision finale. Ce n'est pas de la documentation après coup ; c'est le mécanisme qui permet au système d'évoluer sans effacer sa propre histoire.",
 		governanceBody2:
-			"Agentica est aussi construit avec les agents IA comme acteur défini du système — avec une limite explicite. Les agents peuvent détecter des incohérences, proposer des composants et rédiger de la documentation. Ils ne peuvent pas approuver, déployer, ou contourner la gouvernance. L'humain garde le dernier mot, par design, pas par convention.",
+			"Agentica est aussi construit avec les agents IA comme acteur défini du système, avec une limite explicite. Les agents peuvent détecter des incohérences, proposer des composants et rédiger de la documentation. Ils ne peuvent pas approuver, déployer, ou contourner la gouvernance. L'humain garde le dernier mot, par design, pas par convention.",
 		flowSteps: ['Décider', 'Gouverner', 'Systématiser', 'Exécuter'],
 		architectureTitle: 'Architecture',
 		architectureBody:
-			"Une seule source de vérité alimente quatre niveaux : fondations (tokens), contrats sémantiques, composants et applications. Les composants sont construits en Web Components natifs — indépendants du framework, compilés vers CSS, JS, Tailwind, Angular, iOS et Android. Si l'outillage IA autour disparaissait demain, le système continuerait de fonctionner : documenté, scripté et testé pour le prouver.",
+			"Une seule source de vérité alimente quatre niveaux : fondations (tokens), contrats sémantiques, composants et applications. Les composants sont construits en Web Components natifs, indépendants du framework, compilés vers CSS, JS, Tailwind, Angular, iOS et Android. Si l'outillage IA autour disparaissait demain, le système continuerait de fonctionner : documenté, scripté et testé pour le prouver.",
 		architectureTags: [
 			{ label: 'Web Components' },
 			{ label: 'Design Tokens' },
@@ -92,16 +92,16 @@ const agenticaCopy: Partial<Record<Locale, AgenticaCopy>> = {
 	'pt-br': {
 		contextTitle: 'Contexto / problema',
 		contextBody:
-			'A maioria dos design systems documenta o que foi construído. Poucos preservam o porquê. As equipes perdem decisões em comentários do Figma, threads do Slack e conhecimento tácito — então os mesmos debates se repetem, a documentação fica desatualizada, e o sistema se torna dependente da única pessoa que se lembra do raciocínio. Eu construí a Agentica para testar se esse problema é solucionável — não para um cliente, mas como prova de um modelo de governança que, na minha opinião, falta na maioria dos design systems corporativos.',
+			'A maioria dos design systems documenta o que foi construído. Poucos preservam o porquê. As equipes perdem decisões em comentários do Figma, threads do Slack e conhecimento tácito, então os mesmos debates se repetem, a documentação fica desatualizada, e o sistema se torna dependente da única pessoa que se lembra do raciocínio. Eu construí a Agentica para testar se esse problema é solucionável, não para um cliente, mas como prova de um modelo de governança que, na minha opinião, falta na maioria dos design systems corporativos.',
 		governanceTitle: 'Decisões e governança',
 		governanceBody1:
-			'Cada escolha significativa na Agentica é registrada como um Architecture Decision Record versionado — contexto, alternativas consideradas, trade-offs e o raciocínio por trás da decisão final. Isso não é documentação feita depois; é o mecanismo que permite ao sistema evoluir sem apagar sua própria história.',
+			'Cada escolha significativa na Agentica é registrada como um Architecture Decision Record versionado, contexto, alternativas consideradas, trade-offs e o raciocínio por trás da decisão final. Isso não é documentação feita depois; é o mecanismo que permite ao sistema evoluir sem apagar sua própria história.',
 		governanceBody2:
-			'A Agentica também é construída com agentes de AI como um ator definido no sistema — com um limite explícito. Os agentes podem detectar inconsistências, propor componentes e redigir documentação. Eles não podem aprovar, implantar ou contornar a governança. O humano mantém a palavra final, por design, não por convenção.',
+			'A Agentica também é construída com agentes de AI como um ator definido no sistema, com um limite explícito. Os agentes podem detectar inconsistências, propor componentes e redigir documentação. Eles não podem aprovar, implantar ou contornar a governança. O humano mantém a palavra final, por design, não por convenção.',
 		flowSteps: ['Decidir', 'Governar', 'Sistematizar', 'Executar'],
 		architectureTitle: 'Arquitetura',
 		architectureBody:
-			'Uma única fonte de verdade alimenta quatro níveis: fundações (tokens), contratos semânticos, componentes e aplicações. Os componentes são construídos como Web Components nativos — independentes de framework, compilados para CSS, JS, Tailwind, Angular, iOS e Android. Se o ferramental de AI ao redor desaparecesse amanhã, o sistema continuaria funcionando: documentado, com scripts e testado para provar isso.',
+			'Uma única fonte de verdade alimenta quatro níveis: fundações (tokens), contratos semânticos, componentes e aplicações. Os componentes são construídos como Web Components nativos, independentes de framework, compilados para CSS, JS, Tailwind, Angular, iOS e Android. Se o ferramental de AI ao redor desaparecesse amanhã, o sistema continuaria funcionando: documentado, com scripts e testado para provar isso.',
 		architectureTags: [
 			{ label: 'Web Components' },
 			{ label: 'Design Tokens' },

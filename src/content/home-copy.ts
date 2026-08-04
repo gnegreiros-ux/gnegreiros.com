@@ -35,27 +35,27 @@ export interface HomeCopy {
 export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 	en: {
 		heroAnnotation: 'UX Systems Designer / Systems Builder',
-		heroThesisLine1: 'I design the decision systems that hold digital experiences together —',
+		heroThesisLine1: 'I design the decision systems that hold digital experiences together,',
 		heroThesisLine2Prefix: 'for the humans who decide, and now for the ',
 		heroThesisAccent: 'AI agents who execute',
 		footerYears: '20+ years',
 		footerLine: 'Design → Systems → Governance',
 		transitionText:
-			"Over 20 years, that means moving from screens to the infrastructure behind them — tokens, governance, and the workflows that keep decisions consistent long after the people who made them have moved on.",
+			"Over 20 years, that means moving from screens to the infrastructure behind them, tokens, governance, and the workflows that keep decisions consistent long after the people who made them have moved on.",
 		teasers: (stats) => [
 			{
 				slug: 'approche',
 				variant: 'entry',
 				eyebrow: 'Approach',
 				title: 'How I think about design systems',
-				body: "Design systems don't fail because people are careless — they fail because nothing preserves the reasoning behind what was built.",
+				body: "Design systems don't fail because people are careless, they fail because nothing preserves the reasoning behind what was built.",
 				linkLabel: 'Read the approach',
 			},
 			{
 				slug: 'agentica',
 				variant: 'default',
 				eyebrow: 'Agentica',
-				title: 'Agentica — proof at scale',
+				title: 'Agentica, proof at scale',
 				body: `${stats.tokenCount}+ tokens. ${stats.adrCount}+ versioned decisions. ${stats.componentCount} components shipped, more in progress. A personal system built to test a governance model most enterprise design systems are missing.`,
 				linkLabel: 'Explore Agentica',
 			},
@@ -63,7 +63,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 				slug: 'dtgen',
 				variant: 'default',
 				eyebrow: 'DTGen',
-				title: 'DTGen — proof in practice',
+				title: 'DTGen, proof in practice',
 				body: "A tool built from a real recurring frustration: generating a coherent token set shouldn't mean starting from a blank page every time.",
 				linkLabel: 'See DTGen',
 			},
@@ -71,7 +71,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 		contextEyebrow: 'Journey',
 		contextTitle: 'Where this thinking comes from',
 		contextBody:
-			"Public health, insurance, manufacturing — twenty years across these sectors is the real source of this thinking, not a single personal project.",
+			"Public health, insurance, manufacturing, twenty years across these sectors is the real source of this thinking, not a single personal project.",
 		contextLinkLabel: 'See the context',
 		finalCtaBody:
 			"If you're evaluating how to make design decisions durable in your organization, I'd be glad to talk through what that looks like.",
@@ -79,27 +79,27 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 	},
 	fr: {
 		heroAnnotation: 'Designer de systèmes UX / Bâtisseur de systèmes',
-		heroThesisLine1: 'Je conçois les systèmes de décision qui font tenir les expériences numériques —',
+		heroThesisLine1: 'Je conçois les systèmes de décision qui font tenir les expériences numériques,',
 		heroThesisLine2Prefix: 'pour les humains qui décident, et maintenant pour les ',
 		heroThesisAccent: 'agents IA qui exécutent',
 		footerYears: '20+ ans',
 		footerLine: 'Design → Systèmes → Gouvernance',
 		transitionText:
-			"Sur plus de 20 ans, ça veut dire passer des écrans à l'infrastructure derrière eux — tokens, gouvernance, et les processus qui gardent les décisions cohérentes longtemps après le départ des personnes qui les ont construites.",
+			"Sur plus de 20 ans, ça veut dire passer des écrans à l'infrastructure derrière eux, tokens, gouvernance, et les processus qui gardent les décisions cohérentes longtemps après le départ des personnes qui les ont construites.",
 		teasers: (stats) => [
 			{
 				slug: 'approche',
 				variant: 'entry',
 				eyebrow: 'Approche',
 				title: 'Comment je pense les design systems',
-				body: "Les design systems n'échouent pas parce que les gens sont négligents — ils échouent parce que rien ne préserve le raisonnement derrière ce qui a été construit.",
+				body: "Les design systems n'échouent pas parce que les gens sont négligents, ils échouent parce que rien ne préserve le raisonnement derrière ce qui a été construit.",
 				linkLabel: "Lire l'approche",
 			},
 			{
 				slug: 'agentica',
 				variant: 'default',
 				eyebrow: 'Agentica',
-				title: 'Agentica — la preuve à grande échelle',
+				title: 'Agentica, la preuve à grande échelle',
 				body: `${stats.tokenCount}+ tokens. ${stats.adrCount}+ décisions versionnées. ${stats.componentCount} composants livrés, d'autres en cours. Un système personnel conçu pour tester un modèle de gouvernance qui manque à la plupart des design systems d'entreprise.`,
 				linkLabel: 'Explorer Agentica',
 			},
@@ -107,7 +107,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 				slug: 'dtgen',
 				variant: 'default',
 				eyebrow: 'DTGen',
-				title: 'DTGen — la preuve en pratique',
+				title: 'DTGen, la preuve en pratique',
 				body: "Un outil né d'une vraie frustration récurrente : générer un ensemble de tokens cohérent ne devrait pas vouloir dire repartir de zéro à chaque fois.",
 				linkLabel: 'Voir DTGen',
 			},
@@ -115,7 +115,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 		contextEyebrow: 'Parcours',
 		contextTitle: "D'où vient cette réflexion",
 		contextBody:
-			"Santé publique, assurance, manufacturier — vingt ans à travers ces secteurs sont la véritable source de cette réflexion, pas un seul projet personnel.",
+			"Santé publique, assurance, manufacturier, vingt ans à travers ces secteurs sont la véritable source de cette réflexion, pas un seul projet personnel.",
 		contextLinkLabel: 'Voir le contexte',
 		finalCtaBody:
 			'Si vous évaluez comment rendre les décisions de design durables dans votre organisation, ce sera un plaisir d’en discuter.',
@@ -123,27 +123,27 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 	},
 	'pt-br': {
 		heroAnnotation: 'Designer de Sistemas UX / Systems Builder',
-		heroThesisLine1: 'Eu projeto os sistemas de decisão que sustentam as experiências digitais —',
+		heroThesisLine1: 'Eu projeto os sistemas de decisão que sustentam as experiências digitais,',
 		heroThesisLine2Prefix: 'para os humanos que decidem, e agora para os ',
 		heroThesisAccent: 'agentes de AI que executam',
 		footerYears: '20+ anos',
 		footerLine: 'Design → Sistemas → Governança',
 		transitionText:
-			'Ao longo de mais de 20 anos, isso significa migrar das telas para a infraestrutura por trás delas — tokens, governança e os fluxos de trabalho que mantêm as decisões consistentes muito depois de as pessoas que as construíram terem seguido em frente.',
+			'Ao longo de mais de 20 anos, isso significa migrar das telas para a infraestrutura por trás delas, tokens, governança e os fluxos de trabalho que mantêm as decisões consistentes muito depois de as pessoas que as construíram terem seguido em frente.',
 		teasers: (stats) => [
 			{
 				slug: 'approche',
 				variant: 'entry',
 				eyebrow: 'Abordagem',
 				title: 'Como eu penso os design systems',
-				body: 'Design systems não falham porque as pessoas são negligentes — eles falham porque nada preserva o raciocínio por trás do que foi construído.',
+				body: 'Design systems não falham porque as pessoas são negligentes, eles falham porque nada preserva o raciocínio por trás do que foi construído.',
 				linkLabel: 'Ler a abordagem',
 			},
 			{
 				slug: 'agentica',
 				variant: 'default',
 				eyebrow: 'Agentica',
-				title: 'Agentica — prova em escala',
+				title: 'Agentica, prova em escala',
 				body: `${stats.tokenCount}+ tokens. ${stats.adrCount}+ decisões versionadas. ${stats.componentCount} componentes entregues, mais em desenvolvimento. Um sistema pessoal construído para testar um modelo de governança que falta na maioria dos design systems corporativos.`,
 				linkLabel: 'Explorar Agentica',
 			},
@@ -151,7 +151,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 				slug: 'dtgen',
 				variant: 'default',
 				eyebrow: 'DTGen',
-				title: 'DTGen — prova na prática',
+				title: 'DTGen, prova na prática',
 				body: 'Uma ferramenta construída a partir de uma frustração real e recorrente: gerar um conjunto coerente de tokens não deveria significar começar do zero todas as vezes.',
 				linkLabel: 'Ver DTGen',
 			},
@@ -159,7 +159,7 @@ export const homeCopy: Partial<Record<Locale, HomeCopy>> = {
 		contextEyebrow: 'Trajetória',
 		contextTitle: 'De onde vem esse pensamento',
 		contextBody:
-			'Saúde pública, seguros, manufatura — vinte anos nesses setores são a verdadeira fonte desse pensamento, não um único projeto pessoal.',
+			'Saúde pública, seguros, manufatura, vinte anos nesses setores são a verdadeira fonte desse pensamento, não um único projeto pessoal.',
 		contextLinkLabel: 'Ver o contexto',
 		finalCtaBody:
 			'Se você está avaliando como tornar as decisões de design duráveis na sua organização, terei prazer em conversar sobre como isso funciona na prática.',
