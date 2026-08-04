@@ -8,6 +8,7 @@ import '../styles/tokens.css';
 
 import Analytics from '../components/Analytics.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
+import BrandIcon from '../components/icons/BrandIcon.astro';
 import { locales } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
 import { getLocalizedPath, type Slug } from '../i18n/routes';
@@ -76,25 +77,50 @@ const personJsonLd = {
 		<header class="site-header">
 			<nav class="site-nav" aria-label="Primary">
 				<a class="site-nav__logo" href={getLocalizedPath(routeLocale, 'home')}>Guilherme Negreiros</a>
-				<input type="checkbox" id="nav-toggle" class="site-nav__toggle-input" />
-				<label for="nav-toggle" class="site-nav__menu-toggle">
-					<Menu size={22} stroke-width={1.5} aria-hidden="true" />
-					<span class="visually-hidden">Open menu</span>
-				</label>
-				<ul class="site-nav__links">
-					{navLinks.map((link) => (
+				<div class="site-nav__controls">
+					<input type="checkbox" id="nav-toggle" class="site-nav__toggle-input" />
+					<ul class="site-nav__links">
+						{navLinks.map((link) => (
+							<li>
+								<a href={getLocalizedPath(routeLocale, link.slug)}>{link.label}</a>
+							</li>
+						))}
 						<li>
-							<a href={getLocalizedPath(routeLocale, link.slug)}>{link.label}</a>
+							<a href={getLocalizedPath(routeLocale, 'contact')}>{t('nav.contact')}</a>
 						</li>
-					))}
-					<li>
-						<a class="site-nav__contact" href={getLocalizedPath(routeLocale, 'contact')}>
-							{t('nav.contact')}
+					</ul>
+					<div class="site-nav__utils">
+						<select id="lang-switch" class="lang-switch" aria-label="Language">
+							{locales.map((loc) => (
+								<option value={getLocalizedPath(loc, slug)} selected={loc === routeLocale}>
+									{loc.toUpperCase()}
+								</option>
+							))}
+						</select>
+						<a
+							class="site-nav__linkedin"
+							href="https://www.linkedin.com/in/gnegreiros"
+							target="_blank"
+							rel="noopener"
+							aria-label="LinkedIn"
+						>
+							<BrandIcon name="linkedin" size={18} />
 						</a>
-					</li>
-				</ul>
+					</div>
+					<label for="nav-toggle" class="site-nav__menu-toggle">
+						<Menu size={22} stroke-width={1.5} aria-hidden="true" />
+						<span class="visually-hidden">Open menu</span>
+					</label>
+				</div>
 			</nav>
 		</header>
+
+		<script is:inline>
+			document.getElementById('lang-switch')?.addEventListener('change', function (event) {
+				window.location.href = event.target.value;
+			});
+		</script>
+
 		<main id="main">
 			<slot />
 		</main>
@@ -179,10 +205,18 @@ const personJsonLd = {
 
 	.site-nav__logo {
 		font-family: var(--font-mono);
-		font-size: var(--text-small);
+		font-size: 1.0625rem;
+		font-weight: 500;
 		letter-spacing: 0.02em;
 		text-decoration: none;
 		white-space: nowrap;
+		color: var(--color-accent);
+	}
+
+	.site-nav__controls {
+		display: flex;
+		align-items: center;
+		gap: 1.75rem;
 	}
 
 	.site-nav__toggle-input {
@@ -223,8 +257,41 @@ const personJsonLd = {
 		color: var(--color-text-primary);
 	}
 
-	.site-nav__contact {
-		color: var(--color-accent) !important;
+	.site-nav__utils {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.lang-switch {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.04em;
+		color: var(--color-text-secondary);
+		background: var(--color-bg);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		padding: 0.3125rem 0.5rem;
+		cursor: pointer;
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.lang-switch:hover,
+	.lang-switch:focus-visible {
+		border-color: var(--color-text-secondary);
+		color: var(--color-text-primary);
+	}
+
+	.site-nav__linkedin {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-accent);
+		transition: color 0.2s ease;
+	}
+
+	.site-nav__linkedin:hover,
+	.site-nav__linkedin:focus-visible {
+		color: var(--color-text-primary);
 	}
 
 	main {
@@ -241,6 +308,10 @@ const personJsonLd = {
 	}
 
 	@media (max-width: 768px) {
+		.site-nav__controls {
+			gap: 1rem;
+		}
+
 		.site-nav__toggle-input {
 			position: absolute;
 			display: block;
@@ -261,8 +332,9 @@ const personJsonLd = {
 			flex-direction: column;
 			align-items: stretch;
 			gap: 0;
-			background: var(--color-bg);
+			background: #edebe7;
 			border-bottom: 1px solid var(--color-line);
+			box-shadow: 0 12px 24px rgba(35, 31, 26, 0.1);
 			font-size: var(--text-mono);
 		}
 
