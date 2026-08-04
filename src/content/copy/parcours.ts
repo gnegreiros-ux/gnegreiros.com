@@ -21,7 +21,7 @@ const parcoursCopy: Partial<Record<Locale, ParcoursCopy>> = {
 			{
 				logo: '/logos/ramq.png',
 				alt: 'RAMQ',
-				current: true,
+				current: false,
 				role: 'Client Experience Bureau (BXC)',
 				dates: 'Nov. 2024 – present',
 				body: "Building UX foundations for the Client Experience Bureau (Bureau d'expérience client) at RAMQ (Régie de l'assurance maladie du Québec) — the groundwork that has to exist before consistent screens can. Confidential by nature of the mandate; the work itself is structural, not visual.",
@@ -66,7 +66,7 @@ const parcoursCopy: Partial<Record<Locale, ParcoursCopy>> = {
 			{
 				logo: '/logos/ramq.png',
 				alt: 'RAMQ',
-				current: true,
+				current: false,
 				role: "Bureau d'expérience client (BXC)",
 				dates: 'Nov. 2024 – aujourd\'hui',
 				body: "Je construis les fondations UX du Bureau d'expérience client de la RAMQ (Régie de l'assurance maladie du Québec) — le travail de fond qui doit exister avant que des écrans cohérents puissent l'être. Confidentiel de par la nature du mandat ; le travail lui-même est structurel, pas visuel.",
@@ -111,7 +111,7 @@ const parcoursCopy: Partial<Record<Locale, ParcoursCopy>> = {
 			{
 				logo: '/logos/ramq.png',
 				alt: 'RAMQ',
-				current: true,
+				current: false,
 				role: "Bureau d'expérience client (BXC)",
 				dates: 'Nov. 2024 – atualmente',
 				body: "Construindo as fundações de UX do Bureau d'expérience client (Bureau de Experiência do Cliente) da RAMQ (Régie de l'assurance maladie du Québec) — o trabalho de base que precisa existir antes que telas consistentes possam existir. Confidencial pela natureza do mandato; o trabalho em si é estrutural, não visual.",
