@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # scratch/session notes, not part of the site
 Temp/
+
+# raw photo/video drop zone for the Gaspésie album — huge originals,
+# never committed; scripts/gaspesie-publicar.mjs reads from here and
+# writes optimized output to public/gaspesie/fotos/
+gaspesie/originaux/

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1E2D">
+<title>Gaspésie 2026 — Álbum de fotos</title>
+<meta name="description" content="Álbum de fotos e vídeos da viagem de Guilherme e Vanessa pela Gaspésie, agosto de 2026.">
+<meta name="robots" content="noindex">
+<style>
+/* ============================================================
+   ÁLBUM — GASPÉSIE 2026
+   Mesma linguagem visual do carnet de bord: fundo de casco,
+   papel hidrográfico, luz de farol em âmbar.
+   ============================================================ */
+
+:root{
+  --ink:        #0B1E2D;
+  --ink-2:      #12293A;
+  --hull:       #071722;
+  --sea:        #BFD9DF;
+  --land:       #EDE9DC;
+  --hair:       #7FA3AC;
+  --lantern:    #E9A13B;
+  --lantern-dk: #C57F1E;
+  --starboard:  #2F8F74;
+  --paper:      #F4F1E7;
+  --on-dark:    #DCE8EC;
+  --on-dark-mute:#8EA9B5;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --r: 3px;
+  --gut: clamp(14px, 3.5vw, 28px);
+}
+
+*{box-sizing:border-box}
+html{ -webkit-text-size-adjust:100% }
+body{
+  margin:0;
+  background:var(--hull);
+  color:var(--on-dark);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:1180px; margin:0 auto; padding:0 var(--gut) 80px }
+
+/* ---------- Masthead ---------- */
+.masthead{ padding:34px 0 22px; border-bottom:1px solid rgba(127,163,172,.28) }
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--on-dark-mute); margin:0 0 12px;
+}
+.masthead h1{
+  margin:0; font-family:var(--sans); font-weight:800; letter-spacing:-.02em;
+  font-size:clamp(30px,7vw,54px); line-height:1.02; color:#fff;
+}
+.masthead h1 span{ color:var(--lantern) }
+.title-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:14px; flex-wrap:wrap;
+}
+.btn-album{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; font-weight:700;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  background:var(--lantern); color:var(--ink);
+  padding:9px 16px; border-radius:99px;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.btn-album:hover{ background:var(--lantern-dk) }
+.tagline{ margin:10px 0 0; max-width:56ch; color:var(--on-dark-mute); font-size:15px }
+.stats{ display:flex; flex-wrap:wrap; gap:0; margin:24px 0 0; border-top:1px solid rgba(127,163,172,.22) }
+.stat{ flex:1 1 130px; padding:14px 16px 12px 0; border-right:1px solid rgba(127,163,172,.18) }
+.stat:last-child{ border-right:0 }
+.stat b{ display:block; font-family:var(--mono); font-size:clamp(19px,3.6vw,25px); font-weight:600; color:#fff; letter-spacing:-.01em }
+.stat i{ display:block; font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-dark-mute); margin-top:4px }
+
+/* ---------- Seções por dia ---------- */
+.sec{ margin-top:44px }
+.day-head{
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  padding-bottom:10px; margin-bottom:14px; border-bottom:1px solid rgba(127,163,172,.28);
+  position:sticky; top:0; background:var(--hull); padding-top:12px; z-index:2;
+}
+.day-head h2{ margin:0; font-size:clamp(17px,3.4vw,22px); font-weight:700; letter-spacing:-.01em; color:#fff; text-transform:capitalize }
+.day-head .count{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--lantern-dk); background:rgba(233,161,59,.12); border:1px solid rgba(233,161,59,.35); padding:3px 8px; border-radius:99px }
+
+/* ---------- Grade ---------- */
+.grid{
+  display:grid; gap:3px;
+  grid-template-columns:repeat(3, 1fr);
+}
+@media (min-width:520px){ .grid{ grid-template-columns:repeat(4, 1fr) } }
+@media (min-width:820px){ .grid{ grid-template-columns:repeat(5, 1fr) } }
+.tile{
+  position:relative; aspect-ratio:1/1; overflow:hidden; background:var(--ink-2);
+  border:0; padding:0; cursor:pointer; display:block; width:100%;
+}
+.tile img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .25s ease }
+.tile:hover img, .tile:focus-visible img{ transform:scale(1.04) }
+.tile .play{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(7,23,34,.18);
+}
+.tile .play svg{ width:34px; height:34px; filter:drop-shadow(0 1px 3px rgba(0,0,0,.6)) }
+
+/* ---------- Estado vazio ---------- */
+.empty{
+  margin-top:30px; padding:28px 22px; text-align:center; background:var(--ink);
+  border:1px dashed rgba(127,163,172,.4); border-radius:var(--r); color:var(--on-dark-mute);
+}
+.empty b{ display:block; color:#fff; font-size:17px; margin-bottom:6px }
+
+/* ---------- Lightbox ---------- */
+.lb{
+  position:fixed; inset:0; background:rgba(3,10,15,.96); display:none;
+  align-items:center; justify-content:center; z-index:50; touch-action:pan-y;
+}
+.lb.open{ display:flex }
+.lb-stage{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) }
+.lb img, .lb video{ max-width:94vw; max-height:86vh; object-fit:contain; border-radius:2px }
+.lb-bar{
+  position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
+  padding:calc(env(safe-area-inset-top) + 12px) 14px 12px; background:linear-gradient(rgba(3,10,15,.85), transparent);
+}
+.lb-count{ font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:var(--on-dark-mute) }
+.lb-close{
+  background:transparent; border:1px solid rgba(127,163,172,.4); color:#fff; width:36px; height:36px;
+  border-radius:99px; font-size:18px; cursor:pointer; line-height:1;
+}
+.lb-nav{
+  position:absolute; top:50%; transform:translateY(-50%); background:rgba(11,30,45,.55);
+  border:1px solid rgba(127,163,172,.35); color:#fff; width:42px; height:42px; border-radius:99px;
+  font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.lb-prev{ left:10px } .lb-next{ right:10px }
+.lb-date{
+  position:absolute; bottom:calc(env(safe-area-inset-bottom) + 14px); left:0; right:0; text-align:center;
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--on-dark-mute); text-transform:capitalize;
+}
+
+footer{
+  margin-top:60px; padding-top:18px; border-top:1px solid rgba(127,163,172,.25);
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--on-dark-mute);
+  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+footer a{ color:var(--lantern); text-decoration-thickness:1px; text-underline-offset:3px }
+
+:focus-visible{ outline:2px solid var(--lantern); outline-offset:2px }
+
+@media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Álbum de viagem · 48°30′N 64°13′O</p>
+    <div class="title-row">
+      <h1>Álbum <span>Gaspésie</span></h1>
+      <a class="btn-album" href="./index.html">Roteiro da viagem</a>
+    </div>
+    <p class="tagline">Fotos e vídeos da viagem de Guilherme e Vanessa pela Gaspésie — a rota pelo norte, o litoral, Gaspé e Percé, com volta pela Baía dos Calores. Agosto de 2026.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section class="sec" id="album">
+    <div id="dias"></div>
+    <div class="empty" id="vazio" hidden>
+      <b>Ainda não há fotos publicadas</b>
+      As fotos e vídeos vão aparecer aqui à medida que forem enviados durante a viagem.
+    </div>
+  </section>
+
+  <footer>
+    <span>Álbum · Guilherme &amp; Vanessa · agosto de 2026</span>
+    <a href="./index.html">Ver o roteiro da viagem →</a>
+  </footer>
+
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visualização ampliada">
+  <div class="lb-bar">
+    <span class="lb-count" id="lbCount"></span>
+    <button class="lb-close" id="lbClose" aria-label="Fechar">✕</button>
+  </div>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+  <div class="lb-stage" id="lbStage"></div>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Próxima">›</button>
+  <div class="lb-date" id="lbDate"></div>
+</div>
+
+<script>
+/* ============================================================
+   Carrega fotos/dados.json (gerado por scripts/gaspesie-publicar.mjs)
+   e monta a grade agrupada por data.
+   ============================================================ */
+const diasEl = document.getElementById("dias");
+const vazioEl = document.getElementById("vazio");
+const statsEl = document.getElementById("stats");
+
+const DIAS_SEMANA_MAIUSC = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+function formatarData(iso){
+  const [ano, mes, dia] = iso.split("-").map(Number);
+  const d = new Date(ano, mes - 1, dia);
+  const texto = new Intl.DateTimeFormat("pt-BR", { weekday:"long", day:"numeric", month:"long" }).format(d);
+  return DIAS_SEMANA_MAIUSC(texto);
+}
+
+function playIcon(){
+  return '<span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>';
+}
+
+let ITENS = [];
+
+function montarGrade(itens){
+  diasEl.innerHTML = "";
+  if(!itens.length){ vazioEl.hidden = false; return; }
+  vazioEl.hidden = true;
+
+  const porData = new Map();
+  itens.forEach(it => {
+    if(!porData.has(it.data)) porData.set(it.data, []);
+    porData.get(it.data).push(it);
+  });
+
+  const datasOrdenadas = [...porData.keys()].sort();
+  const nFotos = itens.filter(i => i.tipo === "foto").length;
+  const nVideos = itens.filter(i => i.tipo === "video").length;
+  statsEl.innerHTML = `
+    <div class="stat"><b>${datasOrdenadas.length}</b><i>dias com registros</i></div>
+    <div class="stat"><b>${nFotos}</b><i>fotos</i></div>
+    <div class="stat"><b>${nVideos}</b><i>vídeos</i></div>`;
+
+  datasOrdenadas.forEach(data => {
+    const grupo = porData.get(data).sort((a,b) => (a.hora||"").localeCompare(b.hora||""));
+    const sec = document.createElement("section");
+    sec.className = "sec";
+    sec.innerHTML = `
+      <div class="day-head">
+        <h2>${formatarData(data)}</h2>
+        <span class="count">${grupo.length}</span>
+      </div>
+      <div class="grid"></div>`;
+    const grid = sec.querySelector(".grid");
+    grupo.forEach(it => {
+      const idxGlobal = ITENS.indexOf(it);
+      const b = document.createElement("button");
+      b.className = "tile";
+      b.type = "button";
+      b.setAttribute("aria-label", it.tipo === "video" ? "Abrir vídeo" : "Abrir foto");
+      const capa = it.tipo === "video" ? it.poster : it.thumb;
+      b.innerHTML = `<img src="${capa}" loading="lazy" decoding="async" alt="">${it.tipo === "video" ? playIcon() : ""}`;
+      b.addEventListener("click", () => abrirLightbox(idxGlobal));
+      grid.appendChild(b);
+    });
+    diasEl.appendChild(sec);
+  });
+}
+
+/* ---------- Lightbox ---------- */
+const lb = document.getElementById("lb");
+const lbStage = document.getElementById("lbStage");
+const lbCount = document.getElementById("lbCount");
+const lbDate = document.getElementById("lbDate");
+let lbIndex = 0;
+
+function renderLightbox(){
+  const it = ITENS[lbIndex];
+  lbStage.innerHTML = "";
+  if(it.tipo === "video"){
+    const v = document.createElement("video");
+    v.src = it.src; v.poster = it.poster; v.controls = true; v.playsInline = true;
+    lbStage.appendChild(v);
+  } else {
+    const img = document.createElement("img");
+    img.src = it.full; img.alt = "";
+    lbStage.appendChild(img);
+  }
+  lbCount.textContent = `${lbIndex + 1} / ${ITENS.length}`;
+  lbDate.textContent = formatarData(it.data);
+}
+function abrirLightbox(i){
+  lbIndex = i; lb.classList.add("open"); renderLightbox();
+}
+function fecharLightbox(){
+  lb.classList.remove("open");
+  lbStage.innerHTML = "";
+}
+function navegar(delta){
+  lbIndex = (lbIndex + delta + ITENS.length) % ITENS.length;
+  renderLightbox();
+}
+document.getElementById("lbClose").onclick = fecharLightbox;
+document.getElementById("lbPrev").onclick = () => navegar(-1);
+document.getElementById("lbNext").onclick = () => navegar(1);
+lb.addEventListener("click", e => { if(e.target === lb) fecharLightbox(); });
+document.addEventListener("keydown", e => {
+  if(!lb.classList.contains("open")) return;
+  if(e.key === "Escape") fecharLightbox();
+  if(e.key === "ArrowRight") navegar(1);
+  if(e.key === "ArrowLeft") navegar(-1);
+});
+
+/* swipe no mobile */
+let touchX = null;
+lb.addEventListener("touchstart", e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
+lb.addEventListener("touchend", e => {
+  if(touchX == null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 40) navegar(dx < 0 ? 1 : -1);
+  touchX = null;
+}, {passive:true});
+
+/* ---------- Carregamento ---------- */
+fetch("fotos/dados.json", { cache: "no-store" })
+  .then(r => r.ok ? r.json() : [])
+  .then(dados => { ITENS = dados; montarGrade(dados); })
+  .catch(() => { montarGrade([]); });
+</script>
+</body>
+</html>

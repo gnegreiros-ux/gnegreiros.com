@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1E2D">
+<title>Gaspésie 2026 — Carnet de bord</title>
+<style>
+/* ============================================================
+   CARNET DE BORD — GASPÉSIE 2026
+   Direction : carte marine. Fond de coque, papier hydrographique,
+   feu de phare en ambre. Aucune ressource externe.
+   ============================================================ */
+
+:root{
+  --ink:        #0B1E2D;
+  --ink-2:      #12293A;
+  --ink-3:      #1B3A4E;
+  --hull:       #071722;
+  --sea:        #BFD9DF;
+  --sea-deep:   #9DC3CC;
+  --land:       #EDE9DC;
+  --land-2:     #E2DDCB;
+  --hair:       #7FA3AC;
+  --lantern:    #E9A13B;
+  --lantern-dk: #C57F1E;
+  --starboard:  #2F8F74;
+  --signal:     #A83A32;
+  --slate:      #6C8894;
+  --paper:      #F4F1E7;
+  --paper-2:    #E8E3D4;
+  --on-dark:    #DCE8EC;
+  --on-dark-mute:#8EA9B5;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --chart: Georgia, "Iowan Old Style", "Times New Roman", serif;
+
+  --r: 3px;
+  --gut: clamp(14px, 3.5vw, 28px);
+}
+
+*{box-sizing:border-box}
+html{ -webkit-text-size-adjust:100% }
+body{
+  margin:0;
+  background:var(--hull);
+  color:var(--on-dark);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:1180px; margin:0 auto; padding:0 var(--gut) 80px }
+
+/* ---------- Masthead ---------- */
+.masthead{
+  padding:34px 0 22px;
+  border-bottom:1px solid rgba(127,163,172,.28);
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--on-dark-mute);
+  margin:0 0 12px;
+}
+.title-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:14px; flex-wrap:wrap;
+}
+.btn-album{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; font-weight:700;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  background:var(--lantern); color:var(--ink);
+  padding:9px 16px; border-radius:99px;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.btn-album:hover{ background:var(--lantern-dk) }
+.masthead h1{
+  margin:0;
+  font-family:var(--sans);
+  font-weight:800;
+  letter-spacing:-.02em;
+  font-size:clamp(30px,7vw,54px);
+  line-height:1.02;
+  color:#fff;
+}
+.masthead h1 span{ color:var(--lantern) }
+.tagline{
+  margin:10px 0 0;
+  max-width:56ch;
+  color:var(--on-dark-mute);
+  font-size:15px;
+}
+.stats{
+  display:flex; flex-wrap:wrap; gap:0;
+  margin:24px 0 0;
+  border-top:1px solid rgba(127,163,172,.22);
+}
+.stat{
+  flex:1 1 130px;
+  padding:14px 16px 12px 0;
+  border-right:1px solid rgba(127,163,172,.18);
+}
+.stat:last-child{border-right:0}
+.stat b{
+  display:block;
+  font-family:var(--mono);
+  font-size:clamp(19px,3.6vw,25px);
+  font-weight:600;
+  color:#fff;
+  letter-spacing:-.01em;
+}
+.stat i{
+  display:block; font-style:normal;
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--on-dark-mute); margin-top:4px;
+}
+
+/* ---------- Alerte départ ---------- */
+.alert{
+  margin:26px 0 0;
+  border:1px solid var(--lantern-dk);
+  border-left:4px solid var(--lantern);
+  background:linear-gradient(90deg, rgba(233,161,59,.13), rgba(233,161,59,.03));
+  padding:16px 18px;
+  border-radius:var(--r);
+}
+.alert h2{
+  margin:0 0 6px; font-size:13px; font-family:var(--mono);
+  letter-spacing:.14em; text-transform:uppercase; color:var(--lantern);
+}
+.alert ol{ margin:8px 0 0; padding-left:20px; font-size:14.5px }
+.alert li{ margin:5px 0 }
+.alert a{ color:var(--lantern); text-decoration-thickness:1px; text-underline-offset:3px }
+
+/* ---------- Sections ---------- */
+.sec{ margin-top:56px }
+.sec-head{
+  display:flex; align-items:baseline; gap:14px;
+  padding-bottom:10px; margin-bottom:20px;
+  border-bottom:1px solid rgba(127,163,172,.28);
+}
+.sec-head h2{
+  margin:0; font-size:clamp(19px,3.4vw,25px); font-weight:700;
+  letter-spacing:-.01em; color:#fff;
+}
+.sec-head .num{
+  font-family:var(--mono); font-size:11px; letter-spacing:.2em;
+  color:var(--lantern); padding-top:4px;
+}
+.sec-note{ margin:-8px 0 20px; color:var(--on-dark-mute); font-size:14px; max-width:62ch }
+
+/* ---------- Carte ---------- */
+.chart-shell{
+  background:var(--sea);
+  border:1px solid var(--hair);
+  border-radius:var(--r);
+  overflow:hidden;
+  position:relative;
+}
+.chart-bar{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  padding:9px 12px;
+  background:var(--paper);
+  border-bottom:1px solid var(--hair);
+}
+.chart-bar .lbl{
+  font-family:var(--mono); font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:#4A6773; margin-right:2px;
+}
+.chip{
+  font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  padding:5px 9px; border-radius:99px; cursor:pointer;
+  border:1px solid var(--hair); background:transparent; color:var(--ink);
+  display:inline-flex; align-items:center; gap:6px;
+}
+.chip:hover{ background:var(--paper-2) }
+.chip .swatch{ width:12px; height:3px; border-radius:2px; display:inline-block }
+.chip .swatch.dot{ width:6px; height:6px; border-radius:50%; background:#5A7986 }
+.chip[aria-pressed="true"]{ background:var(--ink); color:#fff; border-color:var(--ink) }
+.chart-zoom{ margin-left:auto; display:flex; gap:6px }
+.zbtn{
+  width:30px; height:28px; border:1px solid var(--hair); background:transparent;
+  color:var(--ink); font-family:var(--mono); font-size:14px; cursor:pointer; border-radius:var(--r);
+}
+.zbtn:hover{ background:var(--paper-2) }
+.chart-canvas{ display:block; width:100%; height:auto; touch-action:none; cursor:grab }
+.chart-canvas.dragging{ cursor:grabbing }
+.chart-hint{
+  padding:7px 12px; background:var(--paper); border-top:1px solid var(--hair);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; color:#4A6773;
+}
+
+/* SVG interne */
+.sea-fill{ fill:var(--sea) }
+.land-fill{ fill:var(--land); stroke:var(--hair); stroke-width:1.1 }
+.depth{ fill:none; stroke:var(--sea-deep); stroke-width:1; opacity:.75 }
+.graticule{ stroke:var(--hair); stroke-width:.5; opacity:.35; fill:none }
+.place-lbl{
+  font-family:var(--chart); font-style:italic; font-size:11px; fill:#26414D;
+  paint-order:stroke; stroke:var(--land); stroke-width:3px; stroke-linejoin:round;
+}
+.water-lbl{
+  font-family:var(--chart); font-style:italic; font-size:12.5px; fill:#4E7784;
+  letter-spacing:.14em; paint-order:stroke; stroke:var(--sea); stroke-width:3.5px;
+  stroke-linejoin:round; text-transform:uppercase;
+}
+.leg{ fill:none; stroke-linecap:round; stroke-linejoin:round }
+.leg-aller{ stroke:var(--starboard); stroke-width:3 }
+.leg-ferry{ stroke:var(--lantern); stroke-width:3; stroke-dasharray:9 7 }
+.leg-gasp{ stroke:var(--signal); stroke-width:4 }
+.leg-retour{ stroke:var(--slate); stroke-width:2.6; stroke-dasharray:2 5 }
+.stop{ cursor:pointer }
+.stop-dot{ fill:var(--paper); stroke:var(--ink); stroke-width:2 }
+.stop-num{
+  font-family:var(--mono); font-size:9.5px; font-weight:600; fill:var(--ink);
+  text-anchor:middle; dominant-baseline:central; pointer-events:none;
+}
+.stop.is-on .stop-dot{ fill:var(--signal); stroke:var(--paper); stroke-width:2.5 }
+.stop.is-on .stop-num{ fill:#fff }
+.beam{ fill:var(--signal); opacity:0 }
+.stop.is-on .beam{ animation:beam 2.6s ease-out infinite }
+@keyframes beam{
+  0%{ opacity:.42; transform:scale(1) }
+  100%{ opacity:0; transform:scale(3.1) }
+}
+.lh{ cursor:pointer }
+.lh-mark{ fill:var(--lantern); stroke:var(--ink); stroke-width:1.2 }
+.lh-lbl{
+  font-family:var(--mono); font-size:8.5px; fill:#5C4310; letter-spacing:.04em;
+  paint-order:stroke; stroke:var(--land); stroke-width:3px; stroke-linejoin:round;
+}
+/* villes repères — visuellement distinctes des arrêts : petit point creux, libellé gris discret */
+.rc-mark{ fill:var(--paper); stroke:#5A7986; stroke-width:1.4 }
+.rc-lbl{
+  font-family:var(--chart); font-style:italic; font-size:9.5px; fill:#4A6773;
+  paint-order:stroke; stroke:var(--land); stroke-width:3px; stroke-linejoin:round;
+}
+.hidden{ display:none }
+
+/* ---------- Fiche détail ---------- */
+.detail{
+  margin-top:14px;
+  background:var(--paper);
+  color:var(--ink);
+  border:1px solid var(--hair);
+  border-radius:var(--r);
+  padding:20px 22px;
+}
+.detail-top{ display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap }
+.detail-day{
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:#fff; background:var(--signal); padding:5px 9px; border-radius:var(--r); white-space:nowrap;
+}
+.detail-top h3{ margin:0; font-size:clamp(19px,3.6vw,24px); letter-spacing:-.01em; flex:1 1 220px }
+.detail-date{ font-family:var(--mono); font-size:12px; color:#4A6773; white-space:nowrap; padding-top:6px }
+.detail-body{ margin-top:14px; font-size:15px; color:#22414F }
+.detail-body p{ margin:0 0 10px }
+.detail-body strong{ color:var(--ink) }
+.detail-body .mut{ color:#4A6773; font-size:14px }
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:1px; margin-top:16px; background:var(--hair); border:1px solid var(--hair);
+}
+.fact{ background:var(--paper); padding:10px 12px }
+.fact i{
+  display:block; font-style:normal; font-family:var(--mono); font-size:9.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:#5A7986; margin-bottom:3px;
+}
+.fact b{ font-weight:600; font-size:14px; color:var(--ink) }
+.fact a.tel{ font-weight:600; font-size:14px }
+.flag{
+  margin-top:14px; padding:10px 13px; font-size:14px; border-radius:var(--r);
+  border-left:3px solid var(--signal); background:rgba(168,58,50,.07); color:#6E2B24;
+}
+.flag.ok{ border-left-color:var(--starboard); background:rgba(47,143,116,.09); color:#1E5B49 }
+
+/* ---------- Journal ---------- */
+.days{ display:grid; gap:1px; background:rgba(127,163,172,.25); border:1px solid rgba(127,163,172,.25); border-radius:var(--r); overflow:hidden }
+.day{
+  display:grid; grid-template-columns:58px 1fr auto 18px; gap:14px; align-items:center;
+  background:var(--ink); padding:13px 16px; cursor:pointer; text-align:left;
+  border:0; color:inherit; font:inherit; width:100%;
+}
+.day:hover{ background:var(--ink-2) }
+.day[aria-current="true"]{ background:var(--ink-2); box-shadow:inset 3px 0 0 var(--signal) }
+.day .d-num{ font-family:var(--mono); font-size:12px; color:var(--lantern); letter-spacing:.08em }
+.day .d-main strong{ display:block; font-weight:600; font-size:15px; color:#fff; letter-spacing:-.005em }
+.day .d-main span{ display:block; font-size:13px; color:var(--on-dark-mute); margin-top:2px }
+.tag{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase;
+  padding:4px 8px; border-radius:99px; white-space:nowrap; border:1px solid;
+}
+.tag.free{ color:#7BD3B4; border-color:rgba(123,211,180,.45) }
+.tag.paid{ color:var(--lantern); border-color:rgba(233,161,59,.45) }
+.tag.mix{ color:#9DC3CC; border-color:rgba(157,195,204,.45) }
+.tag.home{ color:var(--on-dark-mute); border-color:rgba(142,169,181,.35) }
+.day .chev{ font-family:var(--mono); font-size:13px; color:var(--on-dark-mute); transition:transform .2s ease; margin-left:2px }
+.day[aria-expanded="true"] .chev{ transform:rotate(90deg); color:var(--lantern) }
+.day-panel{ max-height:0; overflow:hidden; background:var(--paper); color:var(--ink); transition:max-height .28s ease }
+.day-panel.open{ max-height:1400px }
+.day-panel .inner{ padding:18px 20px 22px }
+.day-panel .detail-body{ margin-top:0; font-size:15px; color:#22414F }
+.day-panel .detail-body p{ margin:0 0 10px }
+.day-panel .detail-body strong{ color:var(--ink) }
+.day-panel .detail-body .mut{ color:#4A6773; font-size:14px }
+
+/* ---------- Grille de références ---------- */
+.grid{ display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)) }
+.card{
+  background:var(--ink); border:1px solid rgba(127,163,172,.28);
+  border-radius:var(--r); padding:18px 19px;
+}
+.card h3{
+  margin:0 0 12px; font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--lantern); font-weight:600;
+}
+.card p{ margin:0 0 9px; font-size:14.5px; color:var(--on-dark) }
+.card ul{ margin:0; padding-left:17px; font-size:14.5px }
+.card li{ margin:5px 0 }
+.card .mut{ color:var(--on-dark-mute); font-size:13.5px }
+.kv{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:4px 12px; padding:8px 0; border-bottom:1px dotted rgba(127,163,172,.3); font-size:14px }
+.kv:last-child{ border-bottom:0 }
+.kv span{ color:var(--on-dark-mute); flex:1 1 100px; min-width:100px }
+.kv b{ font-family:var(--mono); font-weight:600; color:#fff; white-space:normal; overflow-wrap:break-word; word-break:break-word; text-align:right; flex:1 1 160px; min-width:0 }
+.tel{ font-family:var(--mono); color:var(--lantern); text-decoration:none; border-bottom:1px solid rgba(233,161,59,.4) }
+
+/* ---------- Checklist ---------- */
+.check{ list-style:none; margin:0; padding:0 }
+.check li{ margin:0; border-bottom:1px solid rgba(127,163,172,.18) }
+.check li:last-child{ border-bottom:0 }
+.check label{
+  display:flex; gap:11px; align-items:flex-start; padding:11px 2px;
+  cursor:pointer; font-size:14.5px;
+}
+.check input{ margin:3px 0 0; accent-color:var(--lantern); width:16px; height:16px; flex:0 0 auto }
+.check input:checked + span{ color:var(--on-dark-mute); text-decoration:line-through }
+
+footer{
+  margin-top:60px; padding-top:18px; border-top:1px solid rgba(127,163,172,.25);
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--on-dark-mute);
+  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+
+:focus-visible{ outline:2px solid var(--lantern); outline-offset:2px }
+
+@media (max-width:620px){
+  .day{ grid-template-columns:44px 1fr; gap:10px }
+  .day .tag{ grid-column:2; justify-self:start; margin-top:4px }
+  .stat{ flex:1 1 45%; border-right:0 }
+}
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none !important; transition:none !important }
+}
+@media print{
+  body{ background:#fff; color:#000 }
+  .chart-bar,.chart-zoom,.chart-hint{ display:none }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Carnet de bord · 48°30′N 64°13′O · hors ligne</p>
+  <div class="title-row">
+    <h1>Gaspésie <span>2026</span></h1>
+    <a class="btn-album" href="./album.html">Album photo</a>
+  </div>
+  <p class="tagline">Le tour par le nord, le littoral, Gaspé et Percé — retour par la Baie-des-Chaleurs et la rive-sud, en une seule journée. Guilherme &amp; Vanessa, Pathfinder + roulotte 21 pi.</p>
+  <div class="stats">
+    <div class="stat"><b>9 → 22 août</b><i>14 jours</i></div>
+    <div class="stat"><b>13</b><i>nuits</i></div>
+    <div class="stat"><b>≈ 2 400 km</b><i>boucle totale</i></div>
+    <div class="stat"><b>9 / 13</b><i>nuits gratuites visées</i></div>
+    <div class="stat"><b>90 km/h</b><i>vitesse max attelé</i></div>
+  </div>
+
+  <div class="alert">
+    <h2>À régler avant le départ</h2>
+    <ol>
+      <li><strong>Réserver le traversier Godbout → Matane</strong> du mardi 11 août, départ 11h00. Un seul départ ce jour-là — c'est le maillon serré du voyage.</li>
+      <li><strong>Appeler le Camping du Rivage</strong> à Sainte-Anne-des-Monts — <a class="tel" href="tel:+14187638387">418 763-8387</a> — pour corriger les nuits aux 11 et 12 août (et non plus 10-11).</li>
+      <li><strong>Vérifier les règles de stationnement de nuit</strong> à jour pour Charlevoix, Gaspé et Percé. Les règlements municipaux changent d'une saison à l'autre.</li>
+      <li><strong>Vérifier la disponibilité de Fort Prével</strong> (418 368-6957) comme plan B si Camping Gaspé ou By the Sea tombent à l'eau.</li>
+    </ol>
+  </div>
+</header>
+
+<!-- ================= CARTE ================= -->
+<section class="sec" id="carte">
+  <div class="sec-head"><span class="num">01</span><h2>La carte</h2></div>
+  <p class="sec-note">Touchez une étape pour déplier sa fiche dans le journal ci-dessous. Glissez pour déplacer, molette ou boutons pour zoomer. Carte schématique — les positions sont justes, les côtes sont simplifiées. Les villes en italique grisé sont des repères géographiques, pas des arrêts prévus.</p>
+
+  <div class="chart-shell">
+    <div class="chart-bar">
+      <span class="lbl">Tracés</span>
+      <button class="chip" data-layer="aller" aria-pressed="true"><span class="swatch" style="background:#2F8F74"></span>Aller</button>
+      <button class="chip" data-layer="ferry" aria-pressed="true"><span class="swatch" style="background:#E9A13B"></span>Traversier</button>
+      <button class="chip" data-layer="gasp" aria-pressed="true"><span class="swatch" style="background:#A83A32"></span>Gaspésie</button>
+      <button class="chip" data-layer="retour" aria-pressed="true"><span class="swatch" style="background:#6C8894"></span>Retour</button>
+      <button class="chip" data-layer="phares" aria-pressed="true">◆ Phares</button>
+      <button class="chip" data-layer="villes" aria-pressed="true"><span class="swatch dot"></span>Villes repères</button>
+      <span class="chart-zoom">
+        <button class="zbtn" id="zin" aria-label="Zoomer">+</button>
+        <button class="zbtn" id="zout" aria-label="Dézoomer">−</button>
+        <button class="zbtn" id="zreset" aria-label="Recentrer">⌂</button>
+      </span>
+    </div>
+
+    <svg class="chart-canvas" id="chart" viewBox="0 0 1080 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Carte de l'itinéraire Gaspésie 2026">
+      <rect x="-2000" y="-2000" width="6000" height="6000" class="sea-fill"/>
+
+      <!-- graticule -->
+      <g class="graticule">
+        <path d="M0 62 H1080 M0 232 H1080 M0 402 H1080 M0 572 H1080"/>
+        <path d="M137 0 V620 M364 0 V620 M592 0 V620 M819 0 V620 M1046 0 V620"/>
+      </g>
+
+      <!-- contours de profondeur (décoratifs, côté golfe) -->
+      <g class="depth">
+        <path d="M700 130 Q800 150 900 205 Q980 250 1080 290"/>
+        <path d="M660 175 Q770 200 870 255 Q950 300 1080 345"/>
+      </g>
+
+      <!-- TERRE : rive nord (Côte-Nord / Charlevoix) -->
+      <path class="land-fill" d="M0 0 L728 0 L700 10 L637 45 L600 55 L574 62 L520 112 L450 178 L432 210 L396 245 L347 330 L307 368 L226 472 L120 536 L30 566 L0 578 Z"/>
+
+      <!-- TERRE : rive sud + péninsule gaspésienne + Nouveau-Brunswick -->
+      <path class="land-fill" d="M0 600 L88 562 L226 492 L301 449 L324 426 L380 351 L416 305 L470 262 L540 205 L600 168 L645 132 L700 105 L763 84 L843 70 L918 68 L959 64 L1000 80 L1035 120 L1012 141 L988 146 L1001 158 L1018 172 L1027 187 L1015 205 L995 212 L969 217 L936 245 L895 274 L877 268 L804 259 L745 268 L700 277 L730 315 L790 331 L860 361 L950 391 L1080 432 L1080 620 L0 620 Z"/>
+
+      <!-- Île Bonaventure -->
+      <ellipse class="land-fill" cx="1043" cy="190" rx="9" ry="6"/>
+
+      <!-- toponymes déplacés à la fin du SVG pour rester au-dessus de tous les tracés -->
+
+      <!-- TRACÉS -->
+      <g id="layer-aller">
+        <path class="leg leg-aller" d="M75 554 L120 522 L180 470 L226 440 L262 410 L298 391 L347 332 L396 248 L432 213 L450 182 L500 140 L540 105 L574 65 L610 54 L637 48"/>
+      </g>
+      <g id="layer-ferry">
+        <path class="leg leg-ferry" d="M637 48 L642 88 L645 128"/>
+      </g>
+      <g id="layer-gasp">
+        <path class="leg leg-gasp" d="M645 128 L700 104 L763 80 L806 70 L843 66 L880 64 L918 65 L959 61 L995 72 L1020 100 L1030 122 L1010 136 L992 131 L1000 152 L1014 173 L1022 184 L1011 201 L990 208 L969 213 L936 241 L895 270 L877 264 L840 258 L804 255 L760 262 L730 268 L712 272"/>
+      </g>
+      <g id="layer-retour">
+        <path class="leg leg-retour" d="M712 272 L640 282 L560 290 L480 297 L416 301 L380 347 L350 385 L324 422 L301 445 L240 480 L160 522 L88 554 L75 554"/>
+      </g>
+
+      <g id="layer-phares"></g>
+      <g id="layer-villes"></g>
+      <g id="layer-stops"></g>
+
+      <!-- toponymes — dessinés en dernier pour rester lisibles au-dessus de tout -->
+      <text class="water-lbl" x="510" y="150" transform="rotate(-24 510 150)">Fleuve Saint-Laurent</text>
+      <text class="water-lbl" x="880" y="28" transform="rotate(-3 880 28)">Golfe du Saint-Laurent</text>
+      <text class="water-lbl" x="805" y="300" transform="rotate(20 805 300)" style="font-size:10.5px">Baie des Chaleurs</text>
+      <text class="place-lbl" x="300" y="120" style="font-size:12.5px">Côte-Nord</text>
+      <text class="place-lbl" x="150" y="470" style="font-size:12.5px">Mauricie</text>
+      <text class="place-lbl" x="880" y="150" style="font-size:12.5px">Péninsule gaspésienne</text>
+      <text class="place-lbl" x="860" y="440" style="font-size:11.5px">Nouveau-Brunswick</text>
+    </svg>
+
+    <div class="chart-hint">Aller · traversier Godbout→Matane · littoral gaspésien · retour rive-sud direct sans traversier</div>
+  </div>
+</section>
+
+<!-- ================= JOURNAL ================= -->
+<section class="sec" id="journal">
+  <div class="sec-head"><span class="num">02</span><h2>Le journal, jour par jour</h2></div>
+  <p class="sec-note">Une trame, pas un horaire. Touchez une journée pour déplier sa fiche complète — une seule ouverte à la fois. Tout est déplaçable sauf le traversier du 11 août.</p>
+  <div class="days" id="days"></div>
+</section>
+
+<!-- ================= RÉFÉRENCES ================= -->
+<section class="sec" id="refs">
+  <div class="sec-head"><span class="num">03</span><h2>Références de bord</h2></div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Traversier Godbout → Matane</h3>
+      <p>Haute saison, 8 juin au 13 septembre 2026. Un seul départ par jour dans le sens Godbout → Matane.</p>
+      <div class="kv"><span>Mardi 11 août (le nôtre)</span><b>11:00</b></div>
+      <div class="kv"><span>Durée de la traversée</span><b>2 h 15 – 2 h 30</b></div>
+      <div class="kv"><span>Arriver au terminal</span><b>09:30 – 10:00</b></div>
+      <div class="kv"><span>Filet : Baie-Comeau → Matane</span><b>17:30</b></div>
+      <div class="kv"><span>Réservations STQ</span><b><a class="tel" href="tel:+18336775039">1 833 677-5039</a></b></div>
+      <p class="mut" style="margin-top:12px">Si le départ de 11h00 est manqué : redescendre ≈ 90 km vers Baie-Comeau et prendre le 17:30 le même jour.</p>
+    </div>
+
+    <div class="card">
+      <h3>Attelage et conduite</h3>
+      <div class="kv"><span>Véhicule</span><b>Pathfinder SL 2022 V6</b></div>
+      <div class="kv"><span>Roulotte</span><b>21 pi · 2 essieux</b></div>
+      <div class="kv"><span>Vitesse max autoroute</span><b>90 km/h</b></div>
+      <div class="kv"><span>Consommation sous charge</span><b>18–22 L/100 km</b></div>
+      <div class="kv"><span>Réservoir · autonomie</span><b>≈ 74 L · 330–410 km</b></div>
+      <p class="mut" style="margin-top:12px">L'autonomie n'est pas contraignante sur ce trajet : les services sont réguliers sur la 132. Faire le plein avant les segments Grande-Vallée → Gaspé et Matapédia → Rivière-du-Loup.</p>
+    </div>
+
+    <div class="card">
+      <h3>La stratégie du camp de base</h3>
+      <p>Aux arrêts où le gratuit est excentré : dételer la roulotte sur un spot de base, rayonner en Pathfinder seul dans un rayon de 30–45 min, quitte à ajouter une nuit plutôt que de coller au centre.</p>
+      <div class="kv"><span>Camping Gaspé</span><b><a class="tel" href="tel:+14183684800">418 368-4800</a></b></div>
+      <div class="kv"><span>Plan B — Fort Prével</span><b><a class="tel" href="tel:+14183686957">418 368-6957</a></b></div>
+      <div class="kv"><span>By the Sea (Percé)</span><b><a class="tel" href="tel:+14187825588">418 782-5588</a></b></div>
+      <ul style="margin-top:10px">
+        <li><strong>Forillon / Gaspé</strong> — 3 nuits, base à Camping Gaspé (1029 route de Haldimand) ou spot gratuit iOverlander. Excursions vers le parc, Cap-des-Rosiers, Cap-Bon-Ami.</li>
+        <li><strong>Percé</strong> — 3 nuits, base à By the Sea. Rayon : rocher, Île Bonaventure, rivière Émeraude, Chandler.</li>
+      </ul>
+      <p class="mut">Fort Prével (2053 boul. de Douglas, mi-chemin Gaspé/Percé) gardé en plan B si les deux bases prévues ne fonctionnent pas — payant tous les soirs, excursions plus longues.</p>
+    </div>
+
+    <div class="card">
+      <h3>Nuitées de secours</h3>
+      <p>Villages-Relais confirmés sur le parcours, utiles quand un spot libre tombe à l'eau :</p>
+      <ul>
+        <li>Sainte-Anne-des-Monts</li>
+        <li>Bonaventure · New Carlisle</li>
+        <li>La Pocatière · Montmagny · Cap-Saint-Ignace</li>
+      </ul>
+      <p class="mut" style="margin-top:10px">Haltes VR gratuites 48 h repérées : Sainte-Anne-des-Monts (halte routière officielle), Montmagny (stationnement de l'aréna).</p>
+    </div>
+
+    <div class="card">
+      <h3>Eau et vidange</h3>
+      <ul>
+        <li><strong>Baie-Saint-Paul</strong> — eau potable et station de vidange, avant la Côte-Nord.</li>
+        <li><strong>Longue-Rive</strong> — Chute Sault-au-Mouton, vidange sur place.</li>
+        <li><strong>Campings payants</strong> — Sainte-Anne-des-Monts et Percé, à utiliser pour refaire les pleins d'eau et vider avant les segments en spots libres.</li>
+      </ul>
+      <p class="mut" style="margin-top:10px">Rythme visé : une remise à zéro complète tous les 3 à 4 jours, calée sur les nuits payantes.</p>
+    </div>
+
+    <div class="card">
+      <h3>Coordonnées des sites</h3>
+      <div class="kv"><span>Parc des Riverains</span><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=Parc%20des%20Riverains%2C%20Petite-Rivi%C3%A8re-Saint-Fran%C3%A7ois%20QC" target="_blank" rel="noopener">Petite-Rivière-Saint-François</a></b></div>
+      <div class="kv"><span>Parc des chutes, Les Escoumins</span><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=Parc%20des%20chutes%2C%20Les%20Escoumins%20QC" target="_blank" rel="noopener">Les Escoumins</a></b></div>
+      <div class="kv"><span>Camping du Rivage</span><b><a class="tel" href="tel:+14187638387">418 763-8387</a></b></div>
+      <div class="kv"><span>Camping Gaspé</span><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=Camping%20Gasp%C3%A9%2C%20Gasp%C3%A9%20QC" target="_blank" rel="noopener">1029 rte de Haldimand, Gaspé</a></b></div>
+      <div class="kv"><span>Fort Prével (plan B)</span><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=Camping%20Aztec%20Fort%20Pr%C3%A9vel%2C%20Gasp%C3%A9%20QC" target="_blank" rel="noopener">Camping Aztec Fort Prével</a></b></div>
+      <div class="kv"><span>Camping du Phare, Percé</span><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=Camping%20du%20Phare%20%C3%A0%20Perc%C3%A9" target="_blank" rel="noopener">Camping du Phare à Percé</a> · <a class="tel" href="tel:+14187825588">418 782-5588</a></b></div>
+      <p class="mut" style="margin-top:10px"><strong>Sur le terrain</strong> — iOverlander Pro (carte Québec hors ligne), avis récents plutôt que les étoiles pour la compatibilité roulotte.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CHECKLIST ================= -->
+<section class="sec" id="avant">
+  <div class="sec-head"><span class="num">04</span><h2>Avant de tourner la clé</h2></div>
+  <p class="sec-note">Cases à cocher pour la session en cours — elles se remettent à zéro si la page est rechargée.</p>
+  <div class="card">
+    <ul class="check" id="check">
+      <li><label><input type="checkbox"><span>Traversier Godbout → Matane réservé — mardi 11 août, 11h00</span></label></li>
+      <li><label><input type="checkbox"><span>Camping du Rivage corrigé — 2 nuits, 11 et 12 août</span></label></li>
+      <li><label><input type="checkbox"><span>Carte Québec téléchargée hors ligne dans iOverlander</span></label></li>
+      <li><label><input type="checkbox"><span>Spots libres repérés et mis en favoris : Charlevoix, Côte-Nord, Mont-Saint-Pierre, Baie-des-Chaleurs</span></label></li>
+      <li><label><input type="checkbox"><span>Règles de stationnement de nuit revérifiées : Charlevoix, Gaspé, Percé</span></label></li>
+      <li><label><input type="checkbox"><span>Disponibilité de Fort Prével vérifiée comme plan B (Gaspé/Percé)</span></label></li>
+      <li><label><input type="checkbox"><span>Pression des pneus vérifiée — roulotte incluse, y compris la roue de secours</span></label></li>
+      <li><label><input type="checkbox"><span>Attelage, chaînes de sécurité, freins électriques et feux testés</span></label></li>
+      <li><label><input type="checkbox"><span>Réservoir d'eau potable plein, eaux grises et noires vidées</span></label></li>
+      <li><label><input type="checkbox"><span>Bonbonnes de propane pleines</span></label></li>
+      <li><label><input type="checkbox"><span>Cette page enregistrée sur les deux téléphones pour usage hors ligne</span></label></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>Carnet de bord · Guilherme &amp; Vanessa · août 2026</span>
+  <span>Fichier autonome — fonctionne sans connexion</span>
+  <a href="./album.html" style="color:var(--lantern);text-decoration-thickness:1px;text-underline-offset:3px">Voir l'album photo →</a>
+</footer>
+
+</div>
+
+<script>
+/* ============================================================
+   DONNÉES
+   ============================================================ */
+const STOPS = [
+  { n:"1", x:290, y:397, place:"Petite-Rivière", label:"gauche",
+    day:"Jour 1", date:"Dimanche 9 août", title:"Trois-Rivières → Charlevoix",
+    km:"≈ 350 km", drive:"4 h 30 – 5 h attelé", night:"Parc des Riverains (Petite-Rivière-Saint-François) ou halte de La Malbaie", cost:"Gratuit", type:"free",
+    body:"Le plus long segment du voyage, fait le premier jour pendant que l'énergie est là. La 138 par Charlevoix monte et descend sec après Baie-Saint-Paul — rester à 90 km/h, laisser de la distance, utiliser le frein moteur dans les descentes.",
+    flag:"La MRC de Charlevoix interdit le camping sauvage et donne des amendes. S'en tenir aux zones tolérées, arriver tard, partir tôt.", flagOk:false,
+    tip:"Eau potable et station de vidange à Baie-Saint-Paul — bon endroit pour partir en Côte-Nord avec les réservoirs à jour.",
+    addr:"50 rue du Quai, Petite-Rivière-Saint-François QC G0A 2L0", name:"Parc des Riverains, Petite-Rivière-Saint-François QC", tel:"" },
+
+  { n:"2", x:432, y:213, place:"Les Escoumins", label:"gauche",
+    day:"Jour 2", date:"Lundi 10 août", title:"Charlevoix → Tadoussac → Côte-Nord",
+    km:"≈ 280–300 km", drive:"4 h – 4 h 30 attelé", night:"Parc des chutes (Les Escoumins) ou Chute Sault-au-Mouton (Longue-Rive)", cost:"Gratuit", type:"free",
+    body:"Traverse gratuite du Saguenay à Tadoussac — courte, fréquente, aucune réservation, la roulotte passe sans problème. Tadoussac vaut un arrêt même bref : le village, la dune, les baleines depuis la rive.",
+    flag:"Chute Sault-au-Mouton a une station de vidange sur place — l'utiliser si vous y dormez.", flagOk:true,
+    addr:"26, rue de la Rivière, Les Escoumins QC G0T 1K0", name:"Parc des chutes, Les Escoumins QC", tel:"" },
+
+  { n:"3", x:637, y:48, place:"Godbout", label:"droite",
+    day:"Jour 3", date:"Mardi 11 août", title:"Godbout → traversier → Sainte-Anne-des-Monts",
+    km:"≈ 100 km + traversée", drive:"Traversée 2 h 15 – 2 h 30", night:"Camping du Rivage, Sainte-Anne-des-Monts", cost:"Payant · à réserver", type:"paid",
+    body:"Le seul rendez-vous fixe du voyage. Départ à 11h00, terminal entre 9h30 et 10h00. Godbout est un vrai petit village d'environ 300 habitants — arriver la veille au soir ou tôt le matin permet d'en profiter au lieu de le traverser en vitesse.",
+    flag:"Un seul départ Godbout → Matane ce jour-là. Si manqué : redescendre 90 km à Baie-Comeau pour le 17:30.", flagOk:false,
+    tip:"Le phare de Pointe-des-Monts est juste avant Godbout — un détour court et l'un des plus beaux de la Côte-Nord.",
+    addr:"117, rue Pascal-Comeau, Godbout QC G0H 1G0", name:"Gare fluviale de Godbout", tel:"18336775039" },
+
+  { n:"4", x:763, y:80, place:"Sainte-Anne-des-Monts", label:"haut",
+    day:"Jour 4", date:"Mercredi 12 août", title:"Sainte-Anne-des-Monts, journée sans attelage",
+    km:"Excursions locales", drive:"Roulotte au camping", night:"Camping du Rivage (2ᵉ nuit consécutive sur place)", cost:"Payant", type:"paid",
+    body:"Journée tampon après le traversier. Exploradôme, le quai, le village. Le parc national de la Gaspésie et le mont Albert sont à environ 40 min en Pathfinder seul si le cœur vous en dit.",
+    flag:"", flagOk:true,
+    tip:"Repli gratuit : la halte routière officielle de Sainte-Anne-des-Monts, tolérée 48 h.",
+    addr:"500, 1ère Avenue Ouest, Sainte-Anne-des-Monts QC", name:"Camping du Rivage, Sainte-Anne-des-Monts QC", tel:"14187638387" },
+
+  { n:"5", x:918, y:65, place:"Grande-Vallée", label:"haut",
+    day:"Jour 5", date:"Jeudi 13 août", title:"Mont-Saint-Pierre → Grande-Vallée → Pointe-à-la-Renommée",
+    km:"≈ 130 km", drive:"2 h – 2 h 30 attelé", night:"Spot libre repéré sur iOverlander", cost:"Gratuit", type:"free",
+    body:"La plus belle section de littoral du voyage, et la plus lente : la 132 serpente entre falaise et mer avec quelques côtes sérieuses. Peu de kilomètres, beaucoup d'arrêts. Mont-Saint-Pierre pour les parapentes, La Martre pour son phare rouge en bois.",
+    flag:"", flagOk:true,
+    addr:"Secteur L'Anse-à-Valleau (route 132), Gaspé QC — site du phare, aucune adresse fixe pour le spot libre", tel:"" },
+
+  { n:"6", x:1010, y:132, place:"Forillon / Gaspé", label:"droite",
+    day:"Jours 6–8", date:"Vendredi 14 – dimanche 16 août", title:"Forillon et Gaspé — camp de base, 3 nuits",
+    km:"≈ 85 km puis excursions", drive:"Roulotte dételée à la base", night:"Camping Gaspé ou spot gratuit excentré — Fort Prével en plan B", cost:"Mixte", type:"mix",
+    body:"Trois nuits, une seule installation. Le Pathfinder seul fait les allers-retours vers Cap-Bon-Ami, Cap-des-Rosiers, le sentier des Graves et le bout du cap. Gaspé pour le ravitaillement, le musée et un vrai repas si ça vaut le coup.",
+    flag:"Plan B si Camping Gaspé et le spot gratuit tombent à l'eau : Camping Aztec Fort Prével, 418 368-6957 — payant, mi-chemin Gaspé/Percé.", flagOk:false,
+    tip:"Cap-des-Rosiers est le plus haut phare du Canada. À faire tôt le matin, avant les autobus.",
+    addr:"1029 route de Haldimand, Gaspé QC G4X 2J6", name:"Camping Gaspé", tel:"14183684800" },
+
+  { n:"9", x:1022, y:184, place:"Percé", label:"droite",
+    day:"Jours 9–11", date:"Lundi 17 – mercredi 19 août", title:"Percé — camp de base, 3 nuits",
+    km:"≈ 70 km puis excursions", drive:"Roulotte dételée à la base", night:"By the Sea (base retenue) · Côte Surprise en repli", cost:"Payant", type:"paid",
+    body:"La priorité du voyage, et le seul arrêt où trois nuits sont assumées d'avance. Base fixe avec accueil sur place, puis rayonnement en Pathfinder : le rocher, l'Île Bonaventure et sa colonie de fous de Bassan, la rivière Émeraude, Chandler.",
+    flag:"Un terrain avec accueil règle la question de laisser la roulotte seule pendant les excursions — c'est ce qui a fait pencher la balance.", flagOk:true,
+    tip:"Le bateau vers l'Île Bonaventure part du quai de Percé. Prévoir une demi-journée complète, et le matin par temps clair.",
+    addr:"385, route 132 Ouest, Percé QC G0C 2L0", name:"Camping du Phare à Percé", tel:"14187825588" },
+
+  { n:"12", x:801, y:255, place:"Bonaventure", label:"bas",
+    day:"Jours 12–13", date:"Jeudi 20 – vendredi 21 août", title:"Baie-des-Chaleurs — Bonaventure → Carleton-sur-Mer",
+    km:"≈ 190 km sur deux jours", drive:"Étapes courtes", night:"Spot libre — Rivière-Port-Daniel, rue de l'Église", cost:"Gratuit", type:"free",
+    body:"Changement d'ambiance complet : eau plus chaude, rythme acadien, villages étalés le long de la baie. Bonaventure et son musée acadien, New Carlisle, puis Carleton-sur-Mer au pied du mont Saint-Joseph.",
+    flag:"", flagOk:true,
+    addr:"Rue de l'Église, Port-Daniel-Gascons QC G0C 2N0 — secteur du spot libre, numéro civique exact à confirmer", tel:"" },
+
+  { n:"14", x:88, y:554, place:"Trois-Rivières", label:"bas",
+    day:"Jour 14", date:"Samedi 22 août", title:"Baie-des-Chaleurs → Trois-Rivières, retour direct",
+    km:"≈ 550 km", drive:"7 h – 8 h attelé, longue journée assumée", night:"Retour maison — pas de nuit tampon", cost:"—", type:"home",
+    body:"Décision confirmée : plus d'arrêt à Kamouraska. Rivière-du-Loup → autoroute 20 → Bécancour → pont Laviolette, en une seule journée. L'autoroute 20 passe en périphérie de Lévis sans y entrer.",
+    flag:"Longue journée acceptée pour garder les 3 nuits pleines à Forillon/Gaspé et à Percé intactes. Départ tôt recommandé.", flagOk:true,
+    tip:"Si vous rentrez plus tôt que prévu ailleurs dans le voyage, c'est cette dernière portion qui absorbe le décalage — mais le 22 août reste la date de retour.",
+    addr:"", tel:"" }
+];
+
+const PHARES = [
+  { x:662, y:48,  name:"Pointe-des-Monts", anchor:"end",   dx:-9,  dy:-6 },
+  { x:806, y:70,  name:"La Martre",        anchor:"middle",dx:0,   dy:-9 },
+  { x:959, y:61,  name:"Pointe-à-la-Renommée", anchor:"middle", dx:6, dy:-9 },
+  { x:1030,y:122, name:"Cap-des-Rosiers",  anchor:"start", dx:9,   dy:0 },
+  { x:1011,y:201, name:"Cap-d'Espoir",     anchor:"start", dx:9,   dy:8 }
+];
+
+/* Villes repères — contexte géographique seulement, pas des arrêts prévus.
+   Coordonnées validées pour tomber sur la bonne rive (rive-sud vs rive-nord). */
+const REFCITIES = [
+  // Rive sud, dans l'ordre Trois-Rivières → Bas-Saint-Laurent
+  { x:95,  y:560, name:"Bécancour", anchor:"start", dx:9, dy:-6 },
+  { x:215, y:497, name:"Québec / Lévis", anchor:"start", dx:9, dy:14 },
+  { x:272, y:462, name:"Montmagny", anchor:"start", dx:9, dy:-10 },
+  { x:326, y:424, name:"La Pocatière", anchor:"end", dx:-9, dy:-6 },
+  { x:374, y:355, name:"Rivière-du-Loup", anchor:"end", dx:-9, dy:14 },
+  { x:383, y:343, name:"Cacouna", anchor:"start", dx:9, dy:-6 },
+
+  // Rive nord, Charlevoix → Côte-Nord
+  { x:308, y:378, name:"Baie-Saint-Paul", anchor:"end", dx:-9, dy:-8 },
+  { x:397, y:248, name:"Tadoussac", anchor:"start", dx:9, dy:-6 },
+  { x:546, y:58,  name:"Franquelin", anchor:"end", dx:-9, dy:14 },
+  { x:574, y:60,  name:"Baie-Comeau", anchor:"start", dx:9, dy:-6 },
+
+  // Péninsule gaspésienne, côté golfe
+  { x:645, y:128, name:"Matane", anchor:"end", dx:-9, dy:16 },
+  { x:559, y:178, name:"Sainte-Flavie", anchor:"end", dx:-9, dy:14 },
+  { x:824, y:82,  name:"Mont-Saint-Pierre", anchor:"end", dx:-9, dy:14 },
+  { x:977, y:84,  name:"Rivière-au-Renard", anchor:"start", dx:9, dy:-6 },
+
+  // Péninsule gaspésienne, côté Baie-des-Chaleurs
+  { x:936, y:241, name:"Grande-Rivière", anchor:"start", dx:9, dy:-6 },
+  { x:910, y:251, name:"Chandler", anchor:"end", dx:-9, dy:14 },
+  { x:748, y:264, name:"New Richmond", anchor:"start", dx:9, dy:-6 },
+  { x:705, y:268, name:"Carleton-sur-Mer", anchor:"end", dx:-9, dy:-6 }
+];
+
+const LABEL_OFFSET = {
+  gauche:{dx:-13,dy:4,  anchor:"end"},
+  droite:{dx:13, dy:4,  anchor:"start"},
+  haut:  {dx:0,  dy:-14,anchor:"middle"},
+  bas:   {dx:0,  dy:22, anchor:"middle"}
+};
+
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById("chart");
+const gStops = document.getElementById("layer-stops");
+const gPhares = document.getElementById("layer-phares");
+const gVilles = document.getElementById("layer-villes");
+const daysEl = document.getElementById("days");
+let current = 0;
+
+/* ---------- Rendu des marqueurs ---------- */
+function el(tag, attrs, text){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  if(text != null) e.textContent = text;
+  return e;
+}
+
+PHARES.forEach(p => {
+  const g = el("g", {class:"lh"});
+  g.appendChild(el("path", {class:"lh-mark", d:`M${p.x} ${p.y-6} L${p.x+5} ${p.y} L${p.x} ${p.y+6} L${p.x-5} ${p.y} Z`}));
+  g.appendChild(el("text", {class:"lh-lbl", x:p.x+p.dx, y:p.y+p.dy+3, "text-anchor":p.anchor}, p.name));
+  gPhares.appendChild(g);
+});
+
+REFCITIES.forEach(c => {
+  const g = el("g", {class:"rc"});
+  g.appendChild(el("circle", {class:"rc-mark", cx:c.x, cy:c.y, r:3.2}));
+  g.appendChild(el("text", {class:"rc-lbl", x:c.x+c.dx, y:c.y+c.dy+3, "text-anchor":c.anchor}, c.name));
+  gVilles.appendChild(g);
+});
+
+STOPS.forEach((s, i) => {
+  const o = LABEL_OFFSET[s.label];
+  const g = el("g", {class:"stop", tabindex:"0", role:"button", "aria-label":`${s.day} — ${s.title}`});
+  g.appendChild(el("circle", {class:"beam", cx:s.x, cy:s.y, r:11, style:`transform-origin:${s.x}px ${s.y}px`}));
+  g.appendChild(el("circle", {class:"stop-dot", cx:s.x, cy:s.y, r:11}));
+  g.appendChild(el("text", {class:"stop-num", x:s.x, y:s.y}, s.n));
+  g.appendChild(el("text", {class:"place-lbl", x:s.x+o.dx, y:s.y+o.dy, "text-anchor":o.anchor}, s.place));
+  g.addEventListener("click", () => { select(i); toggleDay(i); const p = document.getElementById(`day-panel-${i}`); if(p) p.scrollIntoView({behavior:"smooth", block:"center"}); });
+  g.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); select(i); toggleDay(i); } });
+  gStops.appendChild(g);
+});
+
+/* ---------- Fiche réutilisable (carte + accordéon) ---------- */
+const TAGTXT = {free:"Gratuit", paid:"Payant", mix:"Mixte", home:"Maison"};
+function factsHTML(s){
+  const coordFacts = [];
+  if(s.addr) coordFacts.push(`<div class="fact"><i>Adresse</i><b><a class="tel" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name || s.addr)}" target="_blank" rel="noopener">${s.addr}</a></b></div>`);
+  if(s.tel) coordFacts.push(`<div class="fact"><i>Téléphone</i><a class="tel" href="tel:+1${s.tel}">${s.tel.replace(/^1/,"").replace(/(\d{3})(\d{3})(\d{4})/,"$1 $2-$3")}</a></div>`);
+  return `<div class="facts">
+      <div class="fact"><i>Distance</i><b>${s.km}</b></div>
+      <div class="fact"><i>Conduite</i><b>${s.drive}</b></div>
+      <div class="fact"><i>Nuitée</i><b>${s.night}</b></div>
+      <div class="fact"><i>Coût</i><b>${s.cost}</b></div>
+      ${coordFacts.join("")}
+    </div>
+    ${s.flag ? `<div class="flag ${s.flagOk ? "ok" : ""}">${s.flag}</div>` : ""}`;
+}
+
+/* ---------- Journal — accordéon, une journée à la fois ---------- */
+STOPS.forEach((s, i) => {
+  const item = document.createElement("div");
+  item.className = "day-item";
+
+  const b = document.createElement("button");
+  b.className = "day";
+  b.type = "button";
+  b.setAttribute("aria-expanded", "false");
+  b.setAttribute("aria-controls", `day-panel-${i}`);
+  b.innerHTML = `<span class="d-num">${s.n.padStart(2,"0")}</span>
+    <span class="d-main"><strong>${s.title}</strong><span>${s.date} · ${s.km} · ${s.night}</span></span>
+    <span class="tag ${s.type}">${TAGTXT[s.type]}</span>
+    <span class="chev">▸</span>`;
+
+  const panel = document.createElement("div");
+  panel.className = "day-panel";
+  panel.id = `day-panel-${i}`;
+  panel.innerHTML = `<div class="inner">
+      <div class="detail-body"><p>${s.body}</p><p class="mut"><strong>Sur place —</strong> ${s.tip}</p></div>
+      ${factsHTML(s)}
+    </div>`;
+
+  b.addEventListener("click", () => { toggleDay(i); select(i); });
+  item.appendChild(b);
+  item.appendChild(panel);
+  daysEl.appendChild(item);
+});
+
+function toggleDay(i){
+  const panels = daysEl.querySelectorAll(".day-panel");
+  const buttons = daysEl.querySelectorAll(".day");
+  const wasOpen = panels[i].classList.contains("open");
+  panels.forEach(p => p.classList.remove("open"));
+  buttons.forEach(b => b.setAttribute("aria-expanded", "false"));
+  if(!wasOpen){
+    panels[i].classList.add("open");
+    buttons[i].setAttribute("aria-expanded", "true");
+  }
+}
+
+/* ---------- Sélection (synchronise le marqueur de carte et l'accordéon) ---------- */
+function select(i){
+  current = i;
+  gStops.querySelectorAll(".stop").forEach((g,k) => g.classList.toggle("is-on", k===i));
+  daysEl.querySelectorAll(".day").forEach((d,k) => d.setAttribute("aria-current", k===i ? "true" : "false"));
+}
+
+/* ---------- Couches ---------- */
+document.querySelectorAll(".chip[data-layer]").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const on = chip.getAttribute("aria-pressed") === "true";
+    chip.setAttribute("aria-pressed", String(!on));
+    document.getElementById("layer-" + chip.dataset.layer).classList.toggle("hidden", on);
+  });
+});
+
+/* ---------- Pan & zoom ---------- */
+const HOME = {x:0, y:0, w:1080, h:620};
+let vb = {...HOME};
+function applyVB(){ svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+function zoom(factor, cx, cy){
+  const nw = Math.min(HOME.w * 1.15, Math.max(HOME.w * 0.18, vb.w * factor));
+  const k = nw / vb.w;
+  const px = cx == null ? vb.x + vb.w/2 : cx;
+  const py = cy == null ? vb.y + vb.h/2 : cy;
+  vb.x = px - (px - vb.x) * k;
+  vb.y = py - (py - vb.y) * k;
+  vb.w = nw;
+  vb.h = HOME.h * (nw / HOME.w);
+  applyVB();
+}
+document.getElementById("zin").onclick  = () => zoom(0.72);
+document.getElementById("zout").onclick = () => zoom(1/0.72);
+document.getElementById("zreset").onclick = () => { vb = {...HOME}; applyVB(); };
+
+function toSvg(evt){
+  const r = svg.getBoundingClientRect();
+  return { x: vb.x + (evt.clientX - r.left) / r.width * vb.w,
+           y: vb.y + (evt.clientY - r.top) / r.height * vb.h };
+}
+svg.addEventListener("wheel", e => {
+  e.preventDefault();
+  const p = toSvg(e);
+  zoom(e.deltaY > 0 ? 1.12 : 0.89, p.x, p.y);
+}, {passive:false});
+
+let drag = null;
+const pointers = new Map();
+let pinchStart = null;
+
+svg.addEventListener("pointerdown", e => {
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if(pointers.size === 1){
+    drag = {sx:e.clientX, sy:e.clientY, vx:vb.x, vy:vb.y, moved:false};
+    svg.setPointerCapture(e.pointerId);
+    svg.classList.add("dragging");
+  } else if(pointers.size === 2){
+    const [a,b] = [...pointers.values()];
+    pinchStart = {d:Math.hypot(a.x-b.x, a.y-b.y), w:vb.w};
+    drag = null;
+  }
+});
+svg.addEventListener("pointermove", e => {
+  if(!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if(pinchStart && pointers.size === 2){
+    const [a,b] = [...pointers.values()];
+    const d = Math.hypot(a.x-b.x, a.y-b.y);
+    if(d > 0) zoom((pinchStart.w * (pinchStart.d / d)) / vb.w);
+    return;
+  }
+  if(!drag) return;
+  const r = svg.getBoundingClientRect();
+  const dx = (e.clientX - drag.sx) / r.width * vb.w;
+  const dy = (e.clientY - drag.sy) / r.height * vb.h;
+  if(Math.abs(e.clientX-drag.sx) + Math.abs(e.clientY-drag.sy) > 4) drag.moved = true;
+  vb.x = drag.vx - dx;
+  vb.y = drag.vy - dy;
+  applyVB();
+});
+["pointerup","pointercancel","pointerleave"].forEach(t =>
+  svg.addEventListener(t, e => {
+    pointers.delete(e.pointerId);
+    if(pointers.size < 2) pinchStart = null;
+    if(pointers.size === 0){ drag = null; svg.classList.remove("dragging"); }
+  })
+);
+
+/* ---------- Navigation clavier ---------- */
+document.addEventListener("keydown", e => {
+  if(e.target.matches("input, textarea")) return;
+  if(e.key === "ArrowRight") select(Math.min(STOPS.length-1, current+1));
+  if(e.key === "ArrowLeft")  select(Math.max(0, current-1));
+});
+
+/* ---------- Init ---------- */
+applyVB();
+select(0);
+toggleDay(0);
+</script>
+</body>
+</html>
