@@ -190,5 +190,101 @@
     "hora": "19:26",
     "thumb": "fotos/IMG_0841-thumb.webp",
     "full": "fotos/IMG_0841.webp"
+  },
+  {
+    "id": "IMG_2697",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "09:58",
+    "thumb": "fotos/IMG_2697-thumb.webp",
+    "full": "fotos/IMG_2697.webp"
+  },
+  {
+    "id": "IMG_2699",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "10:09",
+    "thumb": "fotos/IMG_2699-thumb.webp",
+    "full": "fotos/IMG_2699.webp"
+  },
+  {
+    "id": "IMG_2701",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "10:12",
+    "thumb": "fotos/IMG_2701-thumb.webp",
+    "full": "fotos/IMG_2701.webp"
+  },
+  {
+    "id": "IMG_2704",
+    "tipo": "video",
+    "data": "2026-08-10",
+    "hora": "10:12",
+    "src": "fotos/IMG_2704.mp4",
+    "poster": "fotos/IMG_2704-poster.webp"
+  },
+  {
+    "id": "IMG_0845",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "10:52",
+    "thumb": "fotos/IMG_0845-thumb.webp",
+    "full": "fotos/IMG_0845.webp"
+  },
+  {
+    "id": "IMG_2707",
+    "tipo": "video",
+    "data": "2026-08-10",
+    "hora": "10:53",
+    "src": "fotos/IMG_2707.mp4",
+    "poster": "fotos/IMG_2707-poster.webp"
+  },
+  {
+    "id": "IMG_2708",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "10:59",
+    "thumb": "fotos/IMG_2708-thumb.webp",
+    "full": "fotos/IMG_2708.webp"
+  },
+  {
+    "id": "IMG_0848",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "11:06",
+    "thumb": "fotos/IMG_0848-thumb.webp",
+    "full": "fotos/IMG_0848.webp"
+  },
+  {
+    "id": "IMG_0849",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "11:08",
+    "thumb": "fotos/IMG_0849-thumb.webp",
+    "full": "fotos/IMG_0849.webp"
+  },
+  {
+    "id": "IMG_0851",
+    "tipo": "video",
+    "data": "2026-08-10",
+    "hora": "11:11",
+    "src": "fotos/IMG_0851.mp4",
+    "poster": "fotos/IMG_0851-poster.webp"
+  },
+  {
+    "id": "IMG_2714",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "12:14",
+    "thumb": "fotos/IMG_2714-thumb.webp",
+    "full": "fotos/IMG_2714.webp"
+  },
+  {
+    "id": "IMG_2715",
+    "tipo": "foto",
+    "data": "2026-08-10",
+    "hora": "12:16",
+    "thumb": "fotos/IMG_2715-thumb.webp",
+    "full": "fotos/IMG_2715.webp"
   }
 ]
