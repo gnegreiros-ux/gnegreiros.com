@@ -229,7 +229,7 @@ function montarGrade(itens){
     porData.get(it.data).push(it);
   });
 
-  const datasOrdenadas = [...porData.keys()].sort();
+  const datasOrdenadas = [...porData.keys()].sort().reverse();
   const nFotos = itens.filter(i => i.tipo === "foto").length;
   const nVideos = itens.filter(i => i.tipo === "video").length;
   statsEl.innerHTML = `
