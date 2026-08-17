@@ -1,0 +1,5 @@
+[
+  { "nome": "Plage de Haldimand", "lat": 48.79019, "lon": -64.38031, "raioM": 800 },
+  { "nome": "Parc municipal de la Rivière Émeraude", "lat": 48.57489, "lon": -64.34242, "raioM": 700 },
+  { "nome": "Camping Napage", "lat": 48.32172, "lon": -64.6975, "raioM": 300 }
+]

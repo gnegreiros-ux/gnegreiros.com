@@ -27,6 +27,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ORIGINAIS = path.join(ROOT, "gaspesie/originaux");
 const FOTOS = path.join(ROOT, "public/gaspesie/fotos");
 const DADOS = path.join(FOTOS, "dados.json");
+const LOCAIS_MANUAIS = path.join(ROOT, "gaspesie/locais-manuais.json");
 const VIDEO_TIMEZONE = "America/Toronto";
 const NOMINATIM_UA = "gnegreiros.com-gaspesie-album/1.0 (personal travel album, contact: gnegreiros7@gmail.com)";
 const NOMINATIM_DELAY_MS = 1100; // Nominatim usage policy: max 1 req/s
@@ -129,6 +130,36 @@ async function gpsFoto(filePath) {
     }
   } catch {
     // no GPS data — fine, not all photos have it
+  }
+  return null;
+}
+
+// Manual place-name overrides for spots Nominatim doesn't know at
+// locality level (specific beaches, parks, campgrounds), so it would
+// otherwise fall back to the enclosing town. Edit gaspesie/locais-manuais.json
+// to add more — { nome, lat, lon, raioM } — no code changes needed.
+function carregarLocaisManuais() {
+  try {
+    return JSON.parse(fs.readFileSync(LOCAIS_MANUAIS, "utf8"));
+  } catch {
+    return [];
+  }
+}
+
+function distanciaMetros(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function localManual(lat, lon, overrides) {
+  for (const o of overrides) {
+    if (distanciaMetros(lat, lon, o.lat, o.lon) <= o.raioM) return o.nome;
   }
   return null;
 }
@@ -254,9 +285,11 @@ async function preencherLocais(dados) {
     }
   }
 
+  const locaisManuais = carregarLocaisManuais();
+
   for (const item of dados) {
     if (item.lat == null || item.lon == null || item.local) continue;
-    const nome = await nomeLocal(item.lat, item.lon);
+    const nome = localManual(item.lat, item.lon, locaisManuais) || (await nomeLocal(item.lat, item.lon));
     if (nome) {
       item.local = nome;
       alterou = true;
@@ -345,7 +378,7 @@ async function main() {
     return;
   }
 
-  git("add", "public/gaspesie/fotos", "public/gaspesie/album.html", "public/gaspesie/index.html");
+  git("add", "public/gaspesie/fotos", "public/gaspesie/album.html", "public/gaspesie/index.html", "gaspesie/locais-manuais.json");
   const staged = git("diff", "--cached", "--name-only").trim();
   if (!staged) {
     console.log("Nothing staged, skipping commit.");
