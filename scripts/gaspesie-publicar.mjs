@@ -6,6 +6,12 @@
 // deploys to OVH automatically. gaspesie/originaux/ is gitignored and never
 // touched by git here — only public/gaspesie/fotos/ output is committed.
 //
+// Also reverse-geocodes GPS coordinates (EXIF for photos, ISO 6709 "location"
+// tag for videos) into a place name via OpenStreetMap Nominatim, so the album
+// can group photos by place within each day. Runs as a backfill pass too:
+// any existing item missing lat/lon/local gets one, as long as its original
+// file is still present in gaspesie/originaux/.
+//
 // Usage:
 //   node scripts/gaspesie-publicar.mjs            process + commit + push
 //   node scripts/gaspesie-publicar.mjs --no-git    process only, no git actions
@@ -22,6 +28,8 @@ const ORIGINAIS = path.join(ROOT, "gaspesie/originaux");
 const FOTOS = path.join(ROOT, "public/gaspesie/fotos");
 const DADOS = path.join(FOTOS, "dados.json");
 const VIDEO_TIMEZONE = "America/Toronto";
+const NOMINATIM_UA = "gnegreiros.com-gaspesie-album/1.0 (personal travel album, contact: gnegreiros7@gmail.com)";
+const NOMINATIM_DELAY_MS = 1100; // Nominatim usage policy: max 1 req/s
 
 const EXT_FOTO = new Set([".jpg", ".jpeg", ".png", ".heic", ".heif"]);
 const EXT_VIDEO = new Set([".mp4", ".mov", ".m4v"]);
@@ -92,10 +100,71 @@ function infoVideo(filePath) {
   }).formatToParts(instant);
   const get = (t) => parts.find((p) => p.type === t).value;
 
+  const locRaw = tags["location"] || tags["com.apple.quicktime.location.ISO6709"] || null;
+  const gps = locRaw ? parseISO6709(locRaw) : null;
+
   return {
     date: { y: get("year"), m: get("month"), d: get("day"), hh: get("hour"), mm: get("minute") },
     duration,
+    gps,
   };
+}
+
+// Parses ISO 6709 coordinate strings like "+49.2255-065.8177+8.011993/"
+// (the format QuickTime/ffmpeg store GPS location tags in).
+function parseISO6709(str) {
+  const m = /^([+-]\d+(?:\.\d+)?)([+-]\d+(?:\.\d+)?)/.exec(str);
+  if (!m) return null;
+  const lat = parseFloat(m[1]);
+  const lon = parseFloat(m[2]);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  return { lat, lon };
+}
+
+async function gpsFoto(filePath) {
+  try {
+    const gps = await exifr.gps(filePath);
+    if (gps && Number.isFinite(gps.latitude) && Number.isFinite(gps.longitude)) {
+      return { lat: gps.latitude, lon: gps.longitude };
+    }
+  } catch {
+    // no GPS data — fine, not all photos have it
+  }
+  return null;
+}
+
+const geoCache = new Map();
+let lastNominatimCall = 0;
+
+// Reverse-geocodes lat/lon into a place name via OpenStreetMap Nominatim.
+// Queries at zoom=16 (street-level) but reads the *address* hierarchy
+// rather than the top-level name/type, which is often just the nearest
+// road or amenity — the address block still carries the enclosing
+// hamlet/village/town at that zoom. Never translates — returns the name
+// as OSM has it, which for Québec places is already in French.
+async function nomeLocal(lat, lon) {
+  const key = `${lat.toFixed(3)},${lon.toFixed(3)}`;
+  if (geoCache.has(key)) return geoCache.get(key);
+
+  const wait = NOMINATIM_DELAY_MS - (Date.now() - lastNominatimCall);
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+  lastNominatimCall = Date.now();
+
+  let nome = null;
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=16&addressdetails=1`;
+    const res = await fetch(url, { headers: { "User-Agent": NOMINATIM_UA } });
+    if (res.ok) {
+      const j = await res.json();
+      const addr = j.address || {};
+      nome = addr.hamlet || addr.village || addr.town || addr.city || addr.suburb || addr.county || j.name || null;
+    }
+  } catch (err) {
+    console.warn(`  Reverse geocode failed for ${lat},${lon}: ${err.message}`);
+  }
+
+  geoCache.set(key, nome);
+  return nome;
 }
 
 async function processarFoto(filePath, id) {
@@ -107,6 +176,7 @@ async function processarFoto(filePath, id) {
   await sharp(buf).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 76 }).toFile(fullPath);
 
   const { y, m, d, hh, mm } = await dataHoraFoto(filePath);
+  const gps = await gpsFoto(filePath);
   return {
     id,
     tipo: "foto",
@@ -114,6 +184,7 @@ async function processarFoto(filePath, id) {
     hora: `${hh}:${mm}`,
     thumb: `fotos/${id}-thumb.webp`,
     full: `fotos/${id}.webp`,
+    ...(gps ? { lat: gps.lat, lon: gps.lon } : {}),
   };
 }
 
@@ -122,7 +193,7 @@ async function processarVideo(filePath, id) {
   const framePath = path.join(FOTOS, `${id}-frame.jpg`);
   const posterPath = path.join(FOTOS, `${id}-poster.webp`);
 
-  const { date, duration } = infoVideo(filePath);
+  const { date, duration, gps } = infoVideo(filePath);
   const seek = duration > 2 ? 1 : 0;
 
   execFileSync("ffmpeg", [
@@ -150,7 +221,49 @@ async function processarVideo(filePath, id) {
     hora: `${date.hh}:${date.mm}`,
     src: `fotos/${id}.mp4`,
     poster: `fotos/${id}-poster.webp`,
+    ...(gps ? { lat: gps.lat, lon: gps.lon } : {}),
   };
+}
+
+// Finds the original raw file for an already-published item id (any
+// supported extension), used to backfill GPS on items processed before
+// location support existed.
+function encontrarOriginal(id) {
+  for (const ext of [...EXT_FOTO, ...EXT_VIDEO, ...[...EXT_FOTO].map((e) => e.toUpperCase()), ...[...EXT_VIDEO].map((e) => e.toUpperCase())]) {
+    const p = path.join(ORIGINAIS, id + ext);
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+// Backfills lat/lon (from the original file, if still present) and local
+// (via reverse geocoding) on any item that's missing them. Mutates in place
+// and returns whether anything changed.
+async function preencherLocais(dados) {
+  let alterou = false;
+
+  for (const item of dados) {
+    if (item.lat != null && item.lon != null) continue;
+    const original = encontrarOriginal(item.id);
+    if (!original) continue;
+    const gps = item.tipo === "video" ? infoVideo(original).gps : await gpsFoto(original);
+    if (gps) {
+      item.lat = gps.lat;
+      item.lon = gps.lon;
+      alterou = true;
+    }
+  }
+
+  for (const item of dados) {
+    if (item.lat == null || item.lon == null || item.local) continue;
+    const nome = await nomeLocal(item.lat, item.lon);
+    if (nome) {
+      item.local = nome;
+      alterou = true;
+    }
+  }
+
+  return alterou;
 }
 
 async function main() {
@@ -208,14 +321,24 @@ async function main() {
     }
   }
 
-  if (!novos.length) {
+  if (novos.length) {
+    dados = [...dados, ...novos].sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
+    console.log(`\n${novos.length} new item(s) processed.`);
+  } else {
     console.log("No new photos or videos to process.");
+  }
+
+  console.log("\nChecking locations (reverse geocoding via OpenStreetMap)...");
+  const locaisAlterados = await preencherLocais(dados);
+  if (locaisAlterados) console.log("Location data updated.");
+
+  if (!novos.length && !locaisAlterados) {
+    console.log("Nothing to update.");
     return;
   }
 
-  dados = [...dados, ...novos].sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
   fs.writeFileSync(DADOS, JSON.stringify(dados, null, 2) + "\n");
-  console.log(`\n${novos.length} new item(s) processed. dados.json updated.`);
+  console.log("dados.json updated.");
 
   if (noGit) {
     console.log("--no-git: skipping commit/push.");
@@ -229,12 +352,17 @@ async function main() {
     return;
   }
 
-  const nFotos = novos.filter((n) => n.tipo === "foto").length;
-  const nVideos = novos.filter((n) => n.tipo === "video").length;
-  const partes = [];
-  if (nFotos) partes.push(`${nFotos} photo${nFotos === 1 ? "" : "s"}`);
-  if (nVideos) partes.push(`${nVideos} video${nVideos === 1 ? "" : "s"}`);
-  const msg = `Add ${partes.join(" and ")} to Gaspésie album`;
+  let msg;
+  if (novos.length) {
+    const nFotos = novos.filter((n) => n.tipo === "foto").length;
+    const nVideos = novos.filter((n) => n.tipo === "video").length;
+    const partes = [];
+    if (nFotos) partes.push(`${nFotos} photo${nFotos === 1 ? "" : "s"}`);
+    if (nVideos) partes.push(`${nVideos} video${nVideos === 1 ? "" : "s"}`);
+    msg = `Add ${partes.join(" and ")} to Gaspésie album`;
+  } else {
+    msg = "Backfill location data for Gaspésie album";
+  }
 
   git("commit", "-m", msg);
   console.log(`Committed: ${msg}`);

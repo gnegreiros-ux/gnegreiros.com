@@ -89,6 +89,19 @@ body{
 .day-head h2{ margin:0; font-size:clamp(17px,3.4vw,22px); font-weight:700; letter-spacing:-.01em; color:#fff; text-transform:capitalize }
 .day-head .count{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--lantern-dk); background:rgba(233,161,59,.12); border:1px solid rgba(233,161,59,.35); padding:3px 8px; border-radius:99px }
 
+/* ---------- Grupos por local ---------- */
+.place{ margin-top:22px }
+.place:first-child{ margin-top:0 }
+.place-head{
+  display:flex; align-items:center; gap:6px; margin:0 0 8px;
+  font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+}
+.place-head svg{ width:13px; height:13px; flex:none; color:var(--lantern) }
+.place-head a{
+  color:var(--on-dark); text-decoration:none; border-bottom:1px solid rgba(220,232,236,.35);
+}
+.place-head a:hover{ color:var(--lantern); border-bottom-color:var(--lantern) }
+
 /* ---------- Grade ---------- */
 .grid{
   display:grid; gap:3px;
@@ -216,6 +229,29 @@ function playIcon(){
   return '<span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>';
 }
 
+function pinIcon(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>';
+}
+
+function linkMapa(it){
+  return `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}`;
+}
+
+// Agrupa itens já ordenados por hora em blocos consecutivos do mesmo local
+// (sem local, cada item vira um bloco solo, sem cabeçalho de local).
+function agruparPorLocal(itens){
+  const grupos = [];
+  itens.forEach(it => {
+    const ultimo = grupos[grupos.length - 1];
+    if(ultimo && ultimo.local === (it.local || null)){
+      ultimo.itens.push(it);
+    } else {
+      grupos.push({ local: it.local || null, itens: [it] });
+    }
+  });
+  return grupos;
+}
+
 let ITENS = [];
 
 function montarGrade(itens){
@@ -245,20 +281,37 @@ function montarGrade(itens){
       <div class="day-head">
         <h2>${formatarData(data)}</h2>
         <span class="count">${grupo.length}</span>
-      </div>
-      <div class="grid"></div>`;
-    const grid = sec.querySelector(".grid");
-    grupo.forEach(it => {
-      const idxGlobal = ITENS.indexOf(it);
-      const b = document.createElement("button");
-      b.className = "tile";
-      b.type = "button";
-      b.setAttribute("aria-label", it.tipo === "video" ? "Abrir vídeo" : "Abrir foto");
-      const capa = it.tipo === "video" ? it.poster : it.thumb;
-      b.innerHTML = `<img src="${capa}" loading="lazy" decoding="async" alt="">${it.tipo === "video" ? playIcon() : ""}`;
-      b.addEventListener("click", () => abrirLightbox(idxGlobal));
-      grid.appendChild(b);
+      </div>`;
+
+    agruparPorLocal(grupo).forEach(bloco => {
+      const place = document.createElement("div");
+      place.className = "place";
+      if(bloco.local){
+        const primeiro = bloco.itens[0];
+        place.innerHTML = `
+          <div class="place-head">
+            ${pinIcon()}
+            <a href="${linkMapa(primeiro)}" target="_blank" rel="noopener">${bloco.local}</a>
+          </div>
+          <div class="grid"></div>`;
+      } else {
+        place.innerHTML = `<div class="grid"></div>`;
+      }
+      const grid = place.querySelector(".grid");
+      bloco.itens.forEach(it => {
+        const idxGlobal = ITENS.indexOf(it);
+        const b = document.createElement("button");
+        b.className = "tile";
+        b.type = "button";
+        b.setAttribute("aria-label", it.tipo === "video" ? "Abrir vídeo" : "Abrir foto");
+        const capa = it.tipo === "video" ? it.poster : it.thumb;
+        b.innerHTML = `<img src="${capa}" loading="lazy" decoding="async" alt="">${it.tipo === "video" ? playIcon() : ""}`;
+        b.addEventListener("click", () => abrirLightbox(idxGlobal));
+        grid.appendChild(b);
+      });
+      sec.appendChild(place);
     });
+
     diasEl.appendChild(sec);
   });
 }
