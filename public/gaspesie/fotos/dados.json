@@ -2824,6 +2824,17 @@
     "local": "Parc municipal de la Rivière Émeraude"
   },
   {
+    "id": "IMG_2896",
+    "tipo": "video",
+    "data": "2026-08-16",
+    "hora": "12:35",
+    "src": "fotos/IMG_2896.mp4",
+    "poster": "fotos/IMG_2896-poster.webp",
+    "lat": 48.5762,
+    "lon": -64.3499,
+    "local": "Parc municipal de la Rivière Émeraude"
+  },
+  {
     "id": "IMG_2897",
     "tipo": "foto",
     "data": "2026-08-16",
@@ -2986,6 +2997,17 @@
     "full": "fotos/IMG_2919.webp",
     "lat": 48.57741388888889,
     "lon": -64.34951111111111,
+    "local": "Parc municipal de la Rivière Émeraude"
+  },
+  {
+    "id": "IMG_2921",
+    "tipo": "video",
+    "data": "2026-08-16",
+    "hora": "13:36",
+    "src": "fotos/IMG_2921.mp4",
+    "poster": "fotos/IMG_2921-poster.webp",
+    "lat": 48.5774,
+    "lon": -64.3495,
     "local": "Parc municipal de la Rivière Émeraude"
   },
   {
@@ -3163,5 +3185,526 @@
     "lat": 48.32173055555556,
     "lon": -64.69748611111112,
     "local": "Camping Napage"
+  },
+  {
+    "id": "IMG_1090",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "11:24",
+    "thumb": "fotos/IMG_1090-thumb.webp",
+    "full": "fotos/IMG_1090.webp"
+  },
+  {
+    "id": "IMG_1093",
+    "tipo": "video",
+    "data": "2026-08-17",
+    "hora": "14:54",
+    "src": "fotos/IMG_1093.mp4",
+    "poster": "fotos/IMG_1093-poster.webp",
+    "lat": 48.3249,
+    "lon": -64.6949,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1094",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "14:56",
+    "thumb": "fotos/IMG_1094-thumb.webp",
+    "full": "fotos/IMG_1094.webp",
+    "lat": 48.32554722222223,
+    "lon": -64.6949,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1096",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "14:59",
+    "thumb": "fotos/IMG_1096-thumb.webp",
+    "full": "fotos/IMG_1096.webp",
+    "lat": 48.32694722222222,
+    "lon": -64.69393055555555,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1098",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "15:03",
+    "thumb": "fotos/IMG_1098-thumb.webp",
+    "full": "fotos/IMG_1098.webp",
+    "lat": 48.32857222222223,
+    "lon": -64.6928638888889,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1099",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "15:05",
+    "thumb": "fotos/IMG_1099-thumb.webp",
+    "full": "fotos/IMG_1099.webp",
+    "lat": 48.32870555555556,
+    "lon": -64.69260277777778,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1101",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "15:28",
+    "thumb": "fotos/IMG_1101-thumb.webp",
+    "full": "fotos/IMG_1101.webp",
+    "lat": 48.32531388888889,
+    "lon": -64.69535833333333,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1102",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "19:37",
+    "thumb": "fotos/IMG_1102-thumb.webp",
+    "full": "fotos/IMG_1102.webp",
+    "lat": 48.51902777777778,
+    "lon": -64.21540833333334,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1103",
+    "tipo": "video",
+    "data": "2026-08-17",
+    "hora": "19:45",
+    "src": "fotos/IMG_1103.mp4",
+    "poster": "fotos/IMG_1103-poster.webp",
+    "lat": 48.519,
+    "lon": -64.2151,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1104",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "19:50",
+    "thumb": "fotos/IMG_1104-thumb.webp",
+    "full": "fotos/IMG_1104.webp",
+    "lat": 48.519952777777775,
+    "lon": -64.21448611111111,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1105",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "19:52",
+    "thumb": "fotos/IMG_1105-thumb.webp",
+    "full": "fotos/IMG_1105.webp",
+    "lat": 48.52044444444444,
+    "lon": -64.21407222222223,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1106",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "19:54",
+    "thumb": "fotos/IMG_1106-thumb.webp",
+    "full": "fotos/IMG_1106.webp",
+    "lat": 48.520713888888885,
+    "lon": -64.213875,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1108",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "20:01",
+    "thumb": "fotos/IMG_1108-thumb.webp",
+    "full": "fotos/IMG_1108.webp",
+    "lat": 48.52088611111111,
+    "lon": -64.21166944444445,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_2967",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "20:50",
+    "thumb": "fotos/IMG_2967-thumb.webp",
+    "full": "fotos/IMG_2967.webp",
+    "lat": 48.52168888888889,
+    "lon": -64.21336388888889,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1114",
+    "tipo": "foto",
+    "data": "2026-08-17",
+    "hora": "21:04",
+    "thumb": "fotos/IMG_1114-thumb.webp",
+    "full": "fotos/IMG_1114.webp",
+    "lat": 48.521227777777774,
+    "lon": -64.21364722222222,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1117",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "10:38",
+    "thumb": "fotos/IMG_1117-thumb.webp",
+    "full": "fotos/IMG_1117.webp"
+  },
+  {
+    "id": "IMG_2969",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "10:55",
+    "thumb": "fotos/IMG_2969-thumb.webp",
+    "full": "fotos/IMG_2969.webp",
+    "lat": 48.31744722222223,
+    "lon": -64.69892222222222,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2970",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "10:55",
+    "src": "fotos/IMG_2970.mp4",
+    "poster": "fotos/IMG_2970-poster.webp",
+    "lat": 48.3174,
+    "lon": -64.6989,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2971",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "10:57",
+    "thumb": "fotos/IMG_2971-thumb.webp",
+    "full": "fotos/IMG_2971.webp",
+    "lat": 48.31744444444445,
+    "lon": -64.69889722222223,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2972",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "11:07",
+    "thumb": "fotos/IMG_2972-thumb.webp",
+    "full": "fotos/IMG_2972.webp",
+    "lat": 48.31340833333333,
+    "lon": -64.70013611111112,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2973",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "11:07",
+    "thumb": "fotos/IMG_2973-thumb.webp",
+    "full": "fotos/IMG_2973.webp",
+    "lat": 48.313399999999994,
+    "lon": -64.7001638888889,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2978",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "11:12",
+    "thumb": "fotos/IMG_2978-thumb.webp",
+    "full": "fotos/IMG_2978.webp",
+    "lat": 48.31211388888889,
+    "lon": -64.6996,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2979",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "11:27",
+    "src": "fotos/IMG_2979.mp4",
+    "poster": "fotos/IMG_2979-poster.webp",
+    "lat": 48.3174,
+    "lon": -64.6989,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_2980",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "11:27",
+    "src": "fotos/IMG_2980.mp4",
+    "poster": "fotos/IMG_2980-poster.webp",
+    "lat": 48.3174,
+    "lon": -64.6989,
+    "local": "Chandler"
+  },
+  {
+    "id": "IMG_1119",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:02",
+    "thumb": "fotos/IMG_1119-thumb.webp",
+    "full": "fotos/IMG_1119.webp",
+    "lat": 48.52484166666667,
+    "lon": -64.20712222222222,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1120",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:03",
+    "thumb": "fotos/IMG_1120-thumb.webp",
+    "full": "fotos/IMG_1120.webp",
+    "lat": 48.52484166666667,
+    "lon": -64.20712222222222,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1123",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:09",
+    "thumb": "fotos/IMG_1123-thumb.webp",
+    "full": "fotos/IMG_1123.webp",
+    "lat": 48.524655555555555,
+    "lon": -64.20588055555555,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1125",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:10",
+    "thumb": "fotos/IMG_1125-thumb.webp",
+    "full": "fotos/IMG_1125.webp",
+    "lat": 48.52466111111111,
+    "lon": -64.20591111111112,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1126",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:11",
+    "thumb": "fotos/IMG_1126-thumb.webp",
+    "full": "fotos/IMG_1126.webp",
+    "lat": 48.524677777777775,
+    "lon": -64.20592500000001,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1128",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:12",
+    "thumb": "fotos/IMG_1128-thumb.webp",
+    "full": "fotos/IMG_1128.webp",
+    "lat": 48.52465,
+    "lon": -64.20594722222222,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1129",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:15",
+    "thumb": "fotos/IMG_1129-thumb.webp",
+    "full": "fotos/IMG_1129.webp",
+    "lat": 48.525038888888886,
+    "lon": -64.20635277777778,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1130",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "15:42",
+    "thumb": "fotos/IMG_1130-thumb.webp",
+    "full": "fotos/IMG_1130.webp",
+    "lat": 48.52160555555555,
+    "lon": -64.217025,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1133",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "15:52",
+    "src": "fotos/IMG_1133.mp4",
+    "poster": "fotos/IMG_1133-poster.webp",
+    "lat": 48.5216,
+    "lon": -64.217,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1134",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "16:11",
+    "src": "fotos/IMG_1134.mp4",
+    "poster": "fotos/IMG_1134-poster.webp",
+    "lat": 48.5215,
+    "lon": -64.2172,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1135",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "16:31",
+    "src": "fotos/IMG_1135.mp4",
+    "poster": "fotos/IMG_1135-poster.webp",
+    "lat": 48.5216,
+    "lon": -64.2171,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1136",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "16:41",
+    "thumb": "fotos/IMG_1136-thumb.webp",
+    "full": "fotos/IMG_1136.webp",
+    "lat": 48.52162222222222,
+    "lon": -64.21736944444444,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1137",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "16:42",
+    "thumb": "fotos/IMG_1137-thumb.webp",
+    "full": "fotos/IMG_1137.webp",
+    "lat": 48.52153888888889,
+    "lon": -64.21715555555556,
+    "local": "Percé"
+  },
+  {
+    "id": "IMG_1138",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "17:43",
+    "thumb": "fotos/IMG_1138-thumb.webp",
+    "full": "fotos/IMG_1138.webp",
+    "lat": 48.47401111111111,
+    "lon": -64.30660277777777,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1139",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "17:45",
+    "thumb": "fotos/IMG_1139-thumb.webp",
+    "full": "fotos/IMG_1139.webp",
+    "lat": 48.474113888888894,
+    "lon": -64.30665555555555,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1140",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "17:46",
+    "thumb": "fotos/IMG_1140-thumb.webp",
+    "full": "fotos/IMG_1140.webp",
+    "lat": 48.474025000000005,
+    "lon": -64.30660277777777,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1141",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "17:46",
+    "thumb": "fotos/IMG_1141-thumb.webp",
+    "full": "fotos/IMG_1141.webp",
+    "lat": 48.47415277777778,
+    "lon": -64.30683055555555,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1142",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "17:47",
+    "thumb": "fotos/IMG_1142-thumb.webp",
+    "full": "fotos/IMG_1142.webp",
+    "lat": 48.47428888888889,
+    "lon": -64.30682222222222,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1143",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "17:50",
+    "src": "fotos/IMG_1143.mp4",
+    "poster": "fotos/IMG_1143-poster.webp",
+    "lat": 48.4739,
+    "lon": -64.3068,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1144",
+    "tipo": "video",
+    "data": "2026-08-18",
+    "hora": "18:11",
+    "src": "fotos/IMG_1144.mp4",
+    "poster": "fotos/IMG_1144-poster.webp",
+    "lat": 48.474,
+    "lon": -64.3067,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
+  },
+  {
+    "id": "IMG_1146",
+    "tipo": "foto",
+    "data": "2026-08-18",
+    "hora": "18:25",
+    "thumb": "fotos/IMG_1146-thumb.webp",
+    "full": "fotos/IMG_1146.webp",
+    "lat": 48.473955555555555,
+    "lon": -64.30663888888888,
+    "local": "Weygand",
+    "destaque": {
+      "titulo": "Magasin Général authentique - 1928",
+      "url": "https://www.magasinhistorique.com/"
+    }
   }
 ]
