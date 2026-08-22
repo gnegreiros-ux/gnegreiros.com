@@ -241,6 +241,13 @@ body{
   font-family:var(--chart); font-style:italic; font-size:9.5px; fill:#4A6773;
   paint-order:stroke; stroke:var(--land); stroke-width:3px; stroke-linejoin:round;
 }
+/* trajet réel — reconstruit des GPS photo, discret : trait fin pointillé, points creux */
+.reel-line{ fill:none; stroke:var(--ink-3); stroke-width:2; stroke-dasharray:1 4; stroke-linecap:round; opacity:.85 }
+.reel-dot{ fill:var(--paper); stroke:var(--ink-3); stroke-width:1.4 }
+.reel-lbl{
+  font-family:var(--mono); font-size:8px; fill:var(--ink-3); opacity:.85;
+  paint-order:stroke; stroke:var(--land); stroke-width:3px; stroke-linejoin:round;
+}
 .hidden{ display:none }
 
 /* ---------- Fiche détail ---------- */
@@ -395,7 +402,7 @@ footer{
 <!-- ================= CARTE ================= -->
 <section class="sec" id="carte">
   <div class="sec-head"><span class="num">01</span><h2>La carte</h2></div>
-  <p class="sec-note">Touchez une étape pour déplier sa fiche dans le journal ci-dessous. Glissez pour déplacer, molette ou boutons pour zoomer. Carte schématique — les positions sont justes, les côtes sont simplifiées. Les villes en italique grisé sont des repères géographiques, pas des arrêts prévus.</p>
+  <p class="sec-note">Touchez une étape pour déplier sa fiche dans le journal ci-dessous. Glissez pour déplacer, molette ou boutons pour zoomer. Carte schématique — les positions sont justes, les côtes sont simplifiées. Les villes en italique grisé sont des repères géographiques, pas des arrêts prévus. Le trajet réel, activable via « Trajet réel », est reconstruit à partir des coordonnées GPS enregistrées dans les photos de l'album.</p>
 
   <div class="chart-shell">
     <div class="chart-bar">
@@ -406,6 +413,7 @@ footer{
       <button class="chip" data-layer="retour" aria-pressed="true"><span class="swatch" style="background:#6C8894"></span>Retour</button>
       <button class="chip" data-layer="phares" aria-pressed="true">◆ Phares</button>
       <button class="chip" data-layer="villes" aria-pressed="true"><span class="swatch dot"></span>Villes repères</button>
+      <button class="chip" data-layer="reel" aria-pressed="false"><span class="swatch" style="background:#1B3A4E"></span>Trajet réel</button>
       <span class="chart-zoom">
         <button class="zbtn" id="zin" aria-label="Zoomer">+</button>
         <button class="zbtn" id="zout" aria-label="Dézoomer">−</button>
@@ -455,6 +463,7 @@ footer{
 
       <g id="layer-phares"></g>
       <g id="layer-villes"></g>
+      <g id="layer-reel" class="hidden"></g>
       <g id="layer-stops"></g>
 
       <!-- toponymes — dessinés en dernier pour rester lisibles au-dessus de tout -->
@@ -697,6 +706,38 @@ const REFCITIES = [
   { x:705, y:268, name:"Carleton-sur-Mer", anchor:"end", dx:-9, dy:-6 }
 ];
 
+// Trajet réel — positions dérivées des coordonnées GPS des photos de l'album
+// (public/gaspesie/fotos/dados.json), projetées sur cette carte schématique
+// par interpolation le long de l'ordre du trajet plutôt qu'un ajustement
+// géométrique global (voir scripts/gaspesie-mapa-real.mjs pour le calcul et
+// le raisonnement). Points rapprochés à l'écran fusionnés (label combiné).
+const REAL_STOPS = [
+  { x:294.4, y:388.9, label:"Petite-Rivière-Saint-François / Maillard", data:"2026-08-09", n:21 },
+  { x:356.6, y:307.0, label:"Port-au-Saumon", data:"2026-08-10", n:1 },
+  { x:366.9, y:292.0, label:"Saint-Siméon / Rivière-Noire", data:"2026-08-10", n:3 },
+  { x:396.3, y:249.1, label:"Baie-Sainte-Catherine / Tadoussac", data:"2026-08-10", n:7 },
+  { x:427.1, y:217.9, label:"Bon-Désir / Les Escoumins", data:"2026-08-10", n:34 },
+  { x:637.0, y:48.0, label:"Godbout", data:"2026-08-11", n:3 },
+  { x:763.0, y:80.0, label:"Cap-Chat-Est / Cap-Chat / Petit-Fonds / Sainte-Anne-des-Monts", data:"2026-08-11 → 2026-08-12", n:77 },
+  { x:799.3, y:81.2, label:"La Martre", data:"2026-08-13", n:17 },
+  { x:824.0, y:82.0, label:"Mont-Saint-Pierre", data:"2026-08-13", n:1 },
+  { x:866.2, y:82.6, label:"Sainte-Madeleine-de-la-Rivière-Madeleine", data:"2026-08-13", n:1 },
+  { x:895.3, y:82.9, label:"Grande-Vallée / Petite-Vallée", data:"2026-08-13", n:3 },
+  { x:925.8, y:83.3, label:"Cloridorme / Grand Etang", data:"2026-08-13", n:17 },
+  { x:968.0, y:83.9, label:"Saint-Maurice-de-l'Échouerie / Petite-Rivière-au-Renard / Rivière-au-Renard", data:"2026-08-13", n:24 },
+  { x:1005.9, y:126.1, label:"Cap-des-Rosiers / Gaspé / Plage de Haldimand", data:"2026-08-14 → 2026-08-15", n:23 },
+  { x:1017.9, y:166.3, label:"Pointe-Saint-Pierre / Parc municipal de la Rivière Émeraude", data:"2026-08-16", n:34 },
+  { x:1022.0, y:184.0, label:"Percé / White-Head-Percé", data:"2026-08-16", n:36 },
+  { x:909.6, y:251.0, label:"Camping Napage / Chandler", data:"2026-08-16 → 2026-08-17", n:19 },
+  { x:998.8, y:197.9, label:"Weygand", data:"2026-08-18", n:8 },
+  { x:808.9, y:259.4, label:"Paspébiac", data:"2026-08-19", n:14 },
+  { x:705.0, y:268.0, label:"Carleton-sur-Mer", data:"2026-08-19", n:2 },
+  { x:638.9, y:227.3, label:"Routhierville", data:"2026-08-19", n:21 },
+  { x:559.0, y:178.0, label:"Sainte-Flavie", data:"2026-08-20", n:10 },
+  { x:530.4, y:205.4, label:"Rimouski / Rimouski-Est", data:"2026-08-20", n:17 },
+  { x:88.0, y:554.0, label:"Trois-Rivières", data:"2026-08-21", n:1 }
+];
+
 const LABEL_OFFSET = {
   gauche:{dx:-13,dy:4,  anchor:"end"},
   droite:{dx:13, dy:4,  anchor:"start"},
@@ -709,6 +750,7 @@ const svg = document.getElementById("chart");
 const gStops = document.getElementById("layer-stops");
 const gPhares = document.getElementById("layer-phares");
 const gVilles = document.getElementById("layer-villes");
+const gReel = document.getElementById("layer-reel");
 const daysEl = document.getElementById("days");
 let current = 0;
 
@@ -732,6 +774,17 @@ REFCITIES.forEach(c => {
   g.appendChild(el("circle", {class:"rc-mark", cx:c.x, cy:c.y, r:3.2}));
   g.appendChild(el("text", {class:"rc-lbl", x:c.x+c.dx, y:c.y+c.dy+3, "text-anchor":c.anchor}, c.name));
   gVilles.appendChild(g);
+});
+
+gReel.appendChild(el("path", {
+  class: "reel-line",
+  d: REAL_STOPS.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ")
+}));
+REAL_STOPS.forEach(p => {
+  const g = el("g", {class:"reel"});
+  g.appendChild(el("circle", {class:"reel-dot", cx:p.x, cy:p.y, r: p.n > 1 ? 3.4 : 2.6}));
+  g.appendChild(el("title", {}, `${p.label} — ${p.data}`));
+  gReel.appendChild(g);
 });
 
 STOPS.forEach((s, i) => {
