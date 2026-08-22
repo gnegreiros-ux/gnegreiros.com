@@ -2,8 +2,13 @@ name: Deploy to OVH
 
 # Builds the Astro site and pushes dist/ to the OVH mutualisé host over
 # SFTP — see instructions/CLAUDE EXECUTION PLAN — gnegreiros.md §11.
-# OVH mutualisé SFTP is a jailed account (no shell/rsync), hence
-# sftp_only: true below.
+# OVH mutualisé SFTP is a jailed account (no shell/rsync binary on the
+# remote), so plain rsync-over-ssh isn't an option. lftp's `mirror` runs
+# entirely client-side over the SFTP protocol itself: it lists the remote
+# tree and only uploads files that are new or differ in size, instead of
+# re-sending the whole dist/ every run. It also retries/reconnects on its
+# own, which plain sftp `put -r` doesn't — OVH's SFTP occasionally drops
+# the connection mid-transfer on the full-site uploads this replaced.
 
 on:
   push:
@@ -32,13 +37,14 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - name: Deploy over SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
-        with:
-          username: ${{ secrets.OVH_SFTP_USER }}
-          server: ${{ secrets.OVH_SFTP_HOST }}
-          port: ${{ secrets.OVH_SFTP_PORT }}
-          password: ${{ secrets.OVH_SFTP_PASSWORD }}
-          sftp_only: true
-          local_path: './dist/*'
-          remote_path: '${{ secrets.OVH_SFTP_REMOTE_DIR }}'
+      - name: Deploy over SFTP (incremental)
+        env:
+          SFTP_USER: ${{ secrets.OVH_SFTP_USER }}
+          SFTP_HOST: ${{ secrets.OVH_SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.OVH_SFTP_PORT }}
+          SFTP_PASSWORD: ${{ secrets.OVH_SFTP_PASSWORD }}
+          SFTP_REMOTE_DIR: ${{ secrets.OVH_SFTP_REMOTE_DIR }}
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y lftp
+          lftp -u "$SFTP_USER,$SFTP_PASSWORD" -p "$SFTP_PORT" -e "set sftp:auto-confirm yes; set net:max-retries 5; set net:reconnect-interval-base 5; set net:reconnect-interval-multiplier 1; set net:timeout 20; mirror --reverse --verbose --exclude-glob=.DS_Store ./dist \"$SFTP_REMOTE_DIR\"; bye" "sftp://$SFTP_HOST"
