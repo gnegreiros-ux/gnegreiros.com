@@ -3,16 +3,18 @@
 // after upload and retrying (with reconnect) on mismatch or error.
 //
 // The wlixcc/SFTP-Deploy-Action put mechanism silently truncates files when
-// the OVH SFTP session drops mid-session (a reproducible ~25s dead window
-// hits the same files every run) and reports "failed" without retrying,
-// leaving corrupted (truncated) files live on production. A fully
-// sequential rewrite (one connection, one file at a time) avoided the
-// truncation but was far too slow (750+ files, two round trips each). A
-// concurrent-but-unbatched version (5 connections firing continuously)
-// was fast but still lost ~55 files on one run — throwing the whole
-// batch at OVH at once overwhelms whatever triggers the dead window.
-// This version uploads in small batches with a pause in between, plus a
-// final retry pass over anything still failing after a longer rest.
+// the OVH SFTP session drops mid-session and reports "failed" without
+// retrying, leaving corrupted (truncated) files live on production. A
+// fully sequential rewrite (one connection, one file at a time) avoided
+// the truncation but took over an hour for ~750 files. A concurrent
+// version (5 connections firing continuously) was fast but still lost
+// ~55 files on one run. A batched version with short (5-15s) pauses and
+// backoff got stuck for 55+ minutes without clearing the block on the
+// very first batch — the OVH-side block plausibly lasts minutes, not
+// seconds, and reconnecting every few seconds may extend it rather than
+// wait it out. This version uses long, minutes-scale pauses (between
+// batches and between retry attempts) and only two connections at a
+// time, trading speed for actually finishing.
 
 import SftpClient from 'ssh2-sftp-client';
 import { readdirSync, statSync } from 'node:fs';
@@ -25,11 +27,12 @@ const PASSWORD = process.env.OVH_SFTP_PASSWORD;
 const REMOTE_ROOT = process.env.OVH_SFTP_REMOTE_DIR.replace(/\/+$/, '');
 const LOCAL_ROOT = 'dist';
 
-const MAX_ATTEMPTS = 6;
-const CONCURRENCY = 4;
+const MAX_ATTEMPTS = 3;
+const CONCURRENCY = 2;
 const BATCH_SIZE = 50;
-const BATCH_PAUSE_MS = 5000;
-const FINAL_RETRY_PAUSE_MS = 20000;
+const BATCH_PAUSE_MS = 2 * 60 * 1000; // 2 min between batches
+const RETRY_PAUSE_MS = 90 * 1000; // 90s before reconnecting after a failed attempt
+const FINAL_RETRY_PAUSE_MS = 5 * 60 * 1000; // 5 min before the final cleanup pass
 
 function walk(dir) {
 	const out = [];
@@ -105,7 +108,7 @@ async function uploadWithRetry(getSftp, file, onReconnect) {
 			console.log(`error uploading ${remotePath} (attempt ${attempt}/${MAX_ATTEMPTS}): ${err.message}`);
 		}
 
-		await sleep(Math.min(1000 * 2 ** attempt, 15000));
+		await sleep(RETRY_PAUSE_MS);
 		sftp = await onReconnect();
 	}
 
