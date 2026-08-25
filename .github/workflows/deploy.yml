@@ -2,8 +2,13 @@ name: Deploy to OVH
 
 # Builds the Astro site and pushes dist/ to the OVH mutualisé host over
 # SFTP — see instructions/CLAUDE EXECUTION PLAN — gnegreiros.md §11.
-# OVH mutualisé SFTP is a jailed account (no shell/rsync), hence
-# sftp_only: true below.
+# OVH mutualisé SFTP is a jailed account (no shell/rsync).
+#
+# The deploy step uses a custom script (scripts/deploy-sftp.mjs) instead of
+# a plain SFTP put action: the OVH SFTP session reproducibly hits a ~25s
+# dead window partway through the upload (same files truncated every run),
+# so each file's remote size is verified after upload and retried
+# (reconnecting) on mismatch.
 
 on:
   push:
@@ -33,12 +38,10 @@ jobs:
       - run: npm run build
 
       - name: Deploy over SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
-        with:
-          username: ${{ secrets.OVH_SFTP_USER }}
-          server: ${{ secrets.OVH_SFTP_HOST }}
-          port: ${{ secrets.OVH_SFTP_PORT }}
-          password: ${{ secrets.OVH_SFTP_PASSWORD }}
-          sftp_only: true
-          local_path: './dist/*'
-          remote_path: '${{ secrets.OVH_SFTP_REMOTE_DIR }}'
+        env:
+          OVH_SFTP_USER: ${{ secrets.OVH_SFTP_USER }}
+          OVH_SFTP_HOST: ${{ secrets.OVH_SFTP_HOST }}
+          OVH_SFTP_PORT: ${{ secrets.OVH_SFTP_PORT }}
+          OVH_SFTP_PASSWORD: ${{ secrets.OVH_SFTP_PASSWORD }}
+          OVH_SFTP_REMOTE_DIR: ${{ secrets.OVH_SFTP_REMOTE_DIR }}
+        run: node scripts/deploy-sftp.mjs
