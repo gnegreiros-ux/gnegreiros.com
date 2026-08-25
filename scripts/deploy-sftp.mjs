@@ -56,6 +56,9 @@ async function connect() {
 }
 
 async function ensureRemoteDirs(sftp, remoteDirs) {
+	// The jailed SFTP account can't stat/mkdir above its own root (permission
+	// denied), and virtually every directory already exists from prior
+	// deploys anyway — so treat mkdir failures as informational, not fatal.
 	const cache = new Set();
 	for (const remoteDir of remoteDirs) {
 		const parts = remoteDir.split('/').filter(Boolean);
@@ -63,10 +66,14 @@ async function ensureRemoteDirs(sftp, remoteDirs) {
 		for (const part of parts) {
 			path += '/' + part;
 			if (cache.has(path)) continue;
-			if (!(await sftp.exists(path))) {
-				await sftp.mkdir(path, true);
-			}
 			cache.add(path);
+			try {
+				if (!(await sftp.exists(path))) {
+					await sftp.mkdir(path, true);
+				}
+			} catch (err) {
+				console.log(`mkdir ${path} skipped: ${err.message}`);
+			}
 		}
 	}
 }
