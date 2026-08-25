@@ -210,6 +210,19 @@ function main() {
   console.log("const REAL_STOPS = [");
   console.log(linhas.join(",\n"));
   console.log("];");
+
+  // Unmerged, one entry per unique `local` name (chronological), for the
+  // album's per-place mini-map: draws the real path traveled from home up
+  // to and including whichever place that block is, instead of a straight
+  // line. "__inicio__" is a synthetic first point (the real Trois-Rivières
+  // departure fix) that never matches a real `local` name.
+  const caminho = [
+    `  { x:88, y:554, local:"__inicio__" }`,
+    ...projetados.map((p) => `  { x:${p.x.toFixed(1)}, y:${p.y.toFixed(1)}, local:${JSON.stringify(p.local)} }`),
+  ];
+  console.log("\nconst PLACE_PATH = [");
+  console.log(caminho.join(",\n"));
+  console.log("];");
 }
 
 main();

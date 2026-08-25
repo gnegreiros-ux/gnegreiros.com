@@ -119,12 +119,20 @@ body{
 
 /* ---------- Mini-mapa de posição (relativo a Trois-Rivières) ---------- */
 .place-map{ display:flex; align-items:center; gap:10px; margin:0 0 10px }
-.place-map svg{ width:90px; height:56px; flex:none;
-  background:rgba(127,163,172,.06); border:1px solid rgba(127,163,172,.28); border-radius:var(--r) }
+.place-map svg{ width:96px; height:55px; flex:none;
+  border:1px solid rgba(127,163,172,.28); border-radius:var(--r); overflow:hidden }
 .place-map .dist{ font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--on-dark-mute) }
-.mm-line{ stroke:var(--hair); stroke-width:1; stroke-dasharray:2 2; opacity:.7 }
-.mm-home{ fill:var(--on-dark-mute); stroke:var(--hull); stroke-width:1 }
-.mm-place{ fill:var(--lantern); stroke:var(--hull); stroke-width:1 }
+/* mini-mapa é desenhado no mesmo viewBox 1080x620 do mapa grande mas exibido
+   a ~96px de largura (~11x menor) — vector-effect="non-scaling-stroke" (como
+   atributo SVG, não propriedade CSS, ver #qc-bg e miniMapaHTML) mantém a
+   espessura dos traços em pixels de tela reais independente dessa escala;
+   os raios dos círculos, sem equivalente para fill, são definidos já em
+   unidades do viewBox (ver miniMapaHTML). */
+.mm-sea{ fill:#081420 }
+.mm-land{ fill:#3D5E71; stroke:rgba(220,232,236,.3); stroke-width:1.2 }
+.mm-path{ fill:none; stroke:var(--lantern); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; opacity:.85 }
+.mm-home{ fill:var(--on-dark-mute); stroke:var(--hull); stroke-width:1.5 }
+.mm-place{ fill:var(--lantern); stroke:var(--hull); stroke-width:1.5 }
 
 /* ---------- Grade ---------- */
 .grid{
@@ -193,6 +201,20 @@ footer a{ color:var(--lantern); text-decoration-thickness:1px; text-underline-of
 </style>
 </head>
 <body>
+<!-- Fundo compartilhado dos mini-mapas: mesmo contorno esquemático (e mesmo
+     sistema de coordenadas 0..1080 x 0..620) do mapa grande em index.html,
+     referenciado via <use> em cada .place-map para não repetir os paths
+     em ~60 blocos. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="qc-bg">
+      <rect x="0" y="0" width="1080" height="620" class="mm-sea"/>
+      <path class="mm-land" vector-effect="non-scaling-stroke" d="M0 0 L728 0 L700 10 L637 45 L600 55 L574 62 L520 112 L450 178 L432 210 L396 245 L347 330 L307 368 L226 472 L120 536 L30 566 L0 578 Z"/>
+      <path class="mm-land" vector-effect="non-scaling-stroke" d="M0 600 L88 562 L226 492 L301 449 L324 426 L380 351 L416 305 L470 262 L540 205 L600 168 L645 132 L700 105 L763 84 L843 70 L918 68 L959 64 L1000 80 L1035 120 L1012 141 L988 146 L1001 158 L1018 172 L1027 187 L1015 205 L995 212 L969 217 L936 245 L895 274 L877 268 L804 259 L745 268 L700 277 L730 315 L790 331 L860 361 L950 391 L1080 432 L1080 620 L0 620 Z"/>
+      <ellipse class="mm-land" vector-effect="non-scaling-stroke" cx="1043" cy="190" rx="9" ry="6"/>
+    </g>
+  </defs>
+</svg>
 <div class="wrap">
 
   <header class="masthead">
@@ -265,13 +287,59 @@ function linkMapa(it){
   return `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}`;
 }
 
-// Mini-mapa de posição relativa a Trois-Rivières (base do voyage). Projeção
-// equiretangular fixa (não autofit por bloco) para que a distância na tela
-// seja comparável entre blocos: um lugar a 250km e um a 800km devem ter
-// linhas de comprimento visivelmente diferente, não igual.
+// Mini-mapa de posição: mostra o trajeto real percorrido desde Trois-Rivières
+// até este lugar (não uma linha reta), sobre o mesmo fundo esquemático e o
+// mesmo sistema de coordenadas (0..1080 x 0..620) usado no mapa da página
+// do roteiro (public/gaspesie/index.html). PLACE_PATH é a lista cronológica
+// e não fundida dos 41 lugares reais, projetada por scripts/gaspesie-mapa-real.mjs
+// -- ver esse script para o raciocínio completo da projeção.
 const TR_LAT = 46.372136, TR_LON = -72.621453; // fix real do retorno, dados.json 2026-08-21 11:38
-const COS_LAT0 = Math.cos(48 * Math.PI / 180); // constante de meia-latitude fixa
 const miniMapaCache = new Map();
+
+const PLACE_PATH = [
+  { x:88, y:554, local:"__inicio__" },
+  { x:294.4, y:388.9, local:"Petite-Rivière-Saint-François" },
+  { x:293.8, y:389.4, local:"Maillard" },
+  { x:356.6, y:307.0, local:"Port-au-Saumon" },
+  { x:366.9, y:292.0, local:"Saint-Siméon" },
+  { x:367.8, y:290.7, local:"Rivière-Noire" },
+  { x:396.3, y:249.1, local:"Baie-Sainte-Catherine" },
+  { x:397.0, y:248.0, local:"Tadoussac" },
+  { x:427.1, y:217.9, local:"Bon-Désir" },
+  { x:432.0, y:213.0, local:"Les Escoumins" },
+  { x:637.0, y:48.0, local:"Godbout" },
+  { x:763.0, y:80.0, local:"Cap-Chat-Est" },
+  { x:755.9, y:78.2, local:"Cap-Chat" },
+  { x:761.8, y:79.7, local:"Petit-Fonds" },
+  { x:776.0, y:80.4, local:"Sainte-Anne-des-Monts" },
+  { x:799.3, y:81.2, local:"La Martre" },
+  { x:824.0, y:82.0, local:"Mont-Saint-Pierre" },
+  { x:866.2, y:82.6, local:"Sainte-Madeleine-de-la-Rivière-Madeleine" },
+  { x:895.3, y:82.9, local:"Grande-Vallée" },
+  { x:904.2, y:83.0, local:"Petite-Vallée" },
+  { x:925.8, y:83.3, local:"Cloridorme" },
+  { x:936.0, y:83.5, local:"Grand Etang" },
+  { x:968.0, y:83.9, local:"Saint-Maurice-de-l'Échouerie" },
+  { x:972.6, y:83.9, local:"Petite-Rivière-au-Renard" },
+  { x:977.0, y:84.0, local:"Rivière-au-Renard" },
+  { x:1005.9, y:126.1, local:"Cap-des-Rosiers" },
+  { x:1010.0, y:132.0, local:"Gaspé" },
+  { x:1009.0, y:130.6, local:"Plage de Haldimand" },
+  { x:1017.9, y:166.3, local:"Pointe-Saint-Pierre" },
+  { x:1020.1, y:175.6, local:"Parc municipal de la Rivière Émeraude" },
+  { x:1022.0, y:184.0, local:"Percé" },
+  { x:1017.8, y:186.5, local:"White-Head-Percé" },
+  { x:909.6, y:251.0, local:"Camping Napage" },
+  { x:910.0, y:251.0, local:"Chandler" },
+  { x:998.8, y:197.9, local:"Weygand" },
+  { x:808.9, y:259.4, local:"Paspébiac" },
+  { x:705.0, y:268.0, local:"Carleton-sur-Mer" },
+  { x:638.9, y:227.3, local:"Routhierville" },
+  { x:559.0, y:178.0, local:"Sainte-Flavie" },
+  { x:530.4, y:205.4, local:"Rimouski" },
+  { x:520.8, y:214.6, local:"Rimouski-Est" },
+  { x:88.0, y:554.0, local:"Trois-Rivières" }
+];
 
 function distanciaKm(lat1, lon1, lat2, lon2){
   const R = 6371;
@@ -281,21 +349,23 @@ function distanciaKm(lat1, lon1, lat2, lon2){
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function miniMapaHTML(lat, lon){
-  const chave = `${lat},${lon}`;
+function miniMapaHTML(lat, lon, local){
+  const chave = local || `${lat},${lon}`;
   if(miniMapaCache.has(chave)) return miniMapaCache.get(chave);
 
-  const dx = (lon - TR_LON) * COS_LAT0;
-  const dy = -(lat - TR_LAT);
-  const px = (12 + dx * 12.5).toFixed(1);
-  const py = (46 + dy * 12.5).toFixed(1);
+  let idx = PLACE_PATH.findIndex(p => p.local === local);
+  if(idx < 0) idx = PLACE_PATH.length - 1;
+  const trecho = PLACE_PATH.slice(0, idx + 1);
+  const d = trecho.map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`).join(" ");
+  const destino = trecho[trecho.length - 1];
   const km = Math.round(distanciaKm(TR_LAT, TR_LON, lat, lon));
 
   const html = `
-    <svg viewBox="0 0 90 56" aria-hidden="true">
-      <line class="mm-line" x1="12" y1="46" x2="${px}" y2="${py}"/>
-      <circle class="mm-home" cx="12" cy="46" r="2.6"/>
-      <circle class="mm-place" cx="${px}" cy="${py}" r="3"/>
+    <svg viewBox="0 0 1080 620" aria-hidden="true">
+      <use href="#qc-bg"/>
+      <path class="mm-path" vector-effect="non-scaling-stroke" d="${d}"/>
+      <circle class="mm-home" vector-effect="non-scaling-stroke" cx="88" cy="554" r="32"/>
+      <circle class="mm-place" vector-effect="non-scaling-stroke" cx="${destino.x}" cy="${destino.y}" r="38"/>
     </svg>
     <span class="dist">≈ ${km} km de Trois-Rivières</span>`;
 
@@ -362,7 +432,7 @@ function montarGrade(itens){
             ${starIcon()}
             <a href="${bloco.destaque.url}" target="_blank" rel="noopener">${bloco.destaque.titulo}</a>
           </div>
-          ${primeiroD.lat != null ? `<div class="place-map">${miniMapaHTML(primeiroD.lat, primeiroD.lon)}</div>` : ""}
+          ${primeiroD.lat != null ? `<div class="place-map">${miniMapaHTML(primeiroD.lat, primeiroD.lon, primeiroD.local)}</div>` : ""}
           <div class="grid"></div>`;
       } else if(bloco.local){
         place.className = "place";
@@ -372,7 +442,7 @@ function montarGrade(itens){
             ${pinIcon()}
             <a href="${linkMapa(primeiro)}" target="_blank" rel="noopener">${bloco.local}</a>
           </div>
-          ${primeiro.lat != null ? `<div class="place-map">${miniMapaHTML(primeiro.lat, primeiro.lon)}</div>` : ""}
+          ${primeiro.lat != null ? `<div class="place-map">${miniMapaHTML(primeiro.lat, primeiro.lon, bloco.local)}</div>` : ""}
           <div class="grid"></div>`;
       } else {
         place.className = "place";
