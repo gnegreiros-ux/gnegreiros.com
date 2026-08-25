@@ -7,10 +7,12 @@
 // hits the same files every run) and reports "failed" without retrying,
 // leaving corrupted (truncated) files live on production. A fully
 // sequential rewrite (one connection, one file at a time) avoided the
-// truncation but was far too slow (750+ files, two round trips each).
-// This version uses a small pool of independent SFTP connections (each
-// sequential on its own, so no single connection is pipelined hard enough
-// to reproduce the original bug) to get useful throughput back.
+// truncation but was far too slow (750+ files, two round trips each). A
+// concurrent-but-unbatched version (5 connections firing continuously)
+// was fast but still lost ~55 files on one run — throwing the whole
+// batch at OVH at once overwhelms whatever triggers the dead window.
+// This version uploads in small batches with a pause in between, plus a
+// final retry pass over anything still failing after a longer rest.
 
 import SftpClient from 'ssh2-sftp-client';
 import { readdirSync, statSync } from 'node:fs';
@@ -24,7 +26,10 @@ const REMOTE_ROOT = process.env.OVH_SFTP_REMOTE_DIR.replace(/\/+$/, '');
 const LOCAL_ROOT = 'dist';
 
 const MAX_ATTEMPTS = 6;
-const CONCURRENCY = 5;
+const CONCURRENCY = 4;
+const BATCH_SIZE = 50;
+const BATCH_PAUSE_MS = 5000;
+const FINAL_RETRY_PAUSE_MS = 20000;
 
 function walk(dir) {
 	const out = [];
@@ -36,6 +41,12 @@ function walk(dir) {
 			out.push(full);
 		}
 	}
+	return out;
+}
+
+function chunk(arr, size) {
+	const out = [];
+	for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
 	return out;
 }
 
@@ -101,22 +112,10 @@ async function uploadWithRetry(getSftp, file, onReconnect) {
 	return false;
 }
 
-async function main() {
-	const localFiles = walk(LOCAL_ROOT);
-	const files = localFiles.map((localPath) => {
-		const rel = relative(LOCAL_ROOT, localPath).split(sep).join('/');
-		return { localPath, remotePath: posix.join(REMOTE_ROOT, rel), size: statSync(localPath).size };
-	});
-
-	console.log(`Uploading ${files.length} files to ${HOST}:${REMOTE_ROOT} (concurrency ${CONCURRENCY})`);
-
-	const remoteDirs = [...new Set(files.map((f) => f.remotePath.slice(0, f.remotePath.lastIndexOf('/'))))].sort();
-	const setupSftp = await connect();
-	await ensureRemoteDirs(setupSftp, remoteDirs);
-	await setupSftp.end();
-
+// Uploads one batch of files with a small worker pool, returns the file
+// objects that still failed after MAX_ATTEMPTS each.
+async function uploadBatch(files) {
 	let cursor = 0;
-	let completed = 0;
 	const failed = [];
 
 	async function worker() {
@@ -135,21 +134,53 @@ async function main() {
 			const i = cursor++;
 			if (i >= files.length) break;
 			const ok = await uploadWithRetry(() => sftp, files[i], reconnect);
-			if (!ok) failed.push(files[i].remotePath);
-			completed++;
-			if (completed % 50 === 0 || completed === files.length) {
-				console.log(`progress: ${completed}/${files.length}`);
-			}
+			if (!ok) failed.push(files[i]);
 		}
 
 		await sftp.end();
 	}
 
-	await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
+	await Promise.all(Array.from({ length: Math.min(CONCURRENCY, files.length) }, () => worker()));
+	return failed;
+}
+
+async function main() {
+	const localFiles = walk(LOCAL_ROOT);
+	const files = localFiles.map((localPath) => {
+		const rel = relative(LOCAL_ROOT, localPath).split(sep).join('/');
+		return { localPath, remotePath: posix.join(REMOTE_ROOT, rel), size: statSync(localPath).size };
+	});
+
+	console.log(`Uploading ${files.length} files to ${HOST}:${REMOTE_ROOT} in batches of ${BATCH_SIZE}`);
+
+	const remoteDirs = [...new Set(files.map((f) => f.remotePath.slice(0, f.remotePath.lastIndexOf('/'))))].sort();
+	const setupSftp = await connect();
+	await ensureRemoteDirs(setupSftp, remoteDirs);
+	await setupSftp.end();
+
+	const batches = chunk(files, BATCH_SIZE);
+	let failed = [];
+	let done = 0;
+
+	for (let b = 0; b < batches.length; b++) {
+		const batchFailed = await uploadBatch(batches[b]);
+		failed.push(...batchFailed);
+		done += batches[b].length;
+		console.log(
+			`batch ${b + 1}/${batches.length} done (${done}/${files.length} files, ${failed.length} failed so far)`,
+		);
+		if (b < batches.length - 1) await sleep(BATCH_PAUSE_MS);
+	}
 
 	if (failed.length) {
-		console.error(`FAILED to upload ${failed.length} file(s) after ${MAX_ATTEMPTS} attempts each:`);
-		for (const f of failed) console.error(`  ${f}`);
+		console.log(`resting ${FINAL_RETRY_PAUSE_MS / 1000}s then retrying ${failed.length} file(s) that failed...`);
+		await sleep(FINAL_RETRY_PAUSE_MS);
+		failed = await uploadBatch(failed);
+	}
+
+	if (failed.length) {
+		console.error(`FAILED to upload ${failed.length} file(s) after retries:`);
+		for (const f of failed) console.error(`  ${f.remotePath}`);
 		process.exit(1);
 	}
 
