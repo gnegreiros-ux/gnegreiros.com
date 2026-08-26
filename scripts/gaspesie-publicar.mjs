@@ -6,6 +6,11 @@
 // deploys to OVH automatically. gaspesie/originaux/ is gitignored and never
 // touched by git here — only public/gaspesie/fotos/ output is committed.
 //
+// Video is uploaded to the Cloudflare R2 bucket "gaspesie-videos" (via the
+// wrangler CLI — run `npx wrangler login` once) instead of committed: OVH's
+// SFTP account has a 1GB quota that video alone blew past in August 2026.
+// dados.json stores the R2 public URL as `src`, not a local path.
+//
 // Also reverse-geocodes GPS coordinates (EXIF for photos, ISO 6709 "location"
 // tag for videos) into a place name via OpenStreetMap Nominatim, so the album
 // can group photos by place within each day. Runs as a backfill pass too:
@@ -29,6 +34,8 @@ const FOTOS = path.join(ROOT, "public/gaspesie/fotos");
 const DADOS = path.join(FOTOS, "dados.json");
 const LOCAIS_MANUAIS = path.join(ROOT, "gaspesie/locais-manuais.json");
 const VIDEO_TIMEZONE = "America/Toronto";
+const R2_BUCKET = "gaspesie-videos";
+const R2_PUBLIC_BASE = "https://pub-1b342c9179634a29bbdc1651f012b9af.r2.dev";
 const NOMINATIM_UA = "gnegreiros.com-gaspesie-album/1.0 (personal travel album, contact: gnegreiros7@gmail.com)";
 const NOMINATIM_DELAY_MS = 1100; // Nominatim usage policy: max 1 req/s
 
@@ -220,7 +227,7 @@ async function processarFoto(filePath, id) {
 }
 
 async function processarVideo(filePath, id) {
-  const outPath = path.join(FOTOS, `${id}.mp4`);
+  const outPath = path.join(FOTOS, `${id}.mp4`); // temporary — uploaded to R2 then deleted
   const framePath = path.join(FOTOS, `${id}-frame.jpg`);
   const posterPath = path.join(FOTOS, `${id}-poster.webp`);
 
@@ -245,12 +252,26 @@ async function processarVideo(filePath, id) {
   await sharp(fs.readFileSync(framePath)).resize(640, 640, { fit: "cover" }).webp({ quality: 62 }).toFile(posterPath);
   fs.unlinkSync(framePath);
 
+  const key = `gaspesie/${id}.mp4`;
+  execFileSync(
+    "npx",
+    [
+      "-y", "wrangler", "r2", "object", "put", `${R2_BUCKET}/${key}`,
+      "--file", outPath,
+      "--content-type", "video/mp4",
+      "--cache-control", "public, max-age=31536000, immutable",
+      "--remote",
+    ],
+    { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"] },
+  );
+  fs.unlinkSync(outPath);
+
   return {
     id,
     tipo: "video",
     data: `${date.y}-${date.m}-${date.d}`,
     hora: `${date.hh}:${date.mm}`,
-    src: `fotos/${id}.mp4`,
+    src: `${R2_PUBLIC_BASE}/${key}`,
     poster: `fotos/${id}-poster.webp`,
     ...(gps ? { lat: gps.lat, lon: gps.lon } : {}),
   };

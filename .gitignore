@@ -30,3 +30,8 @@ Temp/
 # never committed; scripts/gaspesie-publicar.mjs reads from here and
 # writes optimized output to public/gaspesie/fotos/
 gaspesie/originaux/
+
+# Gaspésie videos are uploaded to Cloudflare R2 (see processarVideo() in
+# scripts/gaspesie-publicar.mjs) instead of committed — OVH's SFTP quota
+# can't hold them. dados.json stores the R2 URL, not a local path.
+public/gaspesie/fotos/*.mp4
