@@ -19,9 +19,13 @@
 // Root cause found 2026-08-26: the account's SFTP quota is 1GB. Gaspésie's
 // video files pushed dist/ past that, so every write started failing
 // (0-byte file, then "Write stream error") — not a transient connection
-// drop. *.mp4 is excluded from upload below until video has a proper
-// external host; see purge-remote-videos.mjs for the one-off cleanup of
-// video already sitting on the server.
+// drop, which is also why it was always the same files truncated on every
+// run (same point in the sorted file list where quota ran out). *.mp4 is
+// excluded from upload below until video has a proper external host; see
+// purge-remote-videos.mjs for the one-off cleanup of video already sitting
+// on the server. With the real cause fixed, the minutes-scale pauses below
+// are no longer needed — they were defending against a wrong theory — so
+// they're back to seconds-scale.
 
 import SftpClient from 'ssh2-sftp-client';
 import { readdirSync, statSync } from 'node:fs';
@@ -37,9 +41,9 @@ const LOCAL_ROOT = 'dist';
 const MAX_ATTEMPTS = 3;
 const CONCURRENCY = 2;
 const BATCH_SIZE = 50;
-const BATCH_PAUSE_MS = 2 * 60 * 1000; // 2 min between batches
-const RETRY_PAUSE_MS = 90 * 1000; // 90s before reconnecting after a failed attempt
-const FINAL_RETRY_PAUSE_MS = 5 * 60 * 1000; // 5 min before the final cleanup pass
+const BATCH_PAUSE_MS = 10 * 1000; // 10s between batches
+const RETRY_PAUSE_MS = 10 * 1000; // 10s before reconnecting after a failed attempt
+const FINAL_RETRY_PAUSE_MS = 30 * 1000; // 30s before the final cleanup pass
 
 function walk(dir) {
 	const out = [];
