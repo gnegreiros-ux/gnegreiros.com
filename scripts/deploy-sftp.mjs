@@ -15,6 +15,13 @@
 // wait it out. This version uses long, minutes-scale pauses (between
 // batches and between retry attempts) and only two connections at a
 // time, trading speed for actually finishing.
+//
+// Root cause found 2026-08-26: the account's SFTP quota is 1GB. Gaspésie's
+// video files pushed dist/ past that, so every write started failing
+// (0-byte file, then "Write stream error") — not a transient connection
+// drop. *.mp4 is excluded from upload below until video has a proper
+// external host; see purge-remote-videos.mjs for the one-off cleanup of
+// video already sitting on the server.
 
 import SftpClient from 'ssh2-sftp-client';
 import { readdirSync, statSync } from 'node:fs';
@@ -45,6 +52,14 @@ function walk(dir) {
 		}
 	}
 	return out;
+}
+
+// The OVH mutualisé account's SFTP quota is 1GB. Gaspésie's videos alone are
+// ~850MB, which pushed every deploy past quota and made every write fail
+// (0-byte files, "Write stream error"), breaking the live site's CSS/fonts.
+// Skip video until it has a proper external host (object storage/CDN).
+function isExcluded(localPath) {
+	return localPath.toLowerCase().endsWith('.mp4');
 }
 
 function chunk(arr, size) {
@@ -148,7 +163,7 @@ async function uploadBatch(files) {
 }
 
 async function main() {
-	const localFiles = walk(LOCAL_ROOT);
+	const localFiles = walk(LOCAL_ROOT).filter((p) => !isExcluded(p));
 	const files = localFiles.map((localPath) => {
 		const rel = relative(LOCAL_ROOT, localPath).split(sep).join('/');
 		return { localPath, remotePath: posix.join(REMOTE_ROOT, rel), size: statSync(localPath).size };

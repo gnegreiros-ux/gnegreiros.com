@@ -1,0 +1,35 @@
+name: One-off - Purge remote videos
+
+# Temporary workflow: deletes the .mp4 files already on the OVH server to
+# free the account's 1GB SFTP quota (Gaspésie's videos alone are ~850MB,
+# which is why every deploy write was failing). Videos stay in git/local
+# dist/; deploy.yml no longer uploads *.mp4. Remove this file once the
+# quota is confirmed freed and the site is deploying normally again.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Delete remote .mp4 files
+        env:
+          OVH_SFTP_USER: ${{ secrets.OVH_SFTP_USER }}
+          OVH_SFTP_HOST: ${{ secrets.OVH_SFTP_HOST }}
+          OVH_SFTP_PORT: ${{ secrets.OVH_SFTP_PORT }}
+          OVH_SFTP_PASSWORD: ${{ secrets.OVH_SFTP_PASSWORD }}
+          OVH_SFTP_REMOTE_DIR: ${{ secrets.OVH_SFTP_REMOTE_DIR }}
+        run: node scripts/purge-remote-videos.mjs
