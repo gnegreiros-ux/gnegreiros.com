@@ -1,0 +1,34 @@
+name: One-off - Fix broken deploy files
+
+# Temporary workflow: re-uploads only the ~65 specific files left corrupted
+# (0 bytes) on production by yesterday's failed full-tree deploy attempts,
+# instead of the whole dist/ tree. Remove this file once production is
+# confirmed fixed.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Re-upload broken files
+        env:
+          OVH_SFTP_USER: ${{ secrets.OVH_SFTP_USER }}
+          OVH_SFTP_HOST: ${{ secrets.OVH_SFTP_HOST }}
+          OVH_SFTP_PORT: ${{ secrets.OVH_SFTP_PORT }}
+          OVH_SFTP_PASSWORD: ${{ secrets.OVH_SFTP_PASSWORD }}
+          OVH_SFTP_REMOTE_DIR: ${{ secrets.OVH_SFTP_REMOTE_DIR }}
+        run: node scripts/fix-broken-files.mjs scripts/broken-files.txt
