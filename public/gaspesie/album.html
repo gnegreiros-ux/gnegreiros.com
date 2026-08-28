@@ -82,10 +82,16 @@ body{
 .stat b{ display:block; font-family:var(--mono); font-size:clamp(19px,3.6vw,25px); font-weight:600; color:#fff; letter-spacing:-.01em }
 .stat i{ display:block; font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-dark-mute); margin-top:4px }
 .stats-map{ display:flex; flex-direction:column; align-items:center; gap:8px }
-.stats-map svg{
-  width:100%; max-width:380px; display:block;
-  border:1px solid rgba(127,163,172,.28); border-radius:var(--r); overflow:hidden;
+.stats-map-btn{
+  width:100%; max-width:760px; padding:0; margin:0; border:0; background:none; cursor:pointer;
+  display:block; line-height:0;
 }
+.stats-map-btn svg{
+  width:100%; display:block;
+  border:1px solid rgba(127,163,172,.28); border-radius:var(--r); overflow:hidden;
+  transition:opacity .15s ease;
+}
+.stats-map-btn:hover svg, .stats-map-btn:focus-visible svg{ opacity:.88 }
 .stats-map .legenda{
   font-family:var(--mono); font-size:10px; letter-spacing:.04em; color:var(--on-dark-mute);
   display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
@@ -95,7 +101,15 @@ body{
 .rota-line{ fill:none; stroke:var(--lantern); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round }
 .rota-line.ferry{ stroke-dasharray:6 5 }
 .rota-dot{ fill:var(--lantern-dk); stroke:var(--hull); stroke-width:1 }
-.rota-home{ fill:var(--on-dark-mute); stroke:var(--hull); stroke-width:1.5 }
+.rota-lbl{
+  font-family:var(--mono); font-size:12px; fill:var(--on-dark);
+  paint-order:stroke; stroke:var(--hull); stroke-width:3px; stroke-linejoin:round;
+}
+.rota-home{ fill:var(--lantern); stroke:var(--hull); stroke-width:2 }
+.rota-home-lbl{
+  font-family:var(--sans); font-weight:800; font-size:17px; fill:var(--lantern);
+  paint-order:stroke; stroke:var(--hull); stroke-width:4px; stroke-linejoin:round;
+}
 @media (max-width:640px){ .stats-row{ grid-template-columns:1fr } }
 
 /* ---------- Semanas (accordion) ---------- */
@@ -105,6 +119,7 @@ body{
   list-style:none; padding:0 0 14px; margin-bottom:0; border-bottom:1px solid rgba(127,163,172,.35);
 }
 .week-head::-webkit-details-marker{ display:none }
+.week-head:focus-visible{ outline-offset:-2px }
 .week-head h2{ margin:0; font-family:var(--sans); font-weight:800; letter-spacing:-.01em; font-size:clamp(20px,4vw,28px); color:#fff }
 .week-head .chev{ width:20px; height:20px; color:var(--lantern); flex:none; transition:transform .2s ease }
 .week-head .chev svg{ width:100%; height:100%; display:block }
@@ -203,6 +218,7 @@ body{
   gap:12px; padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
 }
 .lb img, .lb video{ max-width:94vw; max-height:80vh; object-fit:contain; border-radius:2px }
+.lb svg{ max-width:94vw; max-height:80vh; border-radius:2px; background:var(--hull) }
 .lb-bar{
   position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
   padding:calc(env(safe-area-inset-top) + 12px) 14px 12px; background:linear-gradient(rgba(3,10,15,.85), transparent);
@@ -435,36 +451,141 @@ function miniMapaHTML(lat, lon, local){
 }
 
 // Carte estática do trajeto real completo (ida e volta desde Trois-Rivières),
-// para a coluna de estatísticas. Único trecho feito de traversier no
-// percurso real: Godbout -> Cap-Chat-Est (traversier Godbout-Matane, ver
-// public/gaspesie/index.html) -- tracejado; todo o resto é estrada, traço
-// contínuo.
-const ROTA_FERRY = new Set(["Godbout>Cap-Chat-Est"]);
+// para a coluna de estatísticas. Traçado igual ao da página do plano
+// (public/gaspesie/index.html, camadas aller/ferry/gasp/retour): segue a
+// forma real das estradas e do litoral, não uma reta entre paradas. Único
+// trecho de traversier: Godbout -> Matane (Cap-Chat-Est) -- tracejado.
+const ROTA_ALLER = "M75 554 L120 522 L180 470 L226 440 L262 410 L298 391 L347 332 L396 248 L432 213 L450 182 L500 140 L540 105 L574 65 L610 54 L637 48";
+const ROTA_FERRY_D = "M637 48 L642 88 L645 128";
+const ROTA_GASP = "M645 128 L700 104 L763 80 L806 70 L843 66 L880 64 L918 65 L959 61 L995 72 L1020 100 L1030 122 L1010 136 L992 131 L1000 152 L1014 173 L1022 184 L1011 201 L990 208 L969 213 L936 241 L895 270 L877 264 L840 258 L804 255 L760 262 L730 268 L712 272";
+const ROTA_RETOUR = "M712 272 L640 282 L560 290 L480 297 L416 301 L380 347 L350 385 L324 422 L301 445 L240 480 L160 522 L88 554 L75 554";
+
+// Paradas reais mescladas (mesmos dados de public/gaspesie/index.html,
+// REAL_STOPS), para os rótulos no mapa. Só o primeiro nome de cada grupo
+// mesclado é mostrado, para não sobrecarregar o mapa.
+const REAL_STOPS = [
+  { x:294.4, y:388.9, label:"Petite-Rivière-Saint-François" },
+  { x:356.6, y:307.0, label:"Port-au-Saumon" },
+  { x:366.9, y:292.0, label:"Saint-Siméon" },
+  { x:396.3, y:249.1, label:"Baie-Sainte-Catherine" },
+  { x:427.1, y:217.9, label:"Bon-Désir" },
+  { x:637.0, y:48.0, label:"Godbout" },
+  { x:763.0, y:80.0, label:"Cap-Chat-Est" },
+  { x:799.3, y:81.2, label:"La Martre" },
+  { x:824.0, y:82.0, label:"Mont-Saint-Pierre" },
+  { x:866.2, y:82.6, label:"Sainte-Madeleine" },
+  { x:895.3, y:82.9, label:"Grande-Vallée" },
+  { x:925.8, y:83.3, label:"Cloridorme" },
+  { x:968.0, y:83.9, label:"Rivière-au-Renard" },
+  { x:1005.9, y:126.1, label:"Cap-des-Rosiers" },
+  { x:1017.9, y:166.3, label:"Pointe-Saint-Pierre" },
+  { x:1022.0, y:184.0, label:"Percé" },
+  { x:909.6, y:251.0, label:"Chandler" },
+  { x:998.8, y:197.9, label:"Weygand" },
+  { x:808.9, y:259.4, label:"Paspébiac" },
+  { x:705.0, y:268.0, label:"Carleton-sur-Mer" },
+  { x:638.9, y:227.3, label:"Routhierville" },
+  { x:559.0, y:178.0, label:"Sainte-Flavie" },
+  { x:530.4, y:205.4, label:"Rimouski" }
+];
+
+// As paradas reais (interpoladas por scripts/gaspesie-mapa-real.mjs, ver
+// PLACE_PATH acima) não caem exatamente sobre a curva desenhada à mão do
+// trajeto -- em alguns trechos (ex. Rimouski) a distância é grande o
+// suficiente para o ponto parecer "órfão", solto da linha. Para nunca mais
+// acontecer, cada parada é projetada (snap) no ponto mais próximo da própria
+// linha antes de ser desenhada, garantindo que todo ponto sempre fique sobre
+// o trajeto.
+function parsePontosPath(d){
+  const nums = d.match(/-?\d+(?:\.\d+)?/g).map(Number);
+  const pontos = [];
+  for(let i = 0; i < nums.length; i += 2) pontos.push({ x: nums[i], y: nums[i + 1] });
+  return pontos;
+}
+
+function pontoMaisPertoNoSegmento(px, py, ax, ay, bx, by){
+  const dx = bx - ax, dy = by - ay;
+  const lenSq = dx * dx + dy * dy;
+  let t = lenSq === 0 ? 0 : ((px - ax) * dx + (py - ay) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  const x = ax + t * dx, y = ay + t * dy;
+  return { x, y, dist: Math.hypot(px - x, py - y) };
+}
+
+function snapAoTracado(p, pontosRota){
+  let melhor = null;
+  for(let i = 1; i < pontosRota.length; i++){
+    const a = pontosRota[i - 1], b = pontosRota[i];
+    const cand = pontoMaisPertoNoSegmento(p.x, p.y, a.x, a.y, b.x, b.y);
+    if(!melhor || cand.dist < melhor.dist) melhor = cand;
+  }
+  return melhor;
+}
+
+// Evita rótulos sobrepostos: cada rótulo calcula sua própria caixa
+// (estimada a partir do número de caracteres) e só é desenhado numa posição
+// (acima/abaixo do ponto, a distâncias crescentes) que não colida com
+// nenhuma caixa já aceita. Se nenhuma posição livre existir, mostra só o
+// ponto -- nunca um texto por cima de outro.
+const ROTULO_CHAR_W = 7.2;
+const ROTULO_ALTURA = 13;
+
+function caixaRotulo(cx, baseline, texto, anchor){
+  const largura = texto.length * ROTULO_CHAR_W;
+  let x0;
+  if(anchor === "start") x0 = cx;
+  else if(anchor === "end") x0 = cx - largura;
+  else x0 = cx - largura / 2;
+  return { x0: x0 - 2, x1: x0 + largura + 2, y0: baseline - ROTULO_ALTURA, y1: baseline + 3 };
+}
+function caixasSobrepoem(a, b){
+  return a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+}
 
 function montarMapaReal(){
-  let solid = "", ferry = "";
-  for(let i = 1; i < PLACE_PATH.length; i++){
-    const a = PLACE_PATH[i - 1], b = PLACE_PATH[i];
-    const seg = `M${a.x} ${a.y} L${b.x} ${b.y} `;
-    if(ROTA_FERRY.has(`${a.local}>${b.local}`)) ferry += seg; else solid += seg;
-  }
-  const pontos = PLACE_PATH
-    .filter(p => p.local !== "__inicio__" && p.local !== "Trois-Rivières")
-    .map(p => `<circle class="rota-dot" cx="${p.x}" cy="${p.y}" r="2.2"/>`)
-    .join("");
+  const pontosRota = [...parsePontosPath(ROTA_ALLER), ...parsePontosPath(ROTA_GASP), ...parsePontosPath(ROTA_RETOUR)];
+  const caixasUsadas = [];
+
+  const caixaHome = caixaRotulo(88, 536, "Trois-Rivières", "middle");
+  caixasUsadas.push(caixaHome);
+
+  const paradasHTML = REAL_STOPS.map((p) => {
+    const s = snapAoTracado(p, pontosRota);
+    const x = +s.x.toFixed(1), y = +s.y.toFixed(1);
+    const ponto = `<circle class="rota-dot" cx="${x}" cy="${y}" r="3.2"/>`;
+
+    let anchor = "middle";
+    if(x > 1000) anchor = "end";
+    else if(x < 60) anchor = "start";
+
+    const candidatosDy = [-9, 16, -26, 33];
+    for(const dy of candidatosDy){
+      const baseline = y + dy;
+      const caixa = caixaRotulo(x, baseline, p.label, anchor);
+      if(caixasUsadas.some(c => caixasSobrepoem(c, caixa))) continue;
+      caixasUsadas.push(caixa);
+      return `${ponto}<text class="rota-lbl" x="${x}" y="${baseline}" text-anchor="${anchor}">${p.label}</text>`;
+    }
+    return ponto;
+  }).join("");
 
   document.getElementById("statsMap").innerHTML = `
-    <svg viewBox="0 0 1080 620" role="img" aria-label="Trajeto real percorrido na viagem, partindo e retornando a Trois-Rivières">
-      <use href="#qc-bg"/>
-      <path class="rota-line" d="${solid}"/>
-      <path class="rota-line ferry" d="${ferry}"/>
-      ${pontos}
-      <circle class="rota-home" cx="88" cy="554" r="6"/>
-    </svg>
+    <button class="stats-map-btn" type="button" aria-label="Trajeto real percorrido na viagem, partindo e retornando a Trois-Rivières. Toque para ampliar.">
+      <svg viewBox="0 0 1080 620" aria-hidden="true">
+        <use href="#qc-bg"/>
+        <path class="rota-line" d="${ROTA_ALLER} ${ROTA_GASP} ${ROTA_RETOUR}"/>
+        <path class="rota-line ferry" d="${ROTA_FERRY_D}"/>
+        ${paradasHTML}
+        <circle class="rota-home" cx="88" cy="554" r="7"/>
+        <text class="rota-home-lbl" x="88" y="536" text-anchor="middle">Trois-Rivières</text>
+      </svg>
+    </button>
     <span class="legenda">
       <span><svg viewBox="0 0 20 8"><line class="rota-line" x1="0" y1="4" x2="20" y2="4"/></svg>Estrada</span>
       <span><svg viewBox="0 0 20 8"><line class="rota-line ferry" x1="0" y1="4" x2="20" y2="4"/></svg>Traversier</span>
     </span>`;
+
+  document.querySelector(".stats-map-btn").addEventListener("click", abrirLightboxMapa);
 }
 montarMapaReal();
 
@@ -590,7 +711,10 @@ function montarGrade(itens){
 const lb = document.getElementById("lb");
 const lbStage = document.getElementById("lbStage");
 const lbCount = document.getElementById("lbCount");
+const lbPrevBtn = document.getElementById("lbPrev");
+const lbNextBtn = document.getElementById("lbNext");
 let lbIndex = 0;
+let lbModoMapa = false;
 
 function renderLightbox(){
   const it = ITENS[lbIndex];
@@ -612,13 +736,41 @@ function renderLightbox(){
   lbCount.textContent = `${lbIndex + 1} / ${ITENS.length}`;
 }
 function abrirLightbox(i){
+  lbModoMapa = false;
+  lbPrevBtn.style.display = "";
+  lbNextBtn.style.display = "";
   lbIndex = i; lb.classList.add("open"); renderLightbox();
+}
+function abrirLightboxMapa(){
+  const svgOriginal = document.querySelector("#statsMap svg");
+  if(!svgOriginal) return;
+  lbModoMapa = true;
+  lbStage.innerHTML = "";
+  const svgClone = svgOriginal.cloneNode(true);
+  svgClone.removeAttribute("tabindex");
+  svgClone.style.width = "100%";
+  svgClone.style.height = "auto";
+  svgClone.style.maxWidth = "94vw";
+  svgClone.style.maxHeight = "80vh";
+  lbStage.appendChild(svgClone);
+  const caption = document.createElement("div");
+  caption.className = "lb-caption";
+  caption.textContent = "Trajeto real da viagem";
+  lbStage.appendChild(caption);
+  lbCount.textContent = "";
+  lbPrevBtn.style.display = "none";
+  lbNextBtn.style.display = "none";
+  lb.classList.add("open");
 }
 function fecharLightbox(){
   lb.classList.remove("open");
   lbStage.innerHTML = "";
+  lbModoMapa = false;
+  lbPrevBtn.style.display = "";
+  lbNextBtn.style.display = "";
 }
 function navegar(delta){
+  if(lbModoMapa) return;
   lbIndex = (lbIndex + delta + ITENS.length) % ITENS.length;
   renderLightbox();
 }
