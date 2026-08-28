@@ -390,14 +390,17 @@ function miniMapaHTML(lat, lon, local){
 
 // Agrupa itens já ordenados por hora em blocos consecutivos que
 // compartilham o mesmo destaque (atração com nome/link próprios) ou,
-// na ausência de destaque, o mesmo local. Sem nenhum dos dois, cada
-// item vira um bloco solo, sem cabeçalho.
+// na ausência de destaque, o mesmo local. Um item sem local nem destaque
+// (foto sem GPS) não abre bloco próprio: ele só entra no bloco anterior,
+// para não cortar ao meio uma sequência no mesmo lugar.
 function agruparPorLocal(itens){
   const grupos = [];
   itens.forEach(it => {
-    const chave = it.destaque ? `destaque:${it.destaque.titulo}` : `local:${it.local || ""}`;
+    const chave = it.destaque ? `destaque:${it.destaque.titulo}` : (it.local ? `local:${it.local}` : null);
     const ultimo = grupos[grupos.length - 1];
-    if(ultimo && ultimo.chave === chave){
+    if(chave === null && ultimo){
+      ultimo.itens.push(it);
+    } else if(ultimo && ultimo.chave === chave){
       ultimo.itens.push(it);
     } else {
       grupos.push({ chave, destaque: it.destaque || null, local: it.local || null, itens: [it] });
