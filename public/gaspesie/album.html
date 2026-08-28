@@ -79,6 +79,18 @@ body{
 .stat b{ display:block; font-family:var(--mono); font-size:clamp(19px,3.6vw,25px); font-weight:600; color:#fff; letter-spacing:-.01em }
 .stat i{ display:block; font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-dark-mute); margin-top:4px }
 
+/* ---------- Semanas (accordion) ---------- */
+.week{ margin-top:44px }
+.week-head{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer;
+  list-style:none; padding:0 0 14px; margin-bottom:0; border-bottom:1px solid rgba(127,163,172,.35);
+}
+.week-head::-webkit-details-marker{ display:none }
+.week-head h2{ margin:0; font-family:var(--sans); font-weight:800; letter-spacing:-.01em; font-size:clamp(20px,4vw,28px); color:#fff }
+.week-head .chev{ font-family:var(--mono); font-size:16px; color:var(--lantern-dk); transition:transform .2s ease; flex:none }
+.week[open] > .week-head .chev{ transform:rotate(90deg) }
+.week .sec:first-of-type{ margin-top:24px }
+
 /* ---------- Seções por dia ---------- */
 .sec{ margin-top:44px }
 .day-head{
@@ -264,10 +276,13 @@ const statsEl = document.getElementById("stats");
 
 const DIAS_SEMANA_MAIUSC = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
-function formatarData(iso){
+function parseISO(iso){
   const [ano, mes, dia] = iso.split("-").map(Number);
-  const d = new Date(ano, mes - 1, dia);
-  const texto = new Intl.DateTimeFormat("pt-BR", { weekday:"long", day:"numeric", month:"long" }).format(d);
+  return new Date(ano, mes - 1, dia);
+}
+
+function formatarData(iso){
+  const texto = new Intl.DateTimeFormat("pt-BR", { weekday:"long", day:"numeric", month:"long" }).format(parseISO(iso));
   return DIAS_SEMANA_MAIUSC(texto);
 }
 
@@ -404,7 +419,7 @@ function montarGrade(itens){
     porData.get(it.data).push(it);
   });
 
-  const datasOrdenadas = [...porData.keys()].sort().reverse();
+  const datasOrdenadas = [...porData.keys()].sort();
   const nFotos = itens.filter(i => i.tipo === "foto").length;
   const nVideos = itens.filter(i => i.tipo === "video").length;
   statsEl.innerHTML = `
@@ -412,58 +427,79 @@ function montarGrade(itens){
     <div class="stat"><b>${nFotos}</b><i>fotos</i></div>
     <div class="stat"><b>${nVideos}</b><i>vídeos</i></div>`;
 
+  // Divide os dias (já em ordem cronológica) em blocos de 7 dias a partir do
+  // primeiro dia de registros, virando "Semana 1", "Semana 2" etc. — cada uma
+  // num <details> independente (aberto/fechado não é exclusivo entre elas).
+  const primeiraData = parseISO(datasOrdenadas[0]);
+  const semanas = new Map();
   datasOrdenadas.forEach(data => {
-    const grupo = porData.get(data).sort((a,b) => (a.hora||"").localeCompare(b.hora||""));
-    const sec = document.createElement("section");
-    sec.className = "sec";
-    sec.innerHTML = `
-      <div class="day-head">
-        <h2>${formatarData(data)}</h2>
-        <span class="count">${grupo.length}</span>
-      </div>`;
+    const dias = Math.round((parseISO(data) - primeiraData) / 86400000);
+    const semanaIdx = Math.floor(dias / 7);
+    if(!semanas.has(semanaIdx)) semanas.set(semanaIdx, []);
+    semanas.get(semanaIdx).push(data);
+  });
 
-    agruparPorLocal(grupo).forEach(bloco => {
-      const place = document.createElement("div");
-      if(bloco.destaque){
-        place.className = "place destaque";
-        const primeiroD = bloco.itens[0];
-        place.innerHTML = `
-          <div class="destaque-head">
-            ${starIcon()}
-            <a href="${bloco.destaque.url}" target="_blank" rel="noopener">${bloco.destaque.titulo}</a>
-          </div>
-          ${primeiroD.lat != null ? `<div class="place-map">${miniMapaHTML(primeiroD.lat, primeiroD.lon, primeiroD.local)}</div>` : ""}
-          <div class="grid"></div>`;
-      } else if(bloco.local){
-        place.className = "place";
-        const primeiro = bloco.itens[0];
-        place.innerHTML = `
-          <div class="place-head">
-            ${pinIcon()}
-            <a href="${linkMapa(primeiro)}" target="_blank" rel="noopener">${bloco.local}</a>
-          </div>
-          ${primeiro.lat != null ? `<div class="place-map">${miniMapaHTML(primeiro.lat, primeiro.lon, bloco.local)}</div>` : ""}
-          <div class="grid"></div>`;
-      } else {
-        place.className = "place";
-        place.innerHTML = `<div class="grid"></div>`;
-      }
-      const grid = place.querySelector(".grid");
-      bloco.itens.forEach(it => {
-        const idxGlobal = ITENS.indexOf(it);
-        const b = document.createElement("button");
-        b.className = "tile";
-        b.type = "button";
-        b.setAttribute("aria-label", it.tipo === "video" ? "Abrir vídeo" : "Abrir foto");
-        const capa = it.tipo === "video" ? it.poster : it.thumb;
-        b.innerHTML = `<img src="${capa}" loading="lazy" decoding="async" alt="">${it.tipo === "video" ? playIcon() : ""}`;
-        b.addEventListener("click", () => abrirLightbox(idxGlobal));
-        grid.appendChild(b);
+  [...semanas.keys()].sort((a,b) => a - b).forEach(semanaIdx => {
+    const details = document.createElement("details");
+    details.className = "week";
+    if(semanaIdx === 0) details.open = true;
+    details.innerHTML = `<summary class="week-head"><h2>Semana ${semanaIdx + 1}</h2><span class="chev">›</span></summary>`;
+
+    semanas.get(semanaIdx).forEach(data => {
+      const grupo = porData.get(data).sort((a,b) => (a.hora||"").localeCompare(b.hora||""));
+      const sec = document.createElement("section");
+      sec.className = "sec";
+      sec.innerHTML = `
+        <div class="day-head">
+          <h2>${formatarData(data)}</h2>
+          <span class="count">${grupo.length}</span>
+        </div>`;
+
+      agruparPorLocal(grupo).forEach(bloco => {
+        const place = document.createElement("div");
+        if(bloco.destaque){
+          place.className = "place destaque";
+          const primeiroD = bloco.itens[0];
+          place.innerHTML = `
+            <div class="destaque-head">
+              ${starIcon()}
+              <a href="${bloco.destaque.url}" target="_blank" rel="noopener">${bloco.destaque.titulo}</a>
+            </div>
+            ${primeiroD.lat != null ? `<div class="place-map">${miniMapaHTML(primeiroD.lat, primeiroD.lon, primeiroD.local)}</div>` : ""}
+            <div class="grid"></div>`;
+        } else if(bloco.local){
+          place.className = "place";
+          const primeiro = bloco.itens[0];
+          place.innerHTML = `
+            <div class="place-head">
+              ${pinIcon()}
+              <a href="${linkMapa(primeiro)}" target="_blank" rel="noopener">${bloco.local}</a>
+            </div>
+            ${primeiro.lat != null ? `<div class="place-map">${miniMapaHTML(primeiro.lat, primeiro.lon, bloco.local)}</div>` : ""}
+            <div class="grid"></div>`;
+        } else {
+          place.className = "place";
+          place.innerHTML = `<div class="grid"></div>`;
+        }
+        const grid = place.querySelector(".grid");
+        bloco.itens.forEach(it => {
+          const idxGlobal = ITENS.indexOf(it);
+          const b = document.createElement("button");
+          b.className = "tile";
+          b.type = "button";
+          b.setAttribute("aria-label", it.tipo === "video" ? "Abrir vídeo" : "Abrir foto");
+          const capa = it.tipo === "video" ? it.poster : it.thumb;
+          b.innerHTML = `<img src="${capa}" loading="lazy" decoding="async" alt="">${it.tipo === "video" ? playIcon() : ""}`;
+          b.addEventListener("click", () => abrirLightbox(idxGlobal));
+          grid.appendChild(b);
+        });
+        sec.appendChild(place);
       });
-      sec.appendChild(place);
+
+      details.appendChild(sec);
     });
 
-    diasEl.appendChild(sec);
+    diasEl.appendChild(details);
   });
 }
 
@@ -487,7 +523,8 @@ function renderLightbox(){
     lbStage.appendChild(img);
   }
   lbCount.textContent = `${lbIndex + 1} / ${ITENS.length}`;
-  lbDate.textContent = formatarData(it.data);
+  const local = it.destaque ? it.destaque.titulo : it.local;
+  lbDate.textContent = local ? `${local} — ${formatarData(it.data)}` : formatarData(it.data);
 }
 function abrirLightbox(i){
   lbIndex = i; lb.classList.add("open"); renderLightbox();
@@ -503,7 +540,7 @@ function navegar(delta){
 document.getElementById("lbClose").onclick = fecharLightbox;
 document.getElementById("lbPrev").onclick = () => navegar(-1);
 document.getElementById("lbNext").onclick = () => navegar(1);
-lb.addEventListener("click", e => { if(e.target === lb) fecharLightbox(); });
+lb.addEventListener("click", e => { if(e.target === lb || e.target === lbStage) fecharLightbox(); });
 document.addEventListener("keydown", e => {
   if(!lb.classList.contains("open")) return;
   if(e.key === "Escape") fecharLightbox();
