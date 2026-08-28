@@ -82,12 +82,13 @@ body{
 /* ---------- Semanas (accordion) ---------- */
 .week{ margin-top:44px }
 .week-head{
-  display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer;
+  display:flex; align-items:center; justify-content:flex-start; gap:24px; cursor:pointer;
   list-style:none; padding:0 0 14px; margin-bottom:0; border-bottom:1px solid rgba(127,163,172,.35);
 }
 .week-head::-webkit-details-marker{ display:none }
 .week-head h2{ margin:0; font-family:var(--sans); font-weight:800; letter-spacing:-.01em; font-size:clamp(20px,4vw,28px); color:#fff }
-.week-head .chev{ font-family:var(--mono); font-size:16px; color:var(--lantern-dk); transition:transform .2s ease; flex:none }
+.week-head .chev{ width:20px; height:20px; color:var(--lantern); flex:none; transition:transform .2s ease }
+.week-head .chev svg{ width:100%; height:100%; display:block }
 .week[open] > .week-head .chev{ transform:rotate(90deg) }
 .week .sec:first-of-type{ margin-top:24px }
 
@@ -178,8 +179,11 @@ body{
   align-items:center; justify-content:center; z-index:50; touch-action:pan-y;
 }
 .lb.open{ display:flex }
-.lb-stage{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) }
-.lb img, .lb video{ max-width:94vw; max-height:86vh; object-fit:contain; border-radius:2px }
+.lb-stage{
+  width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+.lb img, .lb video{ max-width:94vw; max-height:80vh; object-fit:contain; border-radius:2px }
 .lb-bar{
   position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
   padding:calc(env(safe-area-inset-top) + 12px) 14px 12px; background:linear-gradient(rgba(3,10,15,.85), transparent);
@@ -195,10 +199,23 @@ body{
   font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
 .lb-prev{ left:10px } .lb-next{ right:10px }
-.lb-date{
-  position:absolute; bottom:calc(env(safe-area-inset-bottom) + 14px); left:0; right:0; text-align:center;
-  font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--on-dark-mute); text-transform:capitalize;
+.lb-caption{
+  text-align:center; max-width:94vw; padding:0 12px;
+  font-family:var(--mono); font-size:15px; font-weight:600; letter-spacing:.04em;
+  color:var(--on-dark); text-transform:capitalize;
 }
+
+/* ---------- Voltar ao topo ---------- */
+.to-top{
+  position:fixed; right:calc(env(safe-area-inset-right) + 18px); bottom:calc(env(safe-area-inset-bottom) + 18px);
+  width:44px; height:44px; border-radius:99px; background:rgba(11,30,45,.75);
+  border:1px solid rgba(127,163,172,.4); color:var(--lantern); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; opacity:0; pointer-events:none; transform:translateY(8px);
+  transition:opacity .2s ease, transform .2s ease; z-index:40;
+}
+.to-top svg{ width:20px; height:20px }
+.to-top.show{ opacity:1; pointer-events:auto; transform:translateY(0) }
+.to-top:hover{ background:rgba(11,30,45,.92); border-color:var(--lantern) }
 
 footer{
   margin-top:60px; padding-top:18px; border-top:1px solid rgba(127,163,172,.25);
@@ -262,8 +279,11 @@ footer a{ color:var(--lantern); text-decoration-thickness:1px; text-underline-of
   <button class="lb-nav lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
   <div class="lb-stage" id="lbStage"></div>
   <button class="lb-nav lb-next" id="lbNext" aria-label="Próxima">›</button>
-  <div class="lb-date" id="lbDate"></div>
 </div>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao topo" title="Voltar ao topo">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+</button>
 
 <script>
 /* ============================================================
@@ -296,6 +316,10 @@ function pinIcon(){
 
 function starIcon(){
   return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.4 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.5 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>';
+}
+
+function chevIcon(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
 }
 
 function linkMapa(it){
@@ -446,7 +470,7 @@ function montarGrade(itens){
     const details = document.createElement("details");
     details.className = "week";
     if(semanaIdx === 0) details.open = true;
-    details.innerHTML = `<summary class="week-head"><h2>Semana ${semanaIdx + 1}</h2><span class="chev">›</span></summary>`;
+    details.innerHTML = `<summary class="week-head"><span class="chev">${chevIcon()}</span><h2>Semana ${semanaIdx + 1}</h2></summary>`;
 
     semanas.get(semanaIdx).forEach(data => {
       const grupo = porData.get(data).sort((a,b) => (a.hora||"").localeCompare(b.hora||""));
@@ -510,7 +534,6 @@ function montarGrade(itens){
 const lb = document.getElementById("lb");
 const lbStage = document.getElementById("lbStage");
 const lbCount = document.getElementById("lbCount");
-const lbDate = document.getElementById("lbDate");
 let lbIndex = 0;
 
 function renderLightbox(){
@@ -525,9 +548,12 @@ function renderLightbox(){
     img.src = it.full; img.alt = "";
     lbStage.appendChild(img);
   }
-  lbCount.textContent = `${lbIndex + 1} / ${ITENS.length}`;
+  const caption = document.createElement("div");
+  caption.className = "lb-caption";
   const local = it.destaque ? it.destaque.titulo : it.local;
-  lbDate.textContent = local ? `${local} — ${formatarData(it.data)}` : formatarData(it.data);
+  caption.textContent = local ? `${local} — ${formatarData(it.data)}` : formatarData(it.data);
+  lbStage.appendChild(caption);
+  lbCount.textContent = `${lbIndex + 1} / ${ITENS.length}`;
 }
 function abrirLightbox(i){
   lbIndex = i; lb.classList.add("open"); renderLightbox();
@@ -560,6 +586,16 @@ lb.addEventListener("touchend", e => {
   if(Math.abs(dx) > 40) navegar(dx < 0 ? 1 : -1);
   touchX = null;
 }, {passive:true});
+
+/* ---------- Voltar ao topo ---------- */
+const toTop = document.getElementById("toTop");
+window.addEventListener("scroll", () => {
+  toTop.classList.toggle("show", window.scrollY > window.innerHeight * 0.6);
+}, { passive: true });
+toTop.addEventListener("click", () => {
+  const reduzMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: reduzMovimento ? "auto" : "smooth" });
+});
 
 /* ---------- Carregamento ---------- */
 fetch("fotos/dados.json", { cache: "no-store" })
