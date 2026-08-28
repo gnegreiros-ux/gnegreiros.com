@@ -72,12 +72,31 @@ body{
 }
 .btn-album:hover{ background:var(--lantern-dk) }
 .tagline{ margin:10px 0 0; max-width:56ch; color:var(--on-dark-mute); font-size:15px }
-.stats{ display:flex; flex-wrap:wrap; gap:0; margin:24px 0 0; border-top:1px solid rgba(127,163,172,.22) }
-.stat{ flex:1 1 130px; padding:14px 16px 12px 16px; border-right:1px solid rgba(127,163,172,.18) }
-.stat:first-child{ padding-left:0 }
-.stat:last-child{ border-right:0 }
+.stats-row{
+  display:grid; grid-template-columns:minmax(160px,260px) 1fr; gap:28px; align-items:center;
+  margin:24px 0 0; padding-top:18px; border-top:1px solid rgba(127,163,172,.22);
+}
+.stats{ display:flex; flex-direction:column }
+.stat{ padding:10px 0; border-bottom:1px solid rgba(127,163,172,.18) }
+.stat:last-child{ border-bottom:0 }
 .stat b{ display:block; font-family:var(--mono); font-size:clamp(19px,3.6vw,25px); font-weight:600; color:#fff; letter-spacing:-.01em }
 .stat i{ display:block; font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-dark-mute); margin-top:4px }
+.stats-map{ display:flex; flex-direction:column; align-items:center; gap:8px }
+.stats-map svg{
+  width:100%; max-width:380px; display:block;
+  border:1px solid rgba(127,163,172,.28); border-radius:var(--r); overflow:hidden;
+}
+.stats-map .legenda{
+  font-family:var(--mono); font-size:10px; letter-spacing:.04em; color:var(--on-dark-mute);
+  display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+}
+.stats-map .legenda span{ display:inline-flex; align-items:center; gap:6px }
+.stats-map .legenda svg{ width:20px; height:8px; border:0; flex:none }
+.rota-line{ fill:none; stroke:var(--lantern); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round }
+.rota-line.ferry{ stroke-dasharray:6 5 }
+.rota-dot{ fill:var(--lantern-dk); stroke:var(--hull); stroke-width:1 }
+.rota-home{ fill:var(--on-dark-mute); stroke:var(--hull); stroke-width:1.5 }
+@media (max-width:640px){ .stats-row{ grid-template-columns:1fr } }
 
 /* ---------- Semanas (accordion) ---------- */
 .week{ margin-top:44px }
@@ -253,7 +272,10 @@ footer a{ color:var(--lantern); text-decoration-thickness:1px; text-underline-of
       <a class="btn-album" href="./index.html">Roteiro da viagem</a>
     </div>
     <p class="tagline">Fotos e vídeos da viagem de Guilherme e Vanessa pela Gaspésie — a rota pelo norte, o litoral, Gaspé e Percé, com volta pela Baie des Chaleurs. Agosto de 2026.</p>
-    <div class="stats" id="stats"></div>
+    <div class="stats-row">
+      <div class="stats" id="stats"></div>
+      <div class="stats-map" id="statsMap"></div>
+    </div>
   </header>
 
   <section class="sec" id="album">
@@ -411,6 +433,40 @@ function miniMapaHTML(lat, lon, local){
   miniMapaCache.set(chave, html);
   return html;
 }
+
+// Carte estática do trajeto real completo (ida e volta desde Trois-Rivières),
+// para a coluna de estatísticas. Único trecho feito de traversier no
+// percurso real: Godbout -> Cap-Chat-Est (traversier Godbout-Matane, ver
+// public/gaspesie/index.html) -- tracejado; todo o resto é estrada, traço
+// contínuo.
+const ROTA_FERRY = new Set(["Godbout>Cap-Chat-Est"]);
+
+function montarMapaReal(){
+  let solid = "", ferry = "";
+  for(let i = 1; i < PLACE_PATH.length; i++){
+    const a = PLACE_PATH[i - 1], b = PLACE_PATH[i];
+    const seg = `M${a.x} ${a.y} L${b.x} ${b.y} `;
+    if(ROTA_FERRY.has(`${a.local}>${b.local}`)) ferry += seg; else solid += seg;
+  }
+  const pontos = PLACE_PATH
+    .filter(p => p.local !== "__inicio__" && p.local !== "Trois-Rivières")
+    .map(p => `<circle class="rota-dot" cx="${p.x}" cy="${p.y}" r="2.2"/>`)
+    .join("");
+
+  document.getElementById("statsMap").innerHTML = `
+    <svg viewBox="0 0 1080 620" role="img" aria-label="Trajeto real percorrido na viagem, partindo e retornando a Trois-Rivières">
+      <use href="#qc-bg"/>
+      <path class="rota-line" d="${solid}"/>
+      <path class="rota-line ferry" d="${ferry}"/>
+      ${pontos}
+      <circle class="rota-home" cx="88" cy="554" r="6"/>
+    </svg>
+    <span class="legenda">
+      <span><svg viewBox="0 0 20 8"><line class="rota-line" x1="0" y1="4" x2="20" y2="4"/></svg>Estrada</span>
+      <span><svg viewBox="0 0 20 8"><line class="rota-line ferry" x1="0" y1="4" x2="20" y2="4"/></svg>Traversier</span>
+    </span>`;
+}
+montarMapaReal();
 
 // Agrupa itens já ordenados por hora em blocos consecutivos que
 // compartilham o mesmo destaque (atração com nome/link próprios) ou,
