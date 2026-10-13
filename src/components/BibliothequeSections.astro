@@ -1,0 +1,193 @@
+---
+import type { LibraryBook } from '../content/library';
+
+interface Props {
+	heroTitle: string;
+	heroSubtitle?: string;
+	books: LibraryBook[];
+}
+
+const { heroTitle, heroSubtitle, books } = Astro.props;
+---
+
+<section class="page-hero">
+	<div class="dot-mark page-hero__mark" aria-hidden="true"></div>
+	<h1 class="page-hero__title">{heroTitle}</h1>
+	{heroSubtitle && <p class="page-hero__subtitle">{heroSubtitle}</p>}
+</section>
+
+<section class="section library-section">
+	<div class="dot-mark library-section__mark" aria-hidden="true"></div>
+	<ul class="library__grid">
+		{books.map((book) => (
+			<li class="book">
+				<div class="book__cover">
+					{book.coverUrl || book.isbn ? (
+						<img
+							class="book__cover-image"
+							src={book.coverUrl ?? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}
+							alt={`${book.title} — ${book.author}`}
+							loading="lazy"
+							width="300"
+							height="450"
+						/>
+					) : (
+						<div class="book__cover-fallback" role="img" aria-label={`${book.title} — ${book.author}`}>
+							<p class="book__cover-fallback-title">{book.title}</p>
+						</div>
+					)}
+				</div>
+				<h3 class="book__title"><a href={book.href} target="_blank" rel="noopener">{book.title}</a></h3>
+				<p class="book__author">{book.author}</p>
+				{book.edition && <p class="book__meta">{book.edition}</p>}
+			</li>
+		))}
+	</ul>
+</section>
+
+<style>
+	.dot-mark {
+		position: absolute;
+		pointer-events: none;
+		background-image: radial-gradient(var(--color-text-secondary) 2px, transparent 2px);
+		background-size: 14px 14px;
+		opacity: 0.2;
+	}
+
+	@media (max-width: 1024px) {
+		.dot-mark {
+			display: none;
+		}
+	}
+
+	.page-hero {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: 7.5rem 1.5rem 0;
+	}
+
+	.page-hero__mark {
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 180px;
+		height: 130px;
+	}
+
+	.page-hero__title {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-h1);
+		line-height: 1.1;
+		color: var(--color-text-primary);
+	}
+
+	.page-hero__subtitle {
+		margin: 0;
+		max-width: var(--measure);
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.section {
+		position: relative;
+		max-width: var(--content-max);
+		margin: 0 auto;
+		padding: var(--space-section) 1.5rem var(--space-section);
+	}
+
+	.library-section__mark {
+		top: var(--space-section);
+		right: 1.5rem;
+		width: 140px;
+		height: 100px;
+	}
+
+	.library__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap: var(--space-card-gap);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.book {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.book__cover {
+		margin: 0 0 1rem;
+		aspect-ratio: 2 / 3;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		background: var(--color-bg);
+	}
+
+	.book__cover-image {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.book__cover-fallback {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 1.25rem;
+		text-align: center;
+	}
+
+	.book__cover-fallback-title {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: var(--text-small);
+		line-height: 1.3;
+		color: var(--color-text-secondary);
+	}
+
+	.book__title {
+		margin: 0 0 0.375rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-h3);
+		line-height: 1.3;
+	}
+
+	.book__title a {
+		text-decoration: none;
+		color: var(--color-text-primary);
+	}
+
+	.book__title a:hover,
+	.book__title a:focus-visible {
+		color: var(--color-accent);
+	}
+
+	.book__author {
+		margin: 0 0 0.5rem;
+		font-size: var(--text-small);
+		color: var(--color-text-secondary);
+	}
+
+	.book__meta {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.03em;
+		color: var(--color-text-secondary);
+	}
+
+	@media (max-width: 640px) {
+		.library__grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: var(--space-card-gap-mobile);
+		}
+	}
+</style>

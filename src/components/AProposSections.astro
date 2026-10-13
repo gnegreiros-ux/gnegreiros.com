@@ -1,4 +1,5 @@
 ---
+import { Book } from '@lucide/astro';
 import BrandIcon from './icons/BrandIcon.astro';
 import type { AProposCopy } from '../content/copy/a-propos';
 
@@ -11,8 +12,9 @@ interface Props {
 const { heroTitle, heroSubtitle, copy } = Astro.props;
 
 const links = [
-	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const },
-	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const },
+	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const, external: true },
+	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const, external: true },
+	{ label: 'Library', href: '/bibliotheque', icon: 'book' as const, external: false },
 ];
 ---
 
@@ -76,8 +78,8 @@ const links = [
 <section class="section links-section">
 	<div class="links">
 		{links.map((link) => (
-			<a class="links__link" href={link.href} target="_blank" rel="noopener">
-				<BrandIcon name={link.icon} size={20} />
+			<a class="links__link" href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}>
+				{link.icon === 'book' ? <Book size={20} stroke-width={1.5} /> : <BrandIcon name={link.icon} size={20} />}
 				{link.label}
 			</a>
 		))}
