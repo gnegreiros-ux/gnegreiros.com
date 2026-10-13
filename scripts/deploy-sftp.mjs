@@ -125,6 +125,19 @@ async function uploadWithRetry(getSftp, file, onReconnect) {
 			);
 		} catch (err) {
 			console.log(`error uploading ${remotePath} (attempt ${attempt}/${MAX_ATTEMPTS}): ${err.message}`);
+			// "No such file" means the remote parent directory doesn't actually
+			// exist — ensureRemoteDirs() can't tell a genuine mkdir failure
+			// apart from "already exists" on this host (both report Permission
+			// denied), so a brand-new directory silently never gets created.
+			// Force it here, where we know for certain it's missing.
+			if (/no such file/i.test(err.message)) {
+				const remoteDir = remotePath.slice(0, remotePath.lastIndexOf('/'));
+				try {
+					await sftp.mkdir(remoteDir, true);
+				} catch (mkdirErr) {
+					console.log(`mkdir ${remoteDir} (recovery) failed: ${mkdirErr.message}`);
+				}
+			}
 		}
 
 		await sleep(RETRY_PAUSE_MS);
