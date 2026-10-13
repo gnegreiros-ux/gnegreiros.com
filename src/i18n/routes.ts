@@ -10,6 +10,7 @@ export const SLUGS = [
 	'parcours',
 	'a-propos',
 	'contact',
+	'bibliotheque',
 ] as const;
 
 export type Slug = (typeof SLUGS)[number];

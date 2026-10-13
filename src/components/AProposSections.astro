@@ -2,19 +2,25 @@
 import { Book } from '@lucide/astro';
 import BrandIcon from './icons/BrandIcon.astro';
 import type { AProposCopy } from '../content/copy/a-propos';
+import { getLocalizedPath } from '../i18n/routes';
+import { useTranslations } from '../i18n/utils';
+import type { Locale } from '../i18n/ui';
 
 interface Props {
 	heroTitle: string;
 	heroSubtitle?: string;
 	copy: AProposCopy;
+	/** Locale segment of the current URL — drives the Library link's localized path and label. */
+	locale: Locale;
 }
 
-const { heroTitle, heroSubtitle, copy } = Astro.props;
+const { heroTitle, heroSubtitle, copy, locale } = Astro.props;
+const t = useTranslations(locale);
 
 const links = [
 	{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/gnegreiros', icon: 'linkedin' as const, external: true },
 	{ label: 'GitHub', href: 'https://github.com/gnegreiros-ux', icon: 'github' as const, external: true },
-	{ label: 'Library', href: '/bibliotheque', icon: 'book' as const, external: false },
+	{ label: t('links.library'), href: getLocalizedPath(locale, 'bibliotheque'), icon: 'book' as const, external: false },
 ];
 ---
 

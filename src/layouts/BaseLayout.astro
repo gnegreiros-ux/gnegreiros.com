@@ -11,7 +11,7 @@ import ConsentBanner from '../components/ConsentBanner.astro';
 import BrandIcon from '../components/icons/BrandIcon.astro';
 import { locales } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
-import { getLocalizedPath, SLUGS, type Slug } from '../i18n/routes';
+import { getLocalizedPath, type Slug } from '../i18n/routes';
 import type { Locale } from '../i18n/ui';
 
 interface Props {
@@ -19,15 +19,13 @@ interface Props {
 	description: string;
 	/** Language of the rendered content (drives `<html lang>` and nav strings). */
 	lang: Locale;
-	/** A routed `Slug`, or a bare path segment for a standalone, English-only page with no locale variants (e.g. "bibliotheque"). */
-	slug: Slug | string;
+	slug: Slug;
 	/** Locale segment of the current URL, if it differs from `lang` (EN-fallback pages served under /fr or /pt-br). */
 	routeLocale?: Locale;
 }
 
 const { title, description, lang, slug, routeLocale = lang } = Astro.props;
 const t = useTranslations(lang);
-const isRoutedSlug = (SLUGS as readonly string[]).includes(slug);
 
 const navLinks: { slug: Slug; label: string }[] = [
 	{ slug: 'approche', label: t('nav.approach') },
@@ -37,9 +35,7 @@ const navLinks: { slug: Slug; label: string }[] = [
 	{ slug: 'a-propos', label: t('nav.about') },
 ];
 
-const canonicalUrl = isRoutedSlug
-	? new URL(getLocalizedPath(routeLocale, slug as Slug), Astro.site)
-	: new URL(`/${slug}`, Astro.site);
+const canonicalUrl = new URL(getLocalizedPath(routeLocale, slug), Astro.site);
 
 const personJsonLd = {
 	'@context': 'https://schema.org',
@@ -63,16 +59,14 @@ const personJsonLd = {
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl} />
 
-		{isRoutedSlug && locales.map((locale) => (
+		{locales.map((locale) => (
 			<link
 				rel="alternate"
 				hreflang={locale}
-				href={new URL(getLocalizedPath(locale, slug as Slug), Astro.site)}
+				href={new URL(getLocalizedPath(locale, slug), Astro.site)}
 			/>
 		))}
-		{isRoutedSlug && (
-			<link rel="alternate" hreflang="x-default" href={new URL(getLocalizedPath('en', slug as Slug), Astro.site)} />
-		)}
+		<link rel="alternate" hreflang="x-default" href={new URL(getLocalizedPath('en', slug), Astro.site)} />
 
 		<script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} is:inline />
 
@@ -96,15 +90,13 @@ const personJsonLd = {
 						</li>
 					</ul>
 					<div class="site-nav__utils">
-						{isRoutedSlug && (
-							<select id="lang-switch" class="lang-switch" aria-label="Language">
-								{locales.map((loc) => (
-									<option value={getLocalizedPath(loc, slug as Slug)} selected={loc === routeLocale}>
-										{loc.toUpperCase()}
-									</option>
-								))}
-							</select>
-						)}
+						<select id="lang-switch" class="lang-switch" aria-label="Language">
+							{locales.map((loc) => (
+								<option value={getLocalizedPath(loc, slug)} selected={loc === routeLocale}>
+									{loc.toUpperCase()}
+								</option>
+							))}
+						</select>
 						<a
 							class="site-nav__linkedin"
 							href="https://www.linkedin.com/in/gnegreiros"

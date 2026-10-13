@@ -1,18 +1,13 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BibliothequeSections from '../components/BibliothequeSections.astro';
 import { libraryBooks } from '../content/library';
+
+const entry = await getEntry('pages', 'en/bibliotheque');
+if (!entry) throw new Error('Missing content entry: en/bibliotheque');
 ---
 
-<BaseLayout
-	title="Library — Guilherme Negreiros"
-	description="Books, handbooks, and guides on design systems, UX, and design operations that shaped how I work."
-	lang="en"
-	slug="bibliotheque"
->
-	<BibliothequeSections
-		heroTitle="Library"
-		heroSubtitle="Books, handbooks, and guides on design systems, UX, and design operations that shaped how I work."
-		books={libraryBooks}
-	/>
+<BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="bibliotheque">
+	<BibliothequeSections heroTitle={entry.data.heroTitle} heroSubtitle={entry.data.heroSubtitle} books={libraryBooks} />
 </BaseLayout>
