@@ -64,7 +64,7 @@ export const libraryBooks: LibraryBook[] = [
 	{
 		title: 'Design Systems (Smashing eBook)',
 		author: 'Smashing Magazine',
-		href: 'https://www.smashingmagazine.com/',
+		href: 'https://www.smashingmagazine.com/printed-books/design-systems/',
 		coverUrl: '/covers/design-systems-smashing.jpg',
 	},
 	{
@@ -90,7 +90,7 @@ export const libraryBooks: LibraryBook[] = [
 		title: 'InVision Design Systems Handbook',
 		author: 'Marco Suarez, Jina Anne, Katie Sylor-Miller, Diana Mounter, Roy Stanfield',
 		edition: 'DesignBetter.Co',
-		href: 'https://designbetterpodcast.com',
+		href: 'https://designbetterpodcast.com/p/design-systems-handbook',
 		coverUrl: '/covers/invision-design-systems.jpg',
 	},
 	{
@@ -103,7 +103,7 @@ export const libraryBooks: LibraryBook[] = [
 	{
 		title: 'Le Product Design dans une organisation Produit',
 		author: 'Thiga',
-		href: 'https://thiga.co',
+		href: 'https://www.thiga.co/fr/nos-ressources/livre-product-design',
 		isbn: '9782956072379',
 		coverUrl: '/covers/le-product-design-thiga.jpg',
 	},
