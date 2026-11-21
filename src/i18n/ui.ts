@@ -22,6 +22,7 @@ export const ui = {
 		'nav.about': 'About',
 		'nav.contact': 'Contact',
 		'links.library': 'Library',
+		'links.charter': 'AI Use Charter',
 		'footer.rights': 'All rights reserved.',
 		'consent.message':
 			'This site uses Google Analytics to understand how it’s used. No tracking cookies until you accept.',
@@ -36,6 +37,7 @@ export const ui = {
 		'nav.about': 'À propos',
 		'nav.contact': 'Contact',
 		'links.library': 'Bibliothèque',
+		'links.charter': "Charte d'usage de l'IA",
 		'footer.rights': 'Tous droits réservés.',
 		'consent.message':
 			'Ce site utilise Google Analytics pour comprendre son utilisation. Aucun cookie de suivi tant que vous n’avez pas accepté.',
@@ -50,6 +52,7 @@ export const ui = {
 		'nav.about': 'Sobre',
 		'nav.contact': 'Contato',
 		'links.library': 'Biblioteca',
+		'links.charter': 'Política de uso de AI',
 		'footer.rights': 'Todos os direitos reservados.',
 		'consent.message':
 			'Este site usa o Google Analytics para entender como é utilizado. Nenhum cookie de rastreamento até que você aceite.',

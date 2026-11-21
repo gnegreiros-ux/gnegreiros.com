@@ -11,6 +11,7 @@ export const SLUGS = [
 	'a-propos',
 	'contact',
 	'bibliotheque',
+	'charte-ia',
 ] as const;
 
 export type Slug = (typeof SLUGS)[number];

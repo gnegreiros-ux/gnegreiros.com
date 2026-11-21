@@ -1,5 +1,5 @@
 ---
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getContentId, SLUGS, type Slug } from '../../i18n/routes';
 import type { Locale } from '../../i18n/ui';
@@ -12,6 +12,7 @@ import ParcoursSections from '../../components/ParcoursSections.astro';
 import AProposSections from '../../components/AProposSections.astro';
 import ContactSections from '../../components/ContactSections.astro';
 import BibliothequeSections from '../../components/BibliothequeSections.astro';
+import CharteSections from '../../components/CharteSections.astro';
 
 import { getApprocheCopy } from '../../content/copy/approche';
 import { getAgenticaCopy } from '../../content/copy/agentica';
@@ -38,6 +39,7 @@ if (!entry) {
 if (!entry) throw new Error(`Missing fallback content entry: en/${slug}`);
 
 const { heroTitle, heroSubtitle } = entry.data;
+const { Content } = await render(entry);
 ---
 
 <BaseLayout
@@ -75,5 +77,8 @@ const { heroTitle, heroSubtitle } = entry.data;
 	{slug === 'contact' && <ContactSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} />}
 	{slug === 'bibliotheque' && (
 		<BibliothequeSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} books={libraryBooks} />
+	)}
+	{slug === 'charte-ia' && (
+		<CharteSections heroTitle={heroTitle} heroSubtitle={heroSubtitle} Content={Content} />
 	)}
 </BaseLayout>

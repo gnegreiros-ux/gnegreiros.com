@@ -1,0 +1,13 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CharteSections from '../components/CharteSections.astro';
+
+const entry = await getEntry('pages', 'en/charte-ia');
+if (!entry) throw new Error('Missing content entry: en/charte-ia');
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description} lang="en" slug="charte-ia">
+	<CharteSections heroTitle={entry.data.heroTitle} heroSubtitle={entry.data.heroSubtitle} Content={Content} />
+</BaseLayout>

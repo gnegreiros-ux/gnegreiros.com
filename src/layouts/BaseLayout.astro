@@ -126,6 +126,9 @@ const personJsonLd = {
 		</main>
 		<footer class="site-footer">
 			<p>&copy; {new Date().getFullYear()} Guilherme Negreiros. {t('footer.rights')}</p>
+			<p class="site-footer__links">
+				<a href={getLocalizedPath(routeLocale, 'charte-ia')}>{t('links.charter')}</a>
+			</p>
 		</footer>
 		<ConsentBanner lang={lang} />
 	</body>
@@ -305,6 +308,22 @@ const personJsonLd = {
 		text-align: center;
 		font-size: var(--text-small);
 		color: var(--color-text-secondary);
+	}
+
+	.site-footer__links {
+		margin: 0.5rem 0 0;
+	}
+
+	.site-footer__links a {
+		text-decoration: underline;
+		text-decoration-color: var(--color-line);
+		color: var(--color-text-secondary);
+	}
+
+	.site-footer__links a:hover,
+	.site-footer__links a:focus-visible {
+		color: var(--color-text-primary);
+		text-decoration-color: currentColor;
 	}
 
 	@media (max-width: 768px) {
